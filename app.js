@@ -9,7 +9,7 @@ var session = require('express-session');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var photos = require('./routes/photoes');
+var photos = require('./routes/photos');
 
 var app = express();
 

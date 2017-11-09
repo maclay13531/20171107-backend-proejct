@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+    <head>
+        <% include head %>
+        <title>Upload</title>
+
+    </head>
+    <body>
+    <% include navbar %>
+     <main>
+        <div class="container">
+		<div class="row">
+			<h3 class="center-align">Upload File</h3>
+			<form class="offset-s2 col s8 card darken-1">
+				<div class="row">
+					<div class="input-field col s12">
+						<a href="#" class="btn dropdown-button btn-block" data-activates='dropdown1'>Type<i class="material-icons right">keyboard_arrow_down</i></a>
+						<ul id='dropdown1' class='dropdown-content'>  
+							<li>hi</li>
+							<div class="divider"></div>
+							<li>h2</li>
+						</ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<a href="#" class="btn dropdown-button btn-block" data-activates='dropdown1'>Breed<i class="material-icons right">keyboard_arrow_down</i></a>
+						<ul id='dropdown1' class='dropdown-content'>  
+							<li>hi</li>
+							<div class="divider"></div>
+							<li>h2</li>
+						</ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="name" type="text" class="validate">
+						<label for="name">Name</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="age" type="text" class="validate">
+						<label for="age">Age</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="gender" type="text" class="validate">
+						<label for="gender">Gender</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s6 center-align">
+						Image Upload
+					</div>
+					<div class="input-field col s6">
+						<input type="file" name="imageToUpload">
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<div class="center-align">
+							<button class="btn waves-effect waves-light" type="submit" name="action">Submit
+								<i class="material-icons right">send</i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+       
+	</main>
+
+    <% include footer %>
+
+    </body>
+</html>

@@ -35,5 +35,8 @@ router.get('/login', function (req,res,next) {
 	res.render('login', {})
 });
 
+router.get('/upload', function(req, res, next){
+	res.render('upload', {})
+})
 
 module.exports = router;

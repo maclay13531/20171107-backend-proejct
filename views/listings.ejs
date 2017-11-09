@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+    <head>
+        <% include head %>
+        <title>Log In</title>
+
+    </head>
+    <body>
+    <% include navbar %>
+     <main>
+		<div class="container">
+			<form action="/searchFromListings" method="post">
+				<div class="row">
+					<div class="input-field col s2">
+						<div class="input-field col s12">
+							<a href="#" class="btn dropdown-button btn-block" data-activates='dropdown2'>Type<i class="material-icons right">keyboard_arrow_down</i></a>
+							<ul id='dropdown2' class='dropdown-content'>  
+								<li>hi</li>
+								<div class="divider"></div>
+								<li>h2</li>
+							</ul>
+						</div>
+					</div>
+					<div class="input-field col s2">
+						<div class="input-field col s12">
+							<a href="#" class="btn dropdown-button btn-block" data-activates='dropdown1'>Breed<i class="material-icons right">keyboard_arrow_down</i></a>
+							<ul id='dropdown1' class='dropdown-content'>  
+								<li>hi</li>
+								<div class="divider"></div>
+								<li>h2</li>
+							</ul>
+						</div>
+					</div>
+					<div class="input-field col s2">
+						<label for="location">Location:</label>
+						<input type="text" class="validate">
+					</div>
+					<div class="input-field col s2">
+						<label for="location">Age:</label>
+						<input type="text" class="validate">
+					</div>
+					<div class="input-field col s2">
+						<label for="location">Gender:</label>
+						<input type="text" class="validate">
+					</div>
+					<div class="input-field col s2">
+						<!-- margin needs to be top 7px -->
+						<button class="btn btn-block waves-effect waves-light">Submit!</button>
+					</div>
+				</div>
+			</form>
+			<div class="row">
+				<div class="col s12">
+					<h3>Featured</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12">
+					<p class="header">Horizontal Card</p>
+					<div class="card horizontal">
+						<div class="card-image">
+							<img src="big-sur.jpeg">
+						</div>
+						<div class="card-stacked">
+							<div class="card-content">
+								<p>I am a very simple card. I am good at containing small bits of information.</p>
+							</div>
+							<div class="card-action right-align">
+								<a href="" class="btn-floating btn-large red"><i class="material-icons">add</i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="divider"></div>
+			<div class="row">
+				<div class="col s12">
+					<p class="header">Horizontal Card</p>
+					<div class="card horizontal">
+						<div class="card-image">
+							<img src="big-sur.jpeg">
+						</div>
+						<div class="card-stacked">
+							<div class="card-content">
+								<p>I am a very simple card. I am good at containing small bits of information.</p>
+							</div>
+							<div class="card-action right-align">
+								<a href="" class="btn-floating btn-large red"><i class="material-icons">add</i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="divider"></div>
+			<div class="row">
+				<div class="col s4">
+					<!-- Pictures -->
+				</div>
+				<div class="col s7">
+					Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quia facere aliquid consectetur voluptates necessitatibus, vel consequatur dolore voluptatem, delectus at officia tenetur cumque praesentium labore dolor laboriosam, enim illum numquam!
+				</div>
+				<div class="col s1">
+					<a href="" class="btn-floating btn-large red"><i class="material-icons">add</i></a>
+				</div>
+			</div>
+		</div>
+	</main>
+    <% include footer %>
+    </body>
+</html>

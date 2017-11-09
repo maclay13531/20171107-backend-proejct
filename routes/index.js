@@ -57,4 +57,12 @@ router.post('/uploadProcess', function (req, res, next) {
 
 });
 
+router.get("/listings", (req, res, next)=>{
+	res.render("listings");
+})
+
+router.get("/singles", (req, res, next)=>{
+	res.render("singlePage");
+})
+
 module.exports = router;

@@ -1,6 +1,9 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  /* display: flex;
+  min-height: 100vh;
+  flex-direction: column; */
 }
 
 a {
@@ -12,4 +15,8 @@ a {
 .brand-logo {
 	font-family: 'Bree Serif', serif;
 	color: #26a69a;
+}
+
+main {
+  /* flex: 1 0 auto; */
 }

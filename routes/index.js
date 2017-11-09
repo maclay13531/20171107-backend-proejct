@@ -15,12 +15,12 @@ var uploadDir = multer({
 var nameOfFileField = uploadDir.single('imageToUpload');
 
 //config.db will be given to Bihn/Jason/Jenn by Jong Park.
-var connection = mysql.createConnection(config.db);
-connection.connect(function(error){
-	if(error){
-		throw error;
-	}
-});
+// var connection = mysql.createConnection(config.db);
+// connection.connect(function(error){
+// 	if(error){
+// 		throw error;
+// 	}
+// });
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

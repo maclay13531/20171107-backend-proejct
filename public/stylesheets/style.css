@@ -19,3 +19,18 @@ a {
 main {
   /* flex: 1 0 auto; */
 }
+
+
+nav, .brand-logo {
+ 	font-family: 'Bree Serif', serif;
+	color: #26a69a;
+	color: #fff;
+}
+
+nav {
+    color: #fff !important;
+    background-color:  #26a69a !important;
+    width: 100%;
+    height: 56px;
+    line-height: 56px;
+ }

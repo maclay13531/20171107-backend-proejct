@@ -6,13 +6,37 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var config = require('./config/config');
 var session = require('express-session');
-
+var Auth0Strategy = require('passport-auth0')
+var passport = require('passport')
 var index = require('./routes/index');
 var users = require('./routes/users');
 var photos = require('./routes/photos');
 
 var app = express();
 
+// This will configure Passport to use Auth0
+const strategy = new Auth0Strategy({
+	  domain: config.auth0.domain,
+	  clientID: config.auth0.clientId,
+	  clientSecret: config.auth0.clientSecret,
+	  callbackURL: 'http://localhost:3000/callback'
+	},function(accessToken, refreshToken, extraParams, profile, done) {
+	  // accessToken is the token to call Auth0 API (not needed in the most cases)
+	  // extraParams.id_token has the JSON Web Token
+	  // profile has all the information from the user
+	  return done(null, profile);
+	}
+);
+
+passport.use(strategy);
+// you can use this section to keep a smaller payload
+passport.serializeUser(function(user, done) {
+	done(null, user);
+});
+  
+passport.deserializeUser(function(user, done) {
+	done(null, user);
+});
 var sessionOptions = {
 	secret: config.sessionSalt,
 	resave: false,
@@ -20,7 +44,8 @@ var sessionOptions = {
 }
 
 app.use(session(sessionOptions));
-
+app.use(passport.initialize());
+app.use(passport.session());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

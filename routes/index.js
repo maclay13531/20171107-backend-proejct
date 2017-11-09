@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const passport = require('passport');
 var fs = require('fs');
 //msql database is named petBasket and "main" MySQL file will be saved in Jong Park's computer. Jong park to distribute the file to Bihn/Jason/Jenn.
 var mysql = require('mysql');
@@ -21,6 +22,15 @@ var nameOfFileField = uploadDir.single('imageToUpload');
 // 		throw error;
 // 	}
 // });
+
+const env = {
+	AUTH0_CLIENT_ID: config.auth0.clientId,
+	AUTH0_DOMAIN: config.auth0.domain,
+	AUTH0_CALLBACK_URL: 'http://localhost:3000/callback'
+};
+
+
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -46,7 +56,38 @@ router.get('/login', function (req,res,next) {
 router.post('/loginProcess', function (req, res, next) {
 
 });
-
+// GET log in with autho
+router.get("/registerWithAuth0",
+	passport.authenticate('auth0', {
+		clientID: env.AUTH0_CLIENT_ID,
+		domain: env.AUTH0_DOMAIN,
+		redirectUri: env.AUTH0_CALLBACK_URL,
+		responseType: 'code',
+		audience: 'https://' + env.AUTH0_DOMAIN + '/userinfo',
+		scope: 'openid profile email'
+	}),
+	(req, res, next)=>{
+		res.redirect("/callback");
+});
+router.get("/callback", (req, res, next)=>{
+	passport.authenticate('auth0', {
+		failureRedirect: '/failure'
+	}),
+	function(req, res) {
+		console.log(req.session);
+		res.redirect(req.session.returnTo || '/listings');
+	}
+});
+router.get('/failure', function(req, res) {
+	var error = req.flash("error");
+	var error_description = req.flash("error_description");
+	req.logout();
+	res.render('failure', {
+	  	error: error[0],
+	  	error_description: error_description[0],
+	});
+});
+  
 // GET Route for Upload Page
 router.get('/upload', function(req, res, next){
 	res.render('upload', {})

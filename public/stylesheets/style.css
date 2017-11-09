@@ -1,21 +1,22 @@
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+   flex: 1 0 auto;
 }
 
 a {
   color: #00B7FF;
 }
 
-
 .brand-logo {
 	font-family: 'Bree Serif', serif;
 	color: #26a69a;
 }
-
-main {
-  /* flex: 1 0 auto; */
-}
-
 
 nav, .brand-logo {
  	font-family: 'Bree Serif', serif;
@@ -31,5 +32,8 @@ nav {
     height: 56px;
     line-height: 56px;
  }
+
+
+
 
 

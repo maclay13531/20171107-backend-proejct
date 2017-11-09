@@ -16,16 +16,58 @@
 <body>
 	<div class="container">
 		<div class="row">
-			<div class="input-field col s5">
-				<label for="location">Location</label>
-				<input type="text" id="location" name="location">
+			<form action="/searchFromIndex" method="post">
+				<div class="row">
+					<div class="input-field col s2">
+						<div class="input-field col s12">
+							<a href="#" class="btn dropdown-button btn-block" data-activates='dropdown2'>Type<i class="material-icons right">keyboard_arrow_down</i></a>
+							<ul id='dropdown2' class='dropdown-content'>  
+								<li>hi</li>
+								<div class="divider"></div>
+								<li>h2</li>
+							</ul>
+						</div>
+					</div>
+					<div class="input-field col s2">
+						<div class="input-field col s12">
+							<a href="#" class="btn dropdown-button btn-block" data-activates='dropdown1'>Breed<i class="material-icons right">keyboard_arrow_down</i></a>
+							<ul id='dropdown1' class='dropdown-content'>  
+								<li>hi</li>
+								<div class="divider"></div>
+								<li>h2</li>
+							</ul>
+						</div>
+					</div>
+					<div class="input-field col s2">
+						<label for="location">Location:</label>
+						<input type="text" class="validate">
+					</div>
+					<div class="input-field col s2">
+						<label for="location">Age:</label>
+						<input type="text" class="validate">
+					</div>
+					<div class="input-field col s2">
+						<label for="location">Gender:</label>
+						<input type="text" class="validate">
+					</div>
+					<div class="input-field col s2">
+						<!-- margin needs to be top 7px -->
+						<button class="btn btn-block waves-effect waves-light">Submit!</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="row">
+			<div class="col s4">
+				<h3>Hello!</h3>
 			</div>
-			<div class="input-field col s5">
-				<label for="type-of-pet">Type Of Pet</label>
-				<input type="text" id="type-of-pet" name="type-of-pet">
+		</div>
+		<div class="row">
+			<div class="col s6">
+				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quia delectus voluptas, debitis dicta quisquam illo voluptatum laborum perferendis? Pariatur at in porro mollitia laborum, optio obcaecati saepe eligendi aliquid eius? LoremLorem ipsum dolor sit amet consectetur, adipisicing elit. Quia delectus voluptas, debitis dicta quisquam illo voluptatum laborum perferendis? Pariatur at in porro mollitia laborum, optio obcaecati saepe eligendi aliquid eius? 
 			</div>
-			<div class="input-field col s2">
-				<button class="btn btn-block waves-effect waves-light">Search!</button>
+			<div class="col s6">
+				<!-- PICTURE OF ANMIALS -->
 			</div>
 		</div>
 	</div>

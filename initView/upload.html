@@ -13,13 +13,13 @@
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="style.css">
 	<script src="script_upload.js"></script>
-	<title>Register</title>
+	<title>Upload</title>
 </head>
 <body>
 	<div class="container">
 		<div class="row">
 			<h3 class="center-align">Upload File</h3>
-			<form class="offset-s2 col s8 card darken-1">
+			<form class="offset-s2 col s8 card darken-1" action="/uploadInfo" method="post">
 				<div class="row">
 					<div class="input-field col s12">
 						<a href="#" class="btn dropdown-button btn-block" data-activates='dropdown1'>Type<i class="material-icons right">keyboard_arrow_down</i></a>
@@ -56,6 +56,12 @@
 					<div class="input-field col s12">
 						<input id="gender" type="text" class="validate">
 						<label for="gender">Gender</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<textarea name="description" id="description" cols="30" rows="10" class="validate"></textarea>
+						<label for="description">Description</label>
 					</div>
 				</div>
 				<div class="row">

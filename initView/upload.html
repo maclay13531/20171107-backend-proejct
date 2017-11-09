@@ -1,0 +1,69 @@
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<!-- jQUERY -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>	
+	<!-- materialize  -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+	<!-- materialize js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+	<!-- google fonts for materialize -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="style.css">
+	<script src="script_upload.js"></script>
+	<title>Register</title>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<h3 class="center-align">Upload File</h3>
+			<form class="offset-s2 col s8 card darken-1">
+				<div class="row">
+					<div class="input-field col s12">
+						<a href="#" class="btn dropdown-button btn-block" data-activates='dropdown1'>Type</a>
+						<ul id='dropdown1' class='dropdown-content'>  
+							<li>hi</li>
+							<div class="divider"></div>
+							<li>h2</li>
+						</ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="breed" type="text" class="validate">
+						<label for="breed">Breed</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="name" type="text" class="validate">
+						<label for="name">Name</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="age" type="text" class="validate">
+						<label for="age">Age</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="gender" type="text" class="validate">
+						<label for="gender">Gender</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s6 center-align">
+						Image Upload
+					</div>
+					<div class="input-field col s6">
+						<input type="file" name="imageToUpload">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

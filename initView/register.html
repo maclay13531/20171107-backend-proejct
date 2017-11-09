@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<!-- jQUERY -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>	
+	<!-- materialize  -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+	<!-- materialize js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+	<!-- google fonts for materialize -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="style.css">
+	<script src="script.js"></script>
+	<title>Register</title>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<h3 class="center-align">Register</h3>
+			<form class="offset-s2 col s8 card darken-1">
+				<div class="row">
+					<div class="input-field col s6">
+						<input id="first_name" type="text" class="validate">
+						<label for="first_name">First Name</label>
+					</div>
+					<div class="input-field col s6">
+						<input id="last_name" type="text" class="validate">
+						<label for="last_name">Last Name</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<i class="material-icons">email</i>
+					</div>
+					<div class="input-field col s12">
+						<input id="email" type="email" class="validate">
+						<label for="email">Email</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="password" type="password" class="validate">
+						<label for="password">Password</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="password2" type="password" class="validate">
+						<label for="password2">Password Again</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<i class="material-icons">my_location</i>
+					</div>
+					<div class="input-field col s12">
+						<input type="text" id="zip-code" class="validate">
+						<label for="zip-code">Zip Code</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<div class="center-align">
+							<button class="btn waves-effect waves-light" type="submit" name="action">Submit
+								<i class="material-icons right">send</i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

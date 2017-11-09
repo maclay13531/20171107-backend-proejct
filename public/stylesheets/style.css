@@ -13,6 +13,10 @@ a {
   color: #00B7FF;
 }
 
+img {
+	max-width:100%;
+}
+
 .brand-logo {
 	font-family: 'Bree Serif', serif;
 }
@@ -20,7 +24,7 @@ a {
 h3 {
 
 	font-family: 'Bree Serif', serif;
-	color: black;
+	color: #26a69a;
 }
 
 .footer-logo {

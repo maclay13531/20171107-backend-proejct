@@ -1,25 +1,17 @@
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<!-- jQUERY -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>	
-	<!-- materialize  -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-	<!-- materialize js -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-	<!-- google fonts for materialize -->
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" href="style.css">
-	<script src="script_upload.js"></script>
-	<title>Upload</title>
-</head>
-<body>
-	<div class="container">
+<!DOCTYPE html>
+
+    <head>
+        <% include head %>
+        <title>Upload</title>
+
+    </head>
+    <body>
+    <% include navbar %>
+     <main>
+        <div class="container">
 		<div class="row">
 			<h3 class="center-align">Upload File</h3>
-			<form class="offset-s2 col s8 card darken-1" action="/uploadInfo" method="post">
+			<form class="offset-s2 col s8 card darken-1">
 				<div class="row">
 					<div class="input-field col s12">
 						<a href="#" class="btn dropdown-button btn-block" data-activates='dropdown1'>Type<i class="material-icons right">keyboard_arrow_down</i></a>
@@ -59,12 +51,6 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="input-field col s12">
-						<textarea id="textarea1" class="materialize-textarea"></textarea>
-						<label for="textarea1">Textarea</label>
-					</div>
-				</div>
-				<div class="row">
 					<div class="input-field col s6 center-align">
 						Image Upload
 					</div>
@@ -83,6 +69,9 @@
 				</div>
 			</form>
 		</div>
-	</div>
+	</div>     
+</main>
+
+<% include footer %>
 </body>
 </html>

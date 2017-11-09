@@ -24,11 +24,37 @@ var nameOfFileField = uploadDir.single('imageToUpload');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', {});
+});
+
+// GET Route for Register Page
+router.get('/register', function(req,res,next){
+	res.render('register', {})
+});
+
+// Post Route for Register Page
+router.post('/registerProcess', function(req,res, next){
+
+});
+
+// GET Route for Login Page
+router.get('/login', function (req,res,next) {
+	res.render('login', {})
+});
+
+// Post Route for Login Page
+router.post('/loginProcess', function (req, res, next) {
+
+});
+
+// GET Route for Upload Page
+router.get('/upload', function(req, res, next){
+	res.render('upload', {})
+});
+
+// Post Route for Upload Page
+router.post('/uploadProcess', function (req, res, next) {
+
 });
 
 module.exports = router;
-
-router.get('/login', function (req,res,next) {
-	res.render('login', {})
-})

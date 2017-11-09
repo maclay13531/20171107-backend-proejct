@@ -29,4 +29,6 @@ router.get('/', function(req, res, next) {
 
 module.exports = router;
 
-//test 
+router.get('/login', function (req,res,next) {
+	res.render('login', {})
+})

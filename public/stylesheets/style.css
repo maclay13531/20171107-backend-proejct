@@ -15,7 +15,13 @@ a {
 
 .brand-logo {
 	font-family: 'Bree Serif', serif;
-	color: #26a69a;
+}
+
+.footer-logo {
+	font-family: 'Bree Serif', serif;
+	font-size: 18px;
+	padding: 0 5px;
+	line-height: 30%;
 }
 
 nav, .brand-logo {
@@ -32,6 +38,26 @@ nav {
     height: 56px;
     line-height: 56px;
  }
+
+
+.footer-copyright {
+    overflow: hidden;
+    min-height: 50px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 10px 0px;
+/*    color: rgba(255,255,255,0.8);
+    background-color: rgba(51,51,51,0.08);*/
+    color: #fff !important;
+    background-color:  #26a69a !important;
+}
+
 
 
 

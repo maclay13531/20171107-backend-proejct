@@ -55,6 +55,7 @@ router.post('/registerProcess', function(req,res, next){
 	}
 	var zipCode = req.body.zipCode;
 	//check to see if it's in the database
+	//HASH PASSWORD before inseting
 	function checkData(){
 		return new Promise((resolve, reject)=>{
 			var checkQuery = "";
@@ -195,6 +196,6 @@ router.get("/singles", (req, res, next)=>{
 
 module.exports = router;
 
-// TODO: update registration with database
+// TODO: update registration with database/ hash password
 // TODO: update login with database
 // TODO: auth0 issues

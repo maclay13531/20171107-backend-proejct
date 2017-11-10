@@ -11,14 +11,14 @@
         <div class="container">
 		<div class="row"></div>
 			<h3 class="center-align">Register</h3>
-			<form class="offset-s2 col s8 card darken-1">
+			<form class="offset-s2 col s8 card darken-1" action="/registerProcess" method="post">
 				<div class="row">
 					<div class="input-field col s6">
-						<input id="first_name" type="text" class="validate">
+						<input id="first_name" name="first_name" type="text" class="validate">
 						<label for="first_name">First Name</label>
 					</div>
 					<div class="input-field col s6">
-						<input id="last_name" type="text" class="validate">
+						<input id="last_name" name="last_name" type="text" class="validate">
 						<label for="last_name">Last Name</label>
 					</div>
 				</div>
@@ -33,7 +33,7 @@
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<input id="password" type="password" class="validate">
+						<input id="password" type="password" name="password" class="validate">
 						<label for="password">Password</label>
 					</div>
 				</div>
@@ -48,7 +48,7 @@
 						<i class="material-icons">my_location</i>
 					</div>
 					<div class="input-field col s12">
-						<input type="text" id="zip-code" class="validate">
+						<input type="text" id="zip-code" name="zip-code"  class="validate">
 						<label for="zip-code">Zip Code</label>
 					</div>
 				</div>

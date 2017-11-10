@@ -39,7 +39,7 @@ router.post('/registerProcess',function(req,res, next){
 	var email = req.body.email;
 	var password = req.body.password;
 	var zipcode = req.body.zipcode;
-	console.log(req.body)
+	// console.log(req.body)
 	// We need to make sure this email isn't already registered 
 	const selectQuery = `SELECT * FROM users WHERE email = ?;`;
 	connection.query(selectQuery, [email], (error, results) => {
@@ -57,7 +57,6 @@ router.post('/registerProcess',function(req,res, next){
 			});
 		}
 	});
-
 });
 
 // GET Route for Login Page

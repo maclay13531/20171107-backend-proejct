@@ -33,6 +33,17 @@ const env = {
 
 
 /* GET home page. */
+
+router.all("/*", (req,res,next)=>{
+	if(req.session.uid == undefined){
+		console.log("you are not loggedin");
+		next();
+	}else if(req.session.uid != undefined){
+		console.log("YOU ARE LOGGEDIN");
+		next();
+	}
+});
+
 router.get('/', function(req, res, next) {
   res.render('index', {});
 });
@@ -123,7 +134,6 @@ router.post('/loginProcess', function (req, res, next) {
 	function matchPassword(results){
 		return new Promise((resolve, reject)=>{
 			var passwordMatch = bcrypt.compareSync(password, results[0].password);
-			console.log(passwordMatch)
 			if(passwordMatch){
 				req.session.fname = results[0].first_name;
 				req.session.lname = results[0].last_name;
@@ -131,7 +141,7 @@ router.post('/loginProcess', function (req, res, next) {
 				req.session.uid = results[0].id;
 				resolve(passwordMatch);
 			}else{
-				reject("error");
+				resolve(passwordMatch);
 			}
 		})
 	}
@@ -141,18 +151,16 @@ router.post('/loginProcess', function (req, res, next) {
 		if(results.length !=0){
 			return matchPassword(results);	
 		}else{
-			return res.redirect("/login?msg=badpassword");
+			return res.redirect("/login?msg=badpassword1");
 		}
-	}).then((password, results)=>{
-		// console.log(password);
-		console.log(req.session.fname);
-		console.log(req.session.uid);
-		if(password){
-			res.redirect("/listings");
+	}).then((password)=>{
+		if(password == true){
+			return res.redirect("/listings");
 		}
-	}).catch((error)=>{
-		throw error;
-	})
+		if(password==false){
+			return res.redirect("/login?msg=badpassword2");
+		}
+	});
 });
 // GET log in with autho
 router.get("/registerWithAuth0",
@@ -162,7 +170,7 @@ router.get("/registerWithAuth0",
 		redirectUri: env.AUTH0_CALLBACK_URL,
 		responseType: 'code',
 		audience: 'https://' + env.AUTH0_DOMAIN + '/userinfo',
-		scope: 'openid'
+		scope: 'openid '
 	}),
 	(req, res, next)=>{
 		res.redirect("/");

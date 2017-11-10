@@ -34,14 +34,15 @@ const env = {
 
 /* GET home page. */
 
-// router.all("/*", (req,res,next)=>{
-// 	if(req.session.uid == undefined){
-// 		console.log("you are loggedin");
-// 		next();
-// 	}else if(req.session.uid != undefined){
-// 		next();
-// 	}
-// });
+router.all("/*", (req,res,next)=>{
+	if(req.session.uid == undefined){
+		console.log("you are not loggedin");
+		next();
+	}else if(req.session.uid != undefined){
+		console.log("YOU ARE LOGGEDIN");
+		next();
+	}
+});
 
 router.get('/', function(req, res, next) {
   res.render('index', {});
@@ -148,13 +149,11 @@ router.post('/loginProcess', function (req, res, next) {
 	checkDB().then((results)=>{
 		// console.log(results);
 		if(results.length !=0){
-			console.log(results);
 			return matchPassword(results);	
 		}else{
 			return res.redirect("/login?msg=badpassword1");
 		}
 	}).then((password)=>{
-		console.log(password);
 		if(password == true){
 			return res.redirect("/listings");
 		}

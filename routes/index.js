@@ -245,7 +245,10 @@ router.post('/uploadProcess', function (req, res, next) {
 
 router.get("/listings", (req, res, next)=>{
 	if(req.session.uid != undefined){
-		res.render("listings", {userID : true, firstName:req.session.fname})
+		res.render("listings", {
+			userID : true, 
+			firstName:req.session.fname
+		})
 	}else{
 		res.render("listings", {userID: false});
 	}

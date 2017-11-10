@@ -43,6 +43,7 @@ router.get('/register', function(req,res,next){
 });
 
 // Post Route for Register Page
+<<<<<<< HEAD
 router.post('/registerProcess', function(req,res, next){
 	var firstName = req.body.first_name;
 	var lastName = req.body.last_name;
@@ -92,6 +93,32 @@ router.post('/registerProcess', function(req,res, next){
 	}).catch((error)=>{
 		throw error;
 	})
+=======
+router.post('/registerProcess',function(req,res, next){
+	var first_name = req.body.first_name;
+	var last_name = req.body.last_name;
+	var email = req.body.email;
+	var password = req.body.password;
+	var zipcode = req.body.zipcode;
+	// console.log(req.body)
+	// We need to make sure this email isn't already registered 
+	const selectQuery = `SELECT * FROM users WHERE email = ?;`;
+	connection.query(selectQuery, [email], (error, results) => {
+		if (results.length != 0) {
+			res.redirect('/register?msg=registered');
+		} else {
+			var hash = bcrypt.hashSync(password);
+			var insertQuery = `INSERT INTO users (first_name,last_name, email, password, zipcode) VALUES (?,?,?,?,?)`;
+			connection.query(insertQuery, [first_name, last_name, email, hash, zipcode], (error) => {
+				if (error) {
+					throw error;
+				} else {
+					res.redirect('/?msg=registered');
+				}
+			});
+		}
+	});
+>>>>>>> e04597a5d7d98cdd345624be63d123b272ba8379
 });
 
 // GET Route for Login Page

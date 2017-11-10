@@ -18,6 +18,7 @@
     <script>
     	$(document).ready(function(){
     		$('#modal1').modal();
+    		$(".button-collapse").sideNav();
     		var socket = io();
     		$('#submit-message').submit((event)=>{
     			event.preventDefault();
@@ -26,8 +27,13 @@
     				message: newMessage
     			});
     		});
+    		// function sendFunction(){
+    		// 	socket.emit('messageToServer', $('#new-message').val());
+    		// 	$('#new-message').val('');
+    		// }
     		socket.on('messageToClient', (msg)=>{
-    			$('#messages').append(`<li>${msg.message}</p>`);
+    			// $('#messages').append($('<li>').text(msg));
+    			$('#messages').append($('<li>').text(msg));
     		});
     	});
 

@@ -57,12 +57,11 @@ app.use(function(err, req, res, next) {
 });
 
 app.io.on('connect', function(socket){  
-  console.log('A USER CONNECTED TO THE SERVER');
-
-socket.on('messageToServer', function(msg){
-    console.log(msg);
-    app.io.emit('messageToClinet', msg);
-  });
+    console.log('A USER CONNECTED TO THE SERVER VIA A SOCKET');
+    socket.on('messageToServer', function(msg){
+        console.log(msg);
+        app.io.emit('messageToClinet', msg);
+    });
 });
 
 module.exports = app;

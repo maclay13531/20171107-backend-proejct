@@ -15,13 +15,13 @@ var uploadDir = multer({
 //make sure that imageToUpload matches on the upload.ejs file as well
 var nameOfFileField = uploadDir.single('imageToUpload');
 
-//config.db will be given to Bihn/Jason/Jenn by Jong Park.
-// var connection = mysql.createConnection(config.db);
-// connection.connect(function(error){
-// 	if(error){
-// 		throw error;
-// 	}
-// });
+// config.db will be given to Bihn/Jason/Jenn by Jong Park.
+var connection = mysql.createConnection(config.db);
+connection.connect(function(error){
+	if(error){
+		throw error;
+	}
+});
 
 const env = {
 	AUTH0_CLIENT_ID: config.auth0.clientId,
@@ -43,7 +43,6 @@ router.get('/register', function(req,res,next){
 });
 
 // Post Route for Register Page
-<<<<<<< HEAD
 router.post('/registerProcess', function(req,res, next){
 	var firstName = req.body.first_name;
 	var lastName = req.body.last_name;
@@ -59,8 +58,8 @@ router.post('/registerProcess', function(req,res, next){
 	//HASH PASSWORD before inseting
 	function checkData(){
 		return new Promise((resolve, reject)=>{
-			var checkQuery = "";
-			connection.query(checkQuery, [],(error, results, field)=>{
+			var checkQuery = "select * from users where email = ?;";
+			connection.query(checkQuery, [email],(error, results, field)=>{
 				if(error){
 					reject(error);
 				}else{
@@ -72,8 +71,9 @@ router.post('/registerProcess', function(req,res, next){
 	//insert into database
 	function insertInto(){
 		return new Promise((resolve, reject)=>{
-			var insertQuery="";
-			connection.query(insertQuery, [], (error, results, field)=>{
+			var insertQuery="insert into users (first_name, last_name, email, password, zipcode) values (?,?,?,?,?);";
+			var hash = bcrypt.hashSync(passwordOne);
+			connection.query(insertQuery, [firstName, lastName, email, hash, zipCode], (error, results, field)=>{
 				if(error){
 					reject(error);
 				}else{
@@ -93,32 +93,6 @@ router.post('/registerProcess', function(req,res, next){
 	}).catch((error)=>{
 		throw error;
 	})
-=======
-router.post('/registerProcess',function(req,res, next){
-	var first_name = req.body.first_name;
-	var last_name = req.body.last_name;
-	var email = req.body.email;
-	var password = req.body.password;
-	var zipcode = req.body.zipcode;
-	// console.log(req.body)
-	// We need to make sure this email isn't already registered 
-	const selectQuery = `SELECT * FROM users WHERE email = ?;`;
-	connection.query(selectQuery, [email], (error, results) => {
-		if (results.length != 0) {
-			res.redirect('/register?msg=registered');
-		} else {
-			var hash = bcrypt.hashSync(password);
-			var insertQuery = `INSERT INTO users (first_name,last_name, email, password, zipcode) VALUES (?,?,?,?,?)`;
-			connection.query(insertQuery, [first_name, last_name, email, hash, zipcode], (error) => {
-				if (error) {
-					throw error;
-				} else {
-					res.redirect('/?msg=registered');
-				}
-			});
-		}
-	});
->>>>>>> e04597a5d7d98cdd345624be63d123b272ba8379
 });
 
 // GET Route for Login Page
@@ -129,8 +103,54 @@ router.get('/login', function (req,res,next) {
 // Post Route for Login Page
 router.post('/loginProcess', function (req, res, next) {
 	// check with database to see if it's a match,if not send them back to the registration page
+	var email = req.body.email;
+	var password = req.body.password;
 
+	function checkDB(){
+		return new Promise((resolve, reject)=>{
+			var checkQuery = "select * from users where email = ?;";
+			// console.log(email);
+			connection.query(checkQuery, [email], (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve(results);
+				}
+			})
+		})
+	}
+
+	function matchPassword(results){
+		return new Promise((resolve, reject)=>{
+			var passwordMatch = bcrypt.compareSync(password, results[0].password);
+			console.log(passwordMatch)
+			if(passwordMatch){
+				req.session.fname = results[0].first_name;
+				req.session.lname = results[0].last_name;
+				req.session.email = results[0].email;
+				req.session.uid = results[0].id;
+				resolve(passwordMatch);
+			}else{
+				reject("error");
+			}
+		})
+	}
 	// if it's a match, make session variables to keep track that it's this person and route them to listings
+	checkDB().then((results)=>{
+		// console.log(results);
+		if(results.length !=0){
+			return matchPassword(results);	
+		}else{
+			return res.redirect("/login?msg=badpassword");
+		}
+	}).then((password, results)=>{
+		console.log(password);
+		if(password){
+			res.redirect("/listings");
+		}
+	}).catch((error)=>{
+		throw error;
+	})
 });
 // GET log in with autho
 router.get("/registerWithAuth0",
@@ -147,7 +167,7 @@ router.get("/registerWithAuth0",
 });
 // callback for autho
 router.get("/callback", (req, res, next)=>{
-	console.log(req.body);
+	console.log(req.session.passport);
 	passport.authenticate('auth0', {
 		failureRedirect: '/failure'
 	}),

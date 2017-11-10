@@ -6,12 +6,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var config = require('./config/config');
 var session = require('express-session');
-var Auth0Strategy = require('passport-auth0')
-var passport = require('passport')
+var passport = require('passport');
+var Auth0Strategy = require('passport-auth0');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var photos = require('./routes/photos');
-const flash = require('connect-flash');
+// const flash = require('connect-flash');
 
 
 // This will configure Passport to use Auth0
@@ -38,6 +38,10 @@ passport.deserializeUser(function(user, done) {
 	done(null, user);
 });
 var app = express();
+// auth0
+
+
+
 var sessionOptions = {
 	secret: config.sessionSalt,
 	resave: false,
@@ -45,8 +49,19 @@ var sessionOptions = {
 }
 
 app.use(session(sessionOptions));
+
 app.use(passport.initialize());
 app.use(passport.session());
+
+
+
+app.use(function(req, res, next) {
+	res.locals.loggedIn = false;
+	if (req.session.passport && typeof req.session.passport.user != 'undefined') {
+	  res.locals.loggedIn = true;
+	}
+	next();
+});
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -64,7 +79,7 @@ app.use('/users', users);
 app.use('/photos', photos);
 
 
-app.use(flash());
+// app.use(flash());
 
 // Handle auth failure error messages
 app.use(function(req, res, next) {

@@ -49,14 +49,48 @@ router.post('/registerProcess', function(req,res, next){
 	var email = req.body.email;
 	var passwordOne=req.body.passwordOne;
 	var passwordTwo = req.body.passwordTwo;
+	//checking password match
 	if(passwordOne != passwordTwo){
 		res.redirect("/register?msg=PasswordNotMatch");
 	}
 	var zipCode = req.body.zipCode;
-
 	//check to see if it's in the database
-
-	//if not, insert into database and then redirect them to login
+	function checkData(){
+		return new Promise((resolve, reject)=>{
+			var checkQuery = "";
+			connection.query(checkQuery, [],(error, results, field)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve(results);
+				}
+			})
+		})
+	}
+	//insert into database
+	function insertInto(){
+		return new Promise((resolve, reject)=>{
+			var insertQuery="";
+			connection.query(insertQuery, [], (error, results, field)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve("insert successful");
+				}
+			})
+		})
+	}
+	checkData().then((results)=>{
+		if(results.length ==0){
+			return insertInto();
+		}else{
+			res.redirect("/register?msg=alreadyRegistered");
+		}
+	}).then((e)=>{
+		res.redirect("/login");
+	}).catch((error)=>{
+		console.log(error);
+	})
 });
 
 // GET Route for Login Page
@@ -66,7 +100,9 @@ router.get('/login', function (req,res,next) {
 
 // Post Route for Login Page
 router.post('/loginProcess', function (req, res, next) {
+	// check with database to see if it's a match,if not send them back to the registration page
 
+	// if it's a match, make session variables to keep track that it's this person and route them to listings
 });
 // GET log in with autho
 router.get("/registerWithAuth0",
@@ -76,7 +112,7 @@ router.get("/registerWithAuth0",
 		redirectUri: env.AUTH0_CALLBACK_URL,
 		responseType: 'code',
 		audience: 'https://' + env.AUTH0_DOMAIN + '/userinfo',
-		scope: 'openid profile email'
+		scope: 'openid'
 	}),
 	(req, res, next)=>{
 		res.redirect("/");
@@ -89,7 +125,7 @@ router.get("/callback", (req, res, next)=>{
 	}),
 	function(req, res) {
 		console.log(req.session);
-		res.redirect('/listings');
+		res.redirect('/');
 	}
 });
 // if callback failled
@@ -158,3 +194,7 @@ router.get("/singles", (req, res, next)=>{
 })
 
 module.exports = router;
+
+// TODO: update registration with database
+// TODO: update login with database
+// TODO: auth0 issues

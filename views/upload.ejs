@@ -12,22 +12,21 @@
 			// initiate selection dropdown
 			$('select').material_select();
 
-			  $("dog").click(function () {
-
-				// Clear the content
-				$("select").empty().html(' ');
-
-				// And add a new value
-				var value = "New value";
-				$("select").append(
-					$("<option></option>").attr("value", value).text(value)
-				);
-
-				// Update the content clearing the caret
-				$("select").material_select('update');
-				$("select").closest('.input-field').children('span.caret').remove();
+			// Hide dog/cat breeds to only show when a type is selected
+			$('.dog-breeds, .cat-breeds').hide();
+			// show dog/cat breeds depending on selection
+			$('#breeds-select').change(function () {
+				var inputValue = $(this).val();
+				// console.log(inputValue)
+				if (inputValue == "dog"){
+					$('.dog-breeds').show();
+					$('.cat-breeds').hide();
+				}else if(inputValue == "cat"){
+					$('.cat-breeds').show();
+					$('.dog-breeds').hide();
+				}
 			});
-			
+	
 		});
 	</script>
      <main>
@@ -37,10 +36,10 @@
 			<form class="offset-s2 col s8 card darken-1" action="/uploadProcess" method="post" enctype="multipart/form-data">
 				<div class="row">
 					<div class="input-field col s12">
-						<select>
+						<select id='breeds-select'>
 						<option value="" disabled selected>Type</option>
-						<option value="dog" class="dog">Dog</option>
-						<option value="cat" class="cat">Cat</option>
+						<option value="dog" class="dog" id="dog">Dog</option>
+						<option value="cat" class="cat" id="cat">Cat</option>
 						</select>
 						<!-- <label>Type</label> -->
 						<!-- <a href="#" class="btn dropdown-button btn-block" data-activates='dropdown1'>Type<i class="material-icons right">keyboard_arrow_down</i></a>
@@ -52,28 +51,11 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="input-field col s12">
-						<!-- <div class="row">
-							<div class="input-field col s12">
-								<i class="material-icons prefix">textsms</i>
-								<input type="text" id="autocomplete-input" class="autocomplete">
-								<label for="autocomplete-input">Autocomplete</label>
-							</div>
-						</div> -->
-
+					<div class="input-field col s12 breeds dog-breeds">
 						<% include dog_breeds %>
-						<!-- <a href="#" class="btn dropdown-button btn-block" data-activates='dropdown1'>Breed<i class="material-icons right">keyboard_arrow_down</i></a>
-						<ul id='dropdown1' class='dropdown-content'>  
-							<li>hi</li>
-							<option value="1">Option 1</option>
-							<div class="divider"></div>
-							<li>h2</li>
-						</ul> -->
-						<!-- <select>
-							<option value="" disabled selected>Breed</option>
-							<option value="dog">Dog</option>
-							<option value="cat">Cat</option>
-						</select> -->
+					</div>
+					<div class="input-field col s12 breeds cat-breeds">
+						<% include cat_breeds %>
 					</div>
 				</div>
 				<div class="row">
@@ -84,14 +66,23 @@
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<input id="age" type="text" class="validate">
-						<label for="age">Age</label>
+						<select multiple>
+							<option value="" disabled selected>Age</option>
+							<option value="baby">Baby</option>
+							<option value="young">Young</option>
+							<option value="adult">Adult</option>
+							<option value="senior">Senior</option>
+						</select>
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<input id="gender" type="text" class="validate">
-						<label for="gender">Gender</label>
+						<select>
+							<option value="" disabled selected>Gender</option>
+							<option value="f" class="dog">Female</option>
+							<option value="m" class="cat">Male</option>
+							<option value="u" class="cat">Unknown</option>
+						</select>
 					</div>
 				</div>
 				<div class="row">

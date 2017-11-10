@@ -6,30 +6,73 @@
 
     </head>
     <body>
-    <% include navbar %>
+	<% include navbar %>
+	<script type="text/javascript">
+		$(document).ready(()=>{
+			$('select').material_select();
+
+			  $("dog").click(function () {
+
+				// Clear the content
+				$("select").empty().html(' ');
+
+				// And add a new value
+				var value = "New value";
+				$("select").append(
+					$("<option></option>").attr("value", value).text(value)
+				);
+
+				// Update the content clearing the caret
+				$("select").material_select('update');
+				$("select").closest('.input-field').children('span.caret').remove();
+			});
+			
+		});
+	</script>
      <main>
         <div class="container">
 		<div class="row">
 			<h3 class="center-align">Upload File</h3>
-			<form class="offset-s2 col s8 card darken-1">
+			<form class="offset-s2 col s8 card darken-1" action="/uploadProcess" method="post" enctype="multipart/form-data">
 				<div class="row">
 					<div class="input-field col s12">
-						<a href="#" class="btn dropdown-button btn-block" data-activates='dropdown1'>Type<i class="material-icons right">keyboard_arrow_down</i></a>
+						<select>
+						<option value="" disabled selected>Type</option>
+						<option value="dog" class="dog">Dog</option>
+						<option value="cat" class="cat">Cat</option>
+						</select>
+						<!-- <label>Type</label> -->
+						<!-- <a href="#" class="btn dropdown-button btn-block" data-activates='dropdown1'>Type<i class="material-icons right">keyboard_arrow_down</i></a>
 						<ul id='dropdown1' class='dropdown-content'>  
 							<li>hi</li>
 							<div class="divider"></div>
 							<li>h2</li>
-						</ul>
+						</ul> -->
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<a href="#" class="btn dropdown-button btn-block" data-activates='dropdown1'>Breed<i class="material-icons right">keyboard_arrow_down</i></a>
+						<!-- <div class="row">
+							<div class="input-field col s12">
+								<i class="material-icons prefix">textsms</i>
+								<input type="text" id="autocomplete-input" class="autocomplete">
+								<label for="autocomplete-input">Autocomplete</label>
+							</div>
+						</div> -->
+
+						<% include dog_breeds %>
+						<!-- <a href="#" class="btn dropdown-button btn-block" data-activates='dropdown1'>Breed<i class="material-icons right">keyboard_arrow_down</i></a>
 						<ul id='dropdown1' class='dropdown-content'>  
 							<li>hi</li>
+							<option value="1">Option 1</option>
 							<div class="divider"></div>
 							<li>h2</li>
-						</ul>
+						</ul> -->
+						<!-- <select>
+							<option value="" disabled selected>Breed</option>
+							<option value="dog">Dog</option>
+							<option value="cat">Cat</option>
+						</select> -->
 					</div>
 				</div>
 				<div class="row">

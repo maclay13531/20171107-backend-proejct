@@ -40,6 +40,8 @@ router.all("/*", (req,res,next)=>{
 		next();
 	}else if(req.session.uid != undefined){
 		console.log("YOU ARE LOGGEDIN");
+		//mention this middleware
+		res.locals.firstNameTest = req.session.fname;
 		next();
 	}
 });

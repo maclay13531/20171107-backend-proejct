@@ -265,6 +265,9 @@ router.post("/searchFromIndex", (req,res,next)=>{
 	console.log(req.session.uid);
 	res.json(req.body);
 });
+router.get("/test", (req, res, next) => {
+	res.render('test')
+});
 
 module.exports = router;
 

@@ -90,7 +90,7 @@ router.post('/registerProcess', function(req,res, next){
 	}).then((e)=>{
 		res.redirect("/login");
 	}).catch((error)=>{
-		console.log(error);
+		throw error;
 	})
 });
 

@@ -59,9 +59,9 @@ app.use(function(err, req, res, next) {
 app.io.on('connect', function(socket){  
   console.log('A USER CONNECTED TO THE SERVER');
 
-  socket.on('new message', function(msg){
-    console.log('new message: ' + msg);
-    app.io.emit('chat message', msg);
+socket.on('messageToServer', function(msg){
+    console.log(msg);
+    app.io.emit('messageToClinet', msg);
   });
 });
 

@@ -19,14 +19,16 @@
     	$(document).ready(function(){
     		$('#modal1').modal();
     		var socket = io();
-    		function sendFunction() {
-    			socket.emit('new message', $('#new-message').val());
-    			$('#new-message').val('');
-  			}
-  				
-  				socket.on('chat message', function(msg){
-    			$('#messages-area').append($('<li>').text(msg));
- 			});
+    		$('#submit-message').submit((event)=>{
+    			event.preventDefault();
+    			var newMessage = $('#new-message').val();
+    			socket.emit('messageToServer', {
+    				message: newMessage
+    			});
+    		});
+    		socket.on('messageToClient', (msg)=>{
+    			$('#messages').append(`<li>${msg.message}</p>`);
+    		});
     	});
 
     </script>

@@ -8,6 +8,9 @@
     <body>
    		<% include navbar %>
      <main>
+	 <% if (firstName !== undefined){ %>
+        <h1> Welcome, <%= firstName %> </h1>
+    <% } %> 
 		<div class="container">
 			<form action="/searchFromListings" method="post">
 				<div class="row">

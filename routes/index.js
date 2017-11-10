@@ -144,7 +144,9 @@ router.post('/loginProcess', function (req, res, next) {
 			return res.redirect("/login?msg=badpassword");
 		}
 	}).then((password, results)=>{
-		console.log(password);
+		// console.log(password);
+		console.log(req.session.fname);
+		console.log(req.session.uid);
 		if(password){
 			res.redirect("/listings");
 		}
@@ -234,7 +236,11 @@ router.post('/uploadProcess', function (req, res, next) {
 });
 
 router.get("/listings", (req, res, next)=>{
-	res.render("listings");
+	if(req.session.uid != null){
+		res.render("listings", {firstName: req.session.fname})
+	}else{
+		res.render("listings");
+	}
 })
 
 router.get("/singles", (req, res, next)=>{

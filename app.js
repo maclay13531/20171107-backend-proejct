@@ -11,8 +11,8 @@ var passport = require('passport')
 var index = require('./routes/index');
 var users = require('./routes/users');
 var photos = require('./routes/photos');
+const flash = require('connect-flash');
 
-var app = express();
 
 // This will configure Passport to use Auth0
 const strategy = new Auth0Strategy({
@@ -37,6 +37,7 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(user, done) {
 	done(null, user);
 });
+var app = express();
 var sessionOptions = {
 	secret: config.sessionSalt,
 	resave: false,
@@ -61,6 +62,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/photos', photos);
+
+
+app.use(flash());
+
+// Handle auth failure error messages
+app.use(function(req, res, next) {
+ if (req && req.query && req.query.error) {
+   req.flash("error", req.query.error);
+ }
+ if (req && req.query && req.query.error_description) {
+   req.flash("error_description", req.query.error_description);
+ }
+ next();
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -14,11 +14,11 @@
 			<form class="offset-s2 col s8 card darken-1" action="/registerProcess" method="post">
 				<div class="row">
 					<div class="input-field col s6">
-						<input id="first_name" type="text" class="validate">
+						<input id="first_name" type="text" class="validate" name= "first_name">
 						<label for="first_name">First Name</label>
 					</div>
 					<div class="input-field col s6">
-						<input id="last_name" type="text" class="validate">
+						<input id="last_name" type="text" class="validate" name ="last_name">
 						<label for="last_name">Last Name</label>
 					</div>
 				</div>
@@ -27,19 +27,19 @@
 						<i class="material-icons">email</i>
 					</div>
 					<div class="input-field col s12">
-						<input id="email" type="email" class="validate">
+						<input id="email" type="email" class="validate" name="email">
 						<label for="email">Email</label>
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<input id="password" type="password" class="validate">
+						<input id="password" type="password" class="validate" name="passwordOne">
 						<label for="password">Password</label>
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<input id="password2" type="password" class="validate">
+						<input id="password2" type="password" class="validate" name="passwordTwo">
 						<label for="password2">Password Again</label>
 					</div>
 				</div>
@@ -48,7 +48,7 @@
 						<i class="material-icons">my_location</i>
 					</div>
 					<div class="input-field col s12">
-						<input type="text" id="zip-code" class="validate">
+						<input type="text" id="zip-code" class="validate" name="zipCode">
 						<label for="zip-code">Zip Code</label>
 					</div>
 				</div>
@@ -61,7 +61,7 @@
 						</div>
 					</div>
 					<div class="input-field col s6 login-with-google">
-						<a href="/registerWithAuth0" class="btn btn-block waves-effect waves-light">Register In with Google</a>
+						<a href="/registerWithAuth0" class="btn btn-block waves-effect waves-light">Register with Google</a>
 					</div>
 				</div>
 			</form>

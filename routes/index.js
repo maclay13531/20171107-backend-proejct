@@ -44,7 +44,19 @@ router.get('/register', function(req,res,next){
 
 // Post Route for Register Page
 router.post('/registerProcess', function(req,res, next){
+	var firstName = req.body.first_name;
+	var lastName = req.body.last_name;
+	var email = req.body.email;
+	var passwordOne=req.body.passwordOne;
+	var passwordTwo = req.body.passwordTwo;
+	if(passwordOne != passwordTwo){
+		res.redirect("/register?msg=PasswordNotMatch");
+	}
+	var zipCode = req.body.zipCode;
 
+	//check to see if it's in the database
+
+	//if not, insert into database and then redirect them to login
 });
 
 // GET Route for Login Page
@@ -67,17 +79,19 @@ router.get("/registerWithAuth0",
 		scope: 'openid profile email'
 	}),
 	(req, res, next)=>{
-		res.redirect("/callback");
+		res.redirect("/");
 });
+// callback for autho
 router.get("/callback", (req, res, next)=>{
 	passport.authenticate('auth0', {
 		failureRedirect: '/failure'
 	}),
 	function(req, res) {
 		console.log(req.session);
-		res.redirect(req.session.returnTo || '/listings');
+		res.redirect('/listings');
 	}
 });
+// if callback failled
 router.get('/failure', function(req, res) {
 	var error = req.flash("error");
 	var error_description = req.flash("error_description");

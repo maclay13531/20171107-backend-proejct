@@ -12,6 +12,7 @@ var users = require('./routes/users');
 var photos = require('./routes/photos');
 
 var app = express();
+app.io = require('socket.io')();
 
 var sessionOptions = {
 	secret: config.sessionSalt,
@@ -53,6 +54,15 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+app.io.on('connect', function(socket){  
+  console.log('A USER CONNECTED TO THE SERVER');
+
+  socket.on('new message', function(msg){
+    console.log('new message: ' + msg);
+    app.io.emit('chat message', msg);
+  });
 });
 
 module.exports = app;

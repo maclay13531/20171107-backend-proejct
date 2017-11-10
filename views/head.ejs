@@ -11,4 +11,22 @@
 	<script src="script.js"></script>
 
 
-<link href="https://fonts.googleapis.com/css?family=Bree+Serif" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Bree+Serif" rel="stylesheet">
+
+	<!-- SOCKET.IO and modals for chat -->
+	<script src="/socket.io/socket.io.js"></script>  
+    <script>
+    	$(document).ready(function(){
+    		$('#modal1').modal();
+    		var socket = io();
+    		function sendFunction() {
+    			socket.emit('new message', $('#new-message').val());
+    			$('#new-message').val('');
+  			}
+  				
+  				socket.on('chat message', function(msg){
+    			$('#messages-area').append($('<li>').text(msg));
+ 			});
+    	});
+
+    </script>

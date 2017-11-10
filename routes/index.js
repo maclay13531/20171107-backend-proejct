@@ -49,12 +49,48 @@ router.post('/loginProcess', function (req, res, next) {
 
 // GET Route for Upload Page
 router.get('/upload', function(req, res, next){
+	console.log(req.file)
 	res.render('upload', {})
 });
 
 // Post Route for Upload Page
 router.post('/uploadProcess', function (req, res, next) {
+	var type = req.body.type;
+	var breed = req.body.breed;
+	var name = req.body.name; 
+	var age = req.body.age; 
+	var gender = req.body.gender; 
+	console.log(req.file);
+	console.log(req.body);
+	var tmpPath = req.file.path;
+	var targetPath = `public/images/${req.file.originalname}`;
+	var insertPetInfoQuery = `INSERT INTO upload (type, breed, name_upload, age, gender) VALUES (?, ?, ?, ?)`;
+	connection.query(selectQuery, [type, breed, name, age, gender], (error, results)=>{
+		if (error){
+			throw error; 
+		}else{
 
+		}
+	})
+	fs.readFile(tmpPath, (error, fileContents) => {
+		if (error) {
+			throw error;
+		}
+		fs.writeFile(targetPath, fileContents, (error) => {
+			if (error) {
+				throw error;
+			}
+			var insertQuery = `INSERT INTO images (imageURL)
+                          VALUES (?);`;
+			connection.query(insertQuery, [req.file.originalname], (dbError, results) => {
+				if (dbError) {
+					throw dbError
+				}
+				res.redirect('/')
+			})
+		})
+	})
+  // res.json(req.body);
 });
 
 router.get("/listings", (req, res, next)=>{

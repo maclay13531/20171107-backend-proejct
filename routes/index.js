@@ -83,6 +83,7 @@ router.get("/registerWithAuth0",
 });
 // callback for autho
 router.get("/callback", (req, res, next)=>{
+	console.log(req.body);
 	passport.authenticate('auth0', {
 		failureRedirect: '/failure'
 	}),

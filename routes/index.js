@@ -37,7 +37,7 @@ router.all("/*", (req,res,next)=>{
 		console.log("you are not loggedin");
 		next();
 	}else if(req.session.uid != undefined){
-		// console.log("YOU ARE LOGGEDIN");
+		console.log("YOU ARE LOGGEDIN");
 		//mention this middleware
 		res.locals.firstNameTest = req.session.fname;
 		console.log(req.session.uid)

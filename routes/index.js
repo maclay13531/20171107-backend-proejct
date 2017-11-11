@@ -206,23 +206,21 @@ router.get('/upload', function(req, res, next){
 	res.render('upload', {})
 });
 
-// Post Route for Upload Page
-router.post('/uploadProcess', function (req, res, next) {
+router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 	var type = req.body.breed_type_select;
 	var dogBreed = req.body.dog_breed_select;
-	var catBreed = req.body.cat_breed_select; 
+	var catBreed = req.body.cat_breed_select;
 	var name = req.body.pet_name;
-	var age = req.body.age; 
-	var gender = req.body.gender; 
-	// console.log(req.file);
-	// console.log(req.session.id);
-	// console.log(req.body.dog_breed_select);
-	// console.log(name);
-	
-	var insertUploadInfo = function(){
-		return new Promise(function(resolve,reject){
-			var insertPetInfoQuery = `INSERT INTO upload (type, cat_breed, dog_breed, name_upload, age, gender) VALUES (?,?, ?, ?, ?, ?)`;
-			connection.query(insertPetInfoQuery, [type, dogBreed, catBreed, name, age, gender], (error, results) => {
+	var age = req.body.age;
+	var gender = req.body.gender;
+	var tmpPath = req.file.path;
+	var targetPath = `public/images/${req.file.originalname}`;
+	console.log(req.file);
+
+	var insertUploadInfo = function () {
+		return new Promise(function (resolve, reject) {
+			var insertPetInfoQuery = `INSERT INTO upload (user_id, type, cat_breed, dog_breed, name_upload, age, gender) VALUES (?,?,?, ?, ?, ?, ?)`;
+			connection.query(insertPetInfoQuery, [req.session.uid, type, dogBreed, catBreed, name, age, gender], (error, results) => {
 				if (error) {
 					reject(error);
 				} else {
@@ -232,10 +230,8 @@ router.post('/uploadProcess', function (req, res, next) {
 		})
 	}
 
-	var insertImage = function(){
-		return new Promise(function(resolve, reject){
-			var tmpPath = req.file.path;
-			var targetPath = `public/images/${req.file.originalname}`;
+	var insertImage = function () {
+		return new Promise(function (resolve, reject) {
 			fs.readFile(tmpPath, (error, fileContents) => {
 				if (error) {
 					throw error;
@@ -244,9 +240,9 @@ router.post('/uploadProcess', function (req, res, next) {
 					if (error) {
 						throw error;
 					}
-					var insertQuery = `INSERT INTO images (imageURL)
+					var insertQuery = `INSERT INTO upload (img_url)
                           VALUES (?);`;
-					connection.query(insertQuery, [req.file.originalname], (dbError, results) => {
+					connection.query(insertQuery, [req.file.path], (dbError, results) => {
 						if (error) {
 							reject(error);
 						} else {
@@ -259,12 +255,17 @@ router.post('/uploadProcess', function (req, res, next) {
 	}
 
 	insertUploadInfo().then(function (result) {
-		return insertImage(result)
-	});
+		return insertImage(result);
+	}).then(function(e){
+		res.redirect('/listings')
+	})
 	insertUploadInfo().catch((error) => {
 		res.json(error);
 	});
- 
+	insertImage().catch((error) => {
+		res.json(error);
+	});
+
 });
 // listings route, wants to print out featured animals which is pet.getRandom
 router.get("/listings", (req, res, next)=>{

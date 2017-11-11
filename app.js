@@ -60,7 +60,7 @@ app.io.on('connect', function(socket){
     console.log('A USER CONNECTED TO THE SERVER VIA A SOCKET');
     socket.on('messageToServer', function(msg){
         console.log(msg);
-        app.io.emit('messageToClinet', msg);
+        app.io.emit('messageToClient', msg)
     });
 });
 

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+    <head>
+        <% include head %>
+        <title>Pet Basket Upload</title>
+
+    </head>
+    <body>
+    <% include navbar %>
+     <main>
+        <div class="container">
+                <div class="row">
+                    <% include sideNav %>
+                    <div class="col s8">
+                        <form class="col s12">
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <i class="material-icons prefix">person</i>
+                                    <input id="icon_prefix" type="text" class="validate" value= '<%= locals.sessionName %>'>
+                                    <label for="icon_prefix">First Name</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <i class="material-icons prefix">person_outline</i>
+                                    <input id="icon_prefix" type="text" class="validate">
+                                    <label for="icon_prefix">Last Name</label>
+                                </div>
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">email</i>
+                                    <input id="icon_telephone" type="email" class="validate">
+                                    <label for="icon_telephone">Email</label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+			</div>
+	    </main>
+        <% include footer %>
+    </body>
+</html>

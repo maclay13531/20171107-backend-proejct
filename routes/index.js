@@ -40,6 +40,7 @@ router.all("/*", (req,res,next)=>{
 		console.log("YOU ARE LOGGEDIN");
 		//mention this middleware
 		res.locals.firstNameTest = req.session.fname;
+		var sessionName = res.locals.firstNameTest;
 		// console.log(req.session.uid)
 		next();
 	}
@@ -427,6 +428,10 @@ router.post("/search", (req,res,next)=>{
 router.get("/test", (req, res, next) => {
 	res.render('test')
 });
+
+router.get('/profile',(req,res, next)=>{
+	res.render('profile')
+})
 
 router.get('/logout', (req, res) => {
 	req.session.destroy();

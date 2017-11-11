@@ -63,6 +63,7 @@ router.post('/registerProcess', function(req,res, next){
 	var email = req.body.email;
 	var passwordOne=req.body.passwordOne;
 	var passwordTwo = req.body.passwordTwo;
+	var phone = req.body.phone;
 	//checking password match
 	if(passwordOne != passwordTwo){
 		res.redirect("/register?msg=PasswordNotMatch");
@@ -96,15 +97,18 @@ router.post('/registerProcess', function(req,res, next){
 			})
 		})
 	}
-	checkData().then((results)=>{
+	checkData()
+	.then((results)=>{
 		if(results.length ==0){
 			return insertInto();
 		}else{
 			res.redirect("/register?msg=alreadyRegistered");
 		}
-	}).then((e)=>{
+	})
+	.then((e)=>{
 		res.redirect("/login");
-	}).catch((error)=>{
+	})
+	.catch((error)=>{
 		throw error;
 	})
 });
@@ -150,14 +154,16 @@ router.post('/loginProcess', function (req, res, next) {
 		})
 	}
 	// if it's a match, make session variables to keep track that it's this person and route them to listings
-	checkDB().then((results)=>{
+	checkDB()
+	.then((results)=>{
 		// console.log(results);
 		if(results.length !=0){
 			return matchPassword(results);	
 		}else{
 			return res.redirect("/login?msg=badpassword1");
 		}
-	}).then((password)=>{
+	})
+	.then((password)=>{
 		if(password){
 			return res.redirect("/listings");
 		}
@@ -310,12 +316,14 @@ router.get("/listings", (req, res, next)=>{
 			})
 		})
 	}
-	getAnimalID().then((data)=>{
+	getAnimalID()
+	.then((data)=>{
 		//this is the animalID that's getting resolved
 		var animalID = data.petfinder.petIds.id.$t;
 		console.log(animalID);
 		return getRandomPet(animalID);
-	}).then((animal)=>{
+	})
+	.then((animal)=>{
 		var animalPhoto = animal.petfinder.pet.media.photos.photo[3].$t;
 		var animalAge = animal.petfinder.pet.age.$t;
 		var animalBreed = animal.petfinder.pet.breeds.breed.$t;
@@ -338,7 +346,8 @@ router.get("/listings", (req, res, next)=>{
 			id: petId
 		});
 		// res.json(animal);
-	}).catch((error)=>{
+	})
+	.catch((error)=>{
 		console.log(error);
 	})
 	//gets info and display to screen
@@ -439,6 +448,4 @@ router.get('/logout', (req, res) => {
 });
 module.exports = router;
 
-// TODO: update registration with database/ hash password
-// TODO: update login with database
 // TODO: auth0 issues

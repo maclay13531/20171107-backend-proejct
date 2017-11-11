@@ -8,6 +8,7 @@ var mysql = require('mysql');
 var config = require('../config/config');
 var bcrypt = require('bcrypt-nodejs');
 var multer = require('multer');
+var request = require("request");
 //images will be saved in the public folder
 var uploadDir = multer({
 	dest: 'public/images'
@@ -36,10 +37,10 @@ const env = {
 
 router.all("/*", (req,res,next)=>{
 	if(req.session.uid == undefined){
-		console.log("you are not loggedin");
+		// console.log("you are not loggedin");
 		next();
 	}else if(req.session.uid != undefined){
-		console.log("YOU ARE LOGGEDIN");
+		// console.log("YOU ARE LOGGEDIN");
 		//mention this middleware
 		res.locals.firstNameTest = req.session.fname;
 		next();
@@ -141,6 +142,7 @@ router.post('/loginProcess', function (req, res, next) {
 				req.session.lname = results[0].last_name;
 				req.session.email = results[0].email;
 				req.session.uid = results[0].id;
+				req.session.location = results[0].zipcode;
 				resolve(passwordMatch);
 			}else{
 				resolve(passwordMatch);
@@ -156,10 +158,10 @@ router.post('/loginProcess', function (req, res, next) {
 			return res.redirect("/login?msg=badpassword1");
 		}
 	}).then((password)=>{
-		if(password == true){
+		if(password){
 			return res.redirect("/listings");
 		}
-		if(password==false){
+		if(!password){
 			return res.redirect("/login?msg=badpassword2");
 		}
 	});
@@ -212,8 +214,9 @@ router.post('/uploadProcess', function (req, res, next) {
 	var name = req.body.name; 
 	var age = req.body.age; 
 	var gender = req.body.gender; 
-	console.log(req.file);
-	console.log(req.body);
+	// console.log(req.file);
+
+	// console.log(req.body);
 	var tmpPath = req.file.path;
 	var targetPath = `public/images/${req.file.originalname}`;
 	var insertPetInfoQuery = `INSERT INTO upload (type, breed, name_upload, age, gender) VALUES (?, ?, ?, ?)`;
@@ -246,16 +249,10 @@ router.post('/uploadProcess', function (req, res, next) {
 });
 
 router.get("/listings", (req, res, next)=>{
-	// if(req.session.uid != undefined){
-	// 	res.render("listings", {
-	// 		userID : true, 
-	// 		firstName:req.session.fname
-	// 	})
-	// }else{
-	// 	res.render("listings", {userID: false});
-	// }
+
+	// var requestString = `http://api.petfinder.com/pet.find?key=${config.petFinderApi}&animal=dog&location=${req.session.location}&format=json`;
 	res.render("listings");
-})
+});
 
 router.get("/singles", (req, res, next)=>{
 	res.render("singlePage");
@@ -263,7 +260,17 @@ router.get("/singles", (req, res, next)=>{
 
 // SEARCH from INDEX
 router.post("/search", (req,res,next)=>{
-	res.render("listings");
+	var type = req.body.typeSelect;
+	var breedSelect;
+	if(type == "dog"){
+		breedSelect = req.body.dogBreedSelect;
+	}else if(type == "cat"){
+		breedSelect = req.body.catBreedSelect;
+	}
+	var location = req.body.location;
+	var age = req.body.ageSelect;
+	var gender = req.body.genderSelect;
+	res.redirect("/listings");
 });
 router.get("/test", (req, res, next) => {
 	res.render('test')

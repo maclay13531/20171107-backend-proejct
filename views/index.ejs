@@ -6,29 +6,46 @@
     </head>
     <body>
         <% include navbar %>
+	<script type="text/javascript">
+		$(document).ready(() => {
+				// initiate selection dropdown
+				$('select').material_select();
+
+				// Hide dog/cat breeds to only show when a type is selected
+				$('.dog-breeds, .cat-breeds').hide();
+				// show dog/cat breeds depending on selection
+				$('#breeds-select').change(function () {
+					var inputValue = $(this).val();
+					// console.log(inputValue)
+					if (inputValue == "dog") {
+						$('.dog-breeds').show();
+						$('.cat-breeds').hide();
+					} else if (inputValue == "cat") {
+						$('.cat-breeds').show();
+						$('.dog-breeds').hide();
+					}
+				});
+			});
+	</script>
+
     <main>
         <div class="container">
 		<div class="row">
 			<form action="/listings" method="post">
 				<div class="row">
 					<div class="input-field col s2">
-						<div class="input-field col s12">
-							<a href="#" class="btn dropdown-button btn-block" data-activates='dropdown2'>Type<i class="material-icons right">keyboard_arrow_down</i></a>
-							<ul id='dropdown2' class='dropdown-content'>  
-								<li>hi</li>
-								<div class="divider"></div>
-								<li>h2</li>
-							</ul>
-						</div>
+						<select id='breeds-select'>
+							<option value="" disabled selected>Type</option>
+							<option value="dog" class="dog" id="dog">Dog</option>
+							<option value="cat" class="cat" id="cat">Cat</option>
+						</select>
 					</div>
 					<div class="input-field col s2">
-						<div class="input-field col s12">
-							<a href="#" class="btn dropdown-button btn-block" data-activates='dropdown1'>Breed<i class="material-icons right">keyboard_arrow_down</i></a>
-							<ul id='dropdown1' class='dropdown-content'>  
-								<li>hi</li>
-								<div class="divider"></div>
-								<li>h2</li>
-							</ul>
+						<div class="breeds dog-breeds">
+							<% include dog_breeds %>
+						</div>
+						<div class="breeds cat-breeds">
+							<% include cat_breeds %>
 						</div>
 					</div>
 					<div class="input-field col s2">
@@ -36,12 +53,21 @@
 						<input type="text" class="validate">
 					</div>
 					<div class="input-field col s2">
-						<label for="location">Age:</label>
-						<input type="text" class="validate">
+						<select multiple>
+							<option value="" disabled selected>Age</option>
+							<option value="baby">Baby</option>
+							<option value="young">Young</option>
+							<option value="adult">Adult</option>
+							<option value="senior">Senior</option>
+						</select>
 					</div>
 					<div class="input-field col s2">
-						<label for="location">Gender:</label>
-						<input type="text" class="validate">
+						<select>
+							<option value="" disabled selected>Gender</option>
+							<option value="f" class="dog">Female</option>
+							<option value="m" class="cat">Male</option>
+							<option value="u" class="cat">Unknown</option>
+						</select>
 					</div>
 					<div class="input-field col s2">
 						<!-- margin needs to be top 7px -->

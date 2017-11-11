@@ -265,6 +265,9 @@ router.get("/singles", (req, res, next)=>{
 router.post("/search", (req,res,next)=>{
 	res.render("listings");
 });
+router.get("/test", (req, res, next) => {
+	res.render('test')
+});
 
 module.exports = router;
 

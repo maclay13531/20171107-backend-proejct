@@ -34,12 +34,7 @@ const env = {
 
 router.all("/*", (req,res,next)=>{
 	if(req.session.uid == undefined){
-<<<<<<< HEAD
-		// console.log("you are not loggedin");
-=======
-		
 		console.log("you are not loggedin");
->>>>>>> b9c218cf0e15a879221b595d6718ce752bfba615
 		next();
 	}else if(req.session.uid != undefined){
 		// console.log("YOU ARE LOGGEDIN");
@@ -271,18 +266,60 @@ router.post('/uploadProcess', function (req, res, next) {
 	});
  
 });
-
+// listings route, wants to print out featured animals which is pet.getRandom
 router.get("/listings", (req, res, next)=>{
+	//gets random animal dogs for now
+	function getAnimalID(){
+		return new Promise((resolve,reject)=>{
+			var randomAnimal = `http://api.petfinder.com/pet.getRandom?key=${config.petFinderApi}&animal=dog&ouput=id&format=json`;
+			request(randomAnimal, (error, response)=>{
+				if(error){
+					reject(error);
+				}else{
+					var parsedData = JSON.parse(response.body);
+					resolve(parsedData);
+					// resolve(response.body[0].petfinder.petIds.id.$t);
+				}
+			})
+		})
+	}
 
-	// var requestString = `http://api.petfinder.com/pet.find?key=${config.petFinderApi}&animal=dog&location=${req.session.location}&format=json`;
-	res.render("listings");
+	function getRandomPet(animalID){
+		return new Promise((resolve, reject)=>{
+			var randomAnimal = `http://api.petfinder.com/pet.get?key=${config.petFinderApi}&id=${animalID}&format=json`;
+			request(randomAnimal, (error, response)=>{
+				if(error){
+					reject(error);
+				}else{
+					var parsedData = JSON.parse(response.body);
+					resolve(parsedData);
+				}
+			})
+		})
+	}
+	getAnimalID().then((data)=>{
+		var animalID = data.petfinder.petIds.id.$t;
+		return getRandomPet(animalID);
+	}).then((animal)=>{
+		var animalPhoto = animal.petfinder.pet.media.photos.photo;
+		var animalAge = animal.petfinder.pet.age.$t;
+		var animalBreed = animal.petfinder.pet.breeds.breed.$t;
+		var animalName = animal.petfinder.pet.name.$t;
+		res.render("/listings", {
+			photo: animalPhoto,
+			age: animalAge,
+			breed: animalBreed,
+			name: animalName
+		});
+	})
+	//gets info and display to screen
 });
 
 router.get("/singles", (req, res, next)=>{
 	res.render("singlePage");
 })
-
-// SEARCH from INDEX
+//===================need to work on this===================
+// SEARCH from INDEX will go back to listings and replace the search results with what we got from api and database
 router.post("/search", (req,res,next)=>{
 	var type = req.body.typeSelect;
 	var breedSelect;
@@ -294,7 +331,23 @@ router.post("/search", (req,res,next)=>{
 	var location = req.body.location;
 	var age = req.body.ageSelect;
 	var gender = req.body.genderSelect;
-	res.redirect("/listings");
+	function requestAPI(){
+		return new Promise((resolve, reject)=>{
+			var requestString = `http://api.petfinder.com/pet.find?key=${config.petFinderApi}&animal=${type}&breed=${breedSelect}&location=${location}&age=${age}&format=json`;
+			request(requestString, (error, response)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve(response);
+				}
+			})
+		})
+	}
+
+	requestAPI().then((data)=>{
+		console.log(data);
+		res.send(data.body);
+	})
 });
 router.get("/test", (req, res, next) => {
 	res.render('test')

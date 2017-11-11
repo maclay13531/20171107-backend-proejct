@@ -48,7 +48,11 @@
 								<p><%=description%></p>
 							</div>
 							<div class="card-action right-align">
-								<a href="/singles/<%=id%>" class="btn-floating btn-large red" ><i class="material-icons">add</i></a>
+								<% if (locals.firstNameTest !== undefined){ %>
+								<a href="/singles/<%=id%>" class="btn-floating btn-large red"><i class="material-icons">add</i></a>
+								<% }else{ %>
+								<a href="#" class="btn-floating btn-large red" onclick="Materialize.toast('Must Login To View Detail', 4000)"><i class="material-icons">add</i></a>
+								<% } %>
 							</div>
 						</div>
 					</div>
@@ -58,5 +62,6 @@
 		</div>
 	</main>
     <% include footer %>
+
     </body>
 </html>

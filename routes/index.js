@@ -34,15 +34,10 @@ const env = {
 
 router.all("/*", (req,res,next)=>{
 	if(req.session.uid == undefined){
-<<<<<<< HEAD
-		// console.log("you are not loggedin");
-=======
-		
 		console.log("you are not loggedin");
->>>>>>> b9c218cf0e15a879221b595d6718ce752bfba615
 		next();
 	}else if(req.session.uid != undefined){
-		// console.log("YOU ARE LOGGEDIN");
+		console.log("YOU ARE LOGGEDIN");
 		//mention this middleware
 		res.locals.firstNameTest = req.session.fname;
 		console.log(req.session.uid)

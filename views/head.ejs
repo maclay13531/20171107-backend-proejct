@@ -25,14 +25,13 @@
     		var userName = 'GUEST';
     		// use if statment to see if req.session.name exist then change userName to match req.session.name
     		$('#submit-message').submit((event)=>{
-	    			event.preventDefault();
-	    			var newMessage = $('#new-message').val();
-	    			$("#new-message").val('');
-	    			socket.emit('messageToServer', {
-	    				message: newMessage,
-	    				name: userName
-	    			});
-		    		
+    			event.preventDefault();
+    			var newMessage = $('#new-message').val();
+    			$("#new-message").val('');
+    			socket.emit('messageToServer', {
+    				message: newMessage,
+    				name: userName
+    			});
     			// socket.emit('nameToServer', {
     			// 	name: userName
     			// })
@@ -53,6 +52,10 @@
     		// socket.on('nameToClient', (msg)=>{
     		// 	$('#user-name').prepend(`<p>${msg.name}</p>`);
     		// });
+    		$('#clear').click(function(){
+	    		$("#messages").empty();
+	    		$("#user-name").empty();
+	    	});
     	});
 
     </script>

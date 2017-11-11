@@ -62,6 +62,10 @@ app.io.on('connect', function(socket){
         console.log(msg);
         app.io.emit('messageToClient', msg)
     });
+    // socket.on('nameToServer', function(name){
+    //     console.log(name);
+    //     app.io.emit('nameToClient', name)
+    // });
 });
 
 module.exports = app;

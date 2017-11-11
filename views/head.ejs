@@ -17,26 +17,42 @@
 	<script src="/socket.io/socket.io.js"></script>  
     <script>
     	$(document).ready(function(){
+    		// modal option
     		$('#modal1').modal();
+    		// button button-collapse option
     		$(".button-collapse").sideNav();
     		var socket = io();
+    		var userName = 'GUEST';
+    		// use if statment to see if req.session.name exist then change userName to match req.session.name
     		$('#submit-message').submit((event)=>{
-    			event.preventDefault();
-    			var newMessage = $('#new-message').val();
-    			socket.emit('messageToServer', {
-    				message: newMessage
-    			});
+	    			event.preventDefault();
+	    			var newMessage = $('#new-message').val();
+	    			$("#new-message").val('');
+	    			socket.emit('messageToServer', {
+	    				message: newMessage,
+	    				name: userName
+	    			});
+		    		
+    			// socket.emit('nameToServer', {
+    			// 	name: userName
+    			// })
     		});
     		// function sendFunction(){
     		// 	socket.emit('messageToServer', $('#new-message').val());
     		// 	$('#new-message').val('');
     		// }
     		socket.on('messageToClient', (msg)=>{
-    			$('#messages').prepend(`<p>${msg.message}</p>`);
+    			if(msg.message != ""){
+	    			$('#messages').prepend(`<p>${msg.message}</p>`);
+	    			$('#user-name').prepend(`<p>${msg.name}</p>`);
+	    		}
     			// $('#messages').append($('<li>').text(msg));
     			// $('#messages').append($('<li>').text(msg));
     		// });
     		});
+    		// socket.on('nameToClient', (msg)=>{
+    		// 	$('#user-name').prepend(`<p>${msg.name}</p>`);
+    		// });
     	});
 
     </script>

@@ -33,12 +33,14 @@ const env = {
 
 router.all("/*", (req,res,next)=>{
 	if(req.session.uid == undefined){
+		
 		console.log("you are not loggedin");
 		next();
 	}else if(req.session.uid != undefined){
 		console.log("YOU ARE LOGGEDIN");
 		//mention this middleware
 		res.locals.firstNameTest = req.session.fname;
+		console.log(req.session.uid)
 		next();
 	}
 });
@@ -212,7 +214,7 @@ router.post('/uploadProcess', function (req, res, next) {
 	var age = req.body.age; 
 	var gender = req.body.gender; 
 	console.log(req.file);
-	console.log(req.session);
+	console.log(req.session.id);
 	console.log(req.body.dog_breed_select);
 	console.log(name);
 	
@@ -288,6 +290,10 @@ router.get("/test", (req, res, next) => {
 	res.render('test')
 });
 
+router.get('/logout', (req, res) => {
+	req.session.destroy();
+	res.redirect('/login');
+});
 module.exports = router;
 
 // TODO: update registration with database/ hash password

@@ -4,9 +4,12 @@
 		<ul id="nav-mobile" class="right hide-on-med-and-down">
 		 <% if (locals.firstNameTest !== undefined){ %>
         	<li><a href="/upload">Upload</a></li>
-		<% } %> 
+			<li><a href="/profile">Profile</a></li>
+			<li><a href="/logout">Log Out</a></li>
+		<% }else{ %> 
 			<li><a href="/register">Sign Up</a></li>
 			<li><a href="/login">Login</a></li>
+		<% } %>
 		</ul>
     </div>
 </nav>

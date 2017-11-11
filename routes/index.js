@@ -257,7 +257,7 @@ router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 	insertUploadInfo().then(function (result) {
 		return insertImage(result);
 	}).then(function(e){
-		res.redirect('/listings')
+		res.redirect('/uploadSuccess')
 	})
 	insertUploadInfo().catch((error) => {
 		res.json(error);
@@ -267,6 +267,10 @@ router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 	});
 
 });
+
+router.get('/uploadSuccess',(req,res,next)=>{
+	res.render('uploadSuccess')
+})
 // listings route, wants to print out featured animals which is pet.getRandom
 router.get("/listings", (req, res, next)=>{
 	//gets random animal dogs for now

@@ -29,9 +29,6 @@ const env = {
 	AUTH0_CALLBACK_URL: 'http://localhost:3000/callback'
 };
 
-
-
-
 /* GET home page. */
 
 router.all("/*", (req,res,next)=>{
@@ -58,6 +55,7 @@ router.get('/register', function(req,res,next){
 // Post Route for Register Page
 router.post('/registerProcess', function(req,res, next){
 	var firstName = req.body.first_name;
+	// console.log(firstName)
 	var lastName = req.body.last_name;
 	var email = req.body.email;
 	var passwordOne=req.body.passwordOne;
@@ -179,12 +177,12 @@ router.get("/registerWithAuth0",
 });
 // callback for autho
 router.get("/callback", (req, res, next)=>{
-	console.log(req.session.passport);
+	// console.log(req.session.passport);
 	passport.authenticate('auth0', {
 		failureRedirect: '/failure'
 	}),
 	function(req, res) {
-		console.log(req.session);
+		// console.log(req.session);
 		res.redirect('/');
 	}
 });
@@ -201,48 +199,69 @@ router.get('/failure', function(req, res) {
   
 // GET Route for Upload Page
 router.get('/upload', function(req, res, next){
-	console.log(req.file)
+	// console.log(req.file)
 	res.render('upload', {})
 });
 
 // Post Route for Upload Page
 router.post('/uploadProcess', function (req, res, next) {
-	var type = req.body.type;
-	var breed = req.body.breed;
-	var name = req.body.name; 
+	var type = req.body.breed_type_select;
+	var dogBreed = req.body.dog_breed_select;
+	var catBreed = req.body.cat_breed_select; 
+	var name = req.body.pet_name;
 	var age = req.body.age; 
 	var gender = req.body.gender; 
 	console.log(req.file);
-	console.log(req.body);
-	var tmpPath = req.file.path;
-	var targetPath = `public/images/${req.file.originalname}`;
-	var insertPetInfoQuery = `INSERT INTO upload (type, breed, name_upload, age, gender) VALUES (?, ?, ?, ?)`;
-	connection.query(selectQuery, [type, breed, name, age, gender], (error, results)=>{
-		if (error){
-			throw error; 
-		}else{
-
-		}
-	})
-	fs.readFile(tmpPath, (error, fileContents) => {
-		if (error) {
-			throw error;
-		}
-		fs.writeFile(targetPath, fileContents, (error) => {
-			if (error) {
-				throw error;
-			}
-			var insertQuery = `INSERT INTO images (imageURL)
-                          VALUES (?);`;
-			connection.query(insertQuery, [req.file.originalname], (dbError, results) => {
-				if (dbError) {
-					throw dbError
+	console.log(req.session);
+	console.log(req.body.dog_breed_select);
+	console.log(name);
+	
+	var insertUploadInfo = function(){
+		return new Promise(function(resolve,reject){
+			var insertPetInfoQuery = `INSERT INTO upload (type, cat_breed, dog_breed, name_upload, age, gender) VALUES (?,?, ?, ?, ?, ?)`;
+			connection.query(insertPetInfoQuery, [type, dogBreed, catBreed, name, age, gender], (error, results) => {
+				if (error) {
+					reject(error);
+				} else {
+					resolve("info added");
 				}
-				res.redirect('/')
 			})
 		})
-	})
-  // res.json(req.body);
+	}
+
+	var insertImage = function(){
+		return new Promise(function(resolve, reject){
+			var tmpPath = req.file.path;
+			var targetPath = `public/images/${req.file.originalname}`;
+			fs.readFile(tmpPath, (error, fileContents) => {
+				if (error) {
+					throw error;
+				}
+				fs.writeFile(targetPath, fileContents, (error) => {
+					if (error) {
+						throw error;
+					}
+					var insertQuery = `INSERT INTO images (imageURL)
+                          VALUES (?);`;
+					connection.query(insertQuery, [req.file.originalname], (dbError, results) => {
+						if (error) {
+							reject(error);
+						} else {
+							resolve("image added");
+						}
+					})
+				})
+			})
+		})
+	}
+
+	insertUploadInfo().then(function (result) {
+		return insertImage(result)
+	});
+	insertUploadInfo().catch((error) => {
+		res.json(error);
+	});
+ 
 });
 
 router.get("/listings", (req, res, next)=>{
@@ -262,7 +281,7 @@ router.get("/singles", (req, res, next)=>{
 
 // SEARCH from INDEX
 router.post("/searchFromIndex", (req,res,next)=>{
-	console.log(req.session.uid);
+	// console.log(req.session.uid);
 	res.json(req.body);
 });
 router.get("/test", (req, res, next) => {

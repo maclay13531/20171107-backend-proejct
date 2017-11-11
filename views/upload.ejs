@@ -33,13 +33,13 @@
         <div class="container">
 		<div class="row">
 			<h3 class="center-align">Upload File</h3>
-			<form class="offset-s2 col s8 card darken-1" action="/uploadProcess" method="post" enctype="multipart/form-data">
+			<form class="offset-s2 col s8 card darken-1" action="/uploadProcess" method="post">
 				<div class="row">
 					<div class="input-field col s12">
-						<select id='breeds-select'>
-						<option value="" disabled selected>Type</option>
-						<option value="dog" class="dog" id="dog">Dog</option>
-						<option value="cat" class="cat" id="cat">Cat</option>
+						<select name="breed_type_select" id='breeds-select'>
+						<option value="" disabled selected name="type">Type</option>
+						<option value="dog" name="dog" class="dog" id="dog">Dog</option>
+						<option value="cat" name="cat" class="cat" id="cat">Cat</option>
 						</select>
 						<!-- <label>Type</label> -->
 						<!-- <a href="#" class="btn dropdown-button btn-block" data-activates='dropdown1'>Type<i class="material-icons right">keyboard_arrow_down</i></a>
@@ -60,13 +60,13 @@
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<input id="name" type="text" class="validate">
+						<input id="name" type="text" name="pet_name" class="validate">
 						<label for="name">Name</label>
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<select multiple>
+						<select name="age" multiple>
 							<option value="" disabled selected>Age</option>
 							<option value="baby">Baby</option>
 							<option value="young">Young</option>
@@ -77,7 +77,7 @@
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<select>
+						<select name="gender">
 							<option value="" disabled selected>Gender</option>
 							<option value="f" class="dog">Female</option>
 							<option value="m" class="cat">Male</option>

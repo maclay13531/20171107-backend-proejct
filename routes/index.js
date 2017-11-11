@@ -270,8 +270,15 @@ router.post('/uploadProcess', function (req, res, next) {
 router.get("/listings", (req, res, next)=>{
 	//gets random animal dogs for now
 	function getAnimalID(){
+		var animalRandom;
+		var rand = Math.random() * 10;
+		if(rand<=5){
+			animalRandom = "cat";
+		}else{
+			animalRandom = "dog";
+		}
 		return new Promise((resolve,reject)=>{
-			var randomAnimal = `http://api.petfinder.com/pet.getRandom?key=${config.petFinderApi}&animal=dog&ouput=id&format=json`;
+			var randomAnimal = `http://api.petfinder.com/pet.getRandom?key=${config.petFinderApi}&animal=${animalRandom}&ouput=id&format=json`;
 			request(randomAnimal, (error, response)=>{
 				if(error){
 					reject(error);
@@ -299,24 +306,98 @@ router.get("/listings", (req, res, next)=>{
 	}
 	getAnimalID().then((data)=>{
 		var animalID = data.petfinder.petIds.id.$t;
+		console.log(animalID);
+		return getRandomPet(animalID);
+	}).then((animal)=>{
+		var animalPhoto = animal.petfinder.pet.media.photos.photo[3].$t;
+		var animalAge = animal.petfinder.pet.age.$t;
+		var animalBreed = animal.petfinder.pet.breeds.breed.$t;
+		var animalName = animal.petfinder.pet.name.$t;
+		var animalDescription = animal.petfinder.pet.description.$t;
+		if(animalPhoto == undefined){
+			animalPhoto = "No photos at this point";
+		}
+		if(animalDescription == undefined){
+			animalDescription = "No description at this point";
+		}
+		res.render("listings", {
+			photo: animalPhoto,
+			age: animalAge,
+			breed: animalBreed,
+			name: animalName,
+			description: animalDescription
+		});
+		// res.json(animal);
+	}).catch((error)=>{
+		console.log(error);
+	})
+	//gets info and display to screen
+});
+
+router.get("/singles", (req, res, next)=>{
+
+	function getAnimalID(){
+		var animalRandom;
+		var rand = Math.random() * 10;
+		if(rand<=5){
+			animalRandom = "cat";
+		}else{
+			animalRandom = "dog";
+		}
+		return new Promise((resolve,reject)=>{
+			var randomAnimal = `http://api.petfinder.com/pet.getRandom?key=${config.petFinderApi}&animal=${animalRandom}&ouput=id&format=json`;
+			request(randomAnimal, (error, response)=>{
+				if(error){
+					reject(error);
+				}else{
+					var parsedData = JSON.parse(response.body);
+					resolve(parsedData);
+					// resolve(response.body[0].petfinder.petIds.id.$t);
+				}
+			})
+		})
+	}
+
+	function getRandomPet(animalID){
+		return new Promise((resolve, reject)=>{
+			var randomAnimal = `http://api.petfinder.com/pet.get?key=${config.petFinderApi}&id=${animalID}&format=json`;
+			request(randomAnimal, (error, response)=>{
+				if(error){
+					reject(error);
+				}else{
+					var parsedData = JSON.parse(response.body);
+					resolve(parsedData);
+				}
+			})
+		})
+	}
+	getAnimalID().then((data)=>{
+		var animalID = data.petfinder.petIds.id.$t;
+		console.log(animalID);
 		return getRandomPet(animalID);
 	}).then((animal)=>{
 		var animalPhoto = animal.petfinder.pet.media.photos.photo;
 		var animalAge = animal.petfinder.pet.age.$t;
 		var animalBreed = animal.petfinder.pet.breeds.breed.$t;
 		var animalName = animal.petfinder.pet.name.$t;
-		res.render("/listings", {
+		var animalDescription = animal.petfinder.pet.description.$t;
+		if(animalPhoto == undefined){
+			animalPhoto = "No photos at this point";
+		}
+		if(animalDescription == undefined){
+			animalDescription = "No description at this point";
+		}
+		res.render("singlePage", {
 			photo: animalPhoto,
 			age: animalAge,
 			breed: animalBreed,
-			name: animalName
+			name: animalName,
+			description: animalDescription
 		});
+		// res.json(animal);
+	}).catch((error)=>{
+		console.log(error);
 	})
-	//gets info and display to screen
-});
-
-router.get("/singles", (req, res, next)=>{
-	res.render("singlePage");
 })
 //===================need to work on this===================
 // SEARCH from INDEX will go back to listings and replace the search results with what we got from api and database

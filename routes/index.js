@@ -338,6 +338,7 @@ router.get("/listings", (req, res, next)=>{
 	//gets info and display to screen
 });
 
+//SINGLE PAGE route
 router.get("/singles/:id", (req, res, next)=>{
 	var id = req.params.id;
 	function getPet(id){
@@ -355,6 +356,7 @@ router.get("/singles/:id", (req, res, next)=>{
 	}
 	getPet(id).then((animal)=>{
 		var animalPhoto = animal.petfinder.pet.media.photos.photo;
+		var bigPic = animal.petfinder.pet.media.photos.photo[3].$t;
 		var animalAge = animal.petfinder.pet.age.$t;
 		var animalBreed = animal.petfinder.pet.breeds.breed.$t;
 		var animalName = animal.petfinder.pet.name.$t;
@@ -377,7 +379,8 @@ router.get("/singles/:id", (req, res, next)=>{
 			name: animalName,
 			sex: sex,
 			phone:phone,
-			description: animalDescription
+			description: animalDescription,
+			bigPic :bigPic
 		});
 		// res.json(animal);
 	}).catch((error)=>{

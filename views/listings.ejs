@@ -47,12 +47,17 @@
 							<div class="card-content card-description">
 								<p><%=description%></p>
 							</div>
-							<div class="card-action right-align">
-								<% if (locals.firstNameTest !== undefined){ %>
-								<a href="/singles/<%=id%>" class="btn-floating btn-large red"><i class="material-icons">add</i></a>
-								<% }else{ %>
-								<a href="#" class="btn-floating btn-large red" onclick="Materialize.toast('Must Login To View Detail', 4000)"><i class="material-icons">add</i></a>
-								<% } %>
+							<div class="card-action">
+								<div class="col s6">
+									Age: <%=age%>
+								</div>
+								<div class="right-align">
+									<% if (locals.firstNameTest !== undefined){ %>
+									<a href="/singles/<%=id%>" class="btn-floating btn-large red"><i class="material-icons">add</i></a>
+									<% }else{ %>
+									<a href="#" class="btn-floating btn-large red" onclick="Materialize.toast('Must Login To View Detail', 4000)"><i class="material-icons">add</i></a>
+									<% } %>
+								</div>
 							</div>
 						</div>
 					</div>

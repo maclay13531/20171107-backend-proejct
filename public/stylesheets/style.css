@@ -71,7 +71,12 @@ nav {
 }
 
 
-
+.card-page{
+	height: 300px;
+}
+.card-description{
+	overflow: auto;
+}
 
 
 

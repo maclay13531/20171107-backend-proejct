@@ -246,14 +246,15 @@ router.post('/uploadProcess', function (req, res, next) {
 });
 
 router.get("/listings", (req, res, next)=>{
-	if(req.session.uid != undefined){
-		res.render("listings", {
-			userID : true, 
-			firstName:req.session.fname
-		})
-	}else{
-		res.render("listings", {userID: false});
-	}
+	// if(req.session.uid != undefined){
+	// 	res.render("listings", {
+	// 		userID : true, 
+	// 		firstName:req.session.fname
+	// 	})
+	// }else{
+	// 	res.render("listings", {userID: false});
+	// }
+	res.render("listings");
 })
 
 router.get("/singles", (req, res, next)=>{
@@ -261,9 +262,8 @@ router.get("/singles", (req, res, next)=>{
 })
 
 // SEARCH from INDEX
-router.post("/searchFromIndex", (req,res,next)=>{
-	console.log(req.session.uid);
-	res.json(req.body);
+router.post("/search", (req,res,next)=>{
+	res.render("listings");
 });
 
 module.exports = router;

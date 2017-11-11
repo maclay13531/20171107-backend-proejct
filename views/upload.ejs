@@ -11,7 +11,6 @@
 		$(document).ready(()=>{
 			// initiate selection dropdown
 			$('select').material_select();
-
 			// Hide dog/cat breeds to only show when a type is selected
 			$('.dog-breeds, .cat-breeds').hide();
 			// show dog/cat breeds depending on selection
@@ -32,21 +31,14 @@
         <div class="container">
 		<div class="row">
 			<h3 class="center-align">Upload File</h3>
-			<form class="offset-s2 col s8 card darken-1" action="/uploadProcess" method="post">
+			<form class="offset-s2 col s8 card darken-1" action="/uploadProcess" method="post" enctype="multipart/form-data">
 				<div class="row">
 					<div class="input-field col s12">
 						<select name="breed_type_select" id='breeds-select'>
-						<option value="" disabled selected name="type">Type</option>
-						<option value="dog" name="dog" class="dog" id="dog">Dog</option>
-						<option value="cat" name="cat" class="cat" id="cat">Cat</option>
+							<option value="" disabled selected name="type">Type</option>
+							<option value="dog" name="dog" class="dog" id="dog">Dog</option>
+							<option value="cat" name="cat" class="cat" id="cat">Cat</option>
 						</select>
-						<!-- <label>Type</label> -->
-						<!-- <a href="#" class="btn dropdown-button btn-block" data-activates='dropdown1'>Type<i class="material-icons right">keyboard_arrow_down</i></a>
-						<ul id='dropdown1' class='dropdown-content'>  
-							<li>hi</li>
-							<div class="divider"></div>
-							<li>h2</li>
-						</ul> -->
 					</div>
 				</div>
 				<div class="row">
@@ -89,7 +81,7 @@
 						Image Upload
 					</div>
 					<div class="input-field col s6">
-						<input type="file" name="imageToUpload">
+						<input type="file" name= "imageToUpload">
 					</div>
 				</div>
 				<div class="row">

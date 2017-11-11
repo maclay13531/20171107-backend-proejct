@@ -40,7 +40,7 @@ router.all("/*", (req,res,next)=>{
 		console.log("YOU ARE LOGGEDIN");
 		//mention this middleware
 		res.locals.firstNameTest = req.session.fname;
-		console.log(req.session.uid)
+		// console.log(req.session.uid)
 		next();
 	}
 });
@@ -214,10 +214,10 @@ router.post('/uploadProcess', function (req, res, next) {
 	var name = req.body.pet_name;
 	var age = req.body.age; 
 	var gender = req.body.gender; 
-	console.log(req.file);
-	console.log(req.session.id);
-	console.log(req.body.dog_breed_select);
-	console.log(name);
+	// console.log(req.file);
+	// console.log(req.session.id);
+	// console.log(req.body.dog_breed_select);
+	// console.log(name);
 	
 	var insertUploadInfo = function(){
 		return new Promise(function(resolve,reject){
@@ -305,6 +305,7 @@ router.get("/listings", (req, res, next)=>{
 		})
 	}
 	getAnimalID().then((data)=>{
+		//this is the animalID that's getting resolved
 		var animalID = data.petfinder.petIds.id.$t;
 		console.log(animalID);
 		return getRandomPet(animalID);
@@ -314,6 +315,8 @@ router.get("/listings", (req, res, next)=>{
 		var animalBreed = animal.petfinder.pet.breeds.breed.$t;
 		var animalName = animal.petfinder.pet.name.$t;
 		var animalDescription = animal.petfinder.pet.description.$t;
+		var petId = animal.petfinder.pet.id.$t;
+		console.log(petId);
 		if(animalPhoto == undefined){
 			animalPhoto = "No photos at this point";
 		}
@@ -325,7 +328,8 @@ router.get("/listings", (req, res, next)=>{
 			age: animalAge,
 			breed: animalBreed,
 			name: animalName,
-			description: animalDescription
+			description: animalDescription,
+			id: petId
 		});
 		// res.json(animal);
 	}).catch((error)=>{
@@ -334,33 +338,11 @@ router.get("/listings", (req, res, next)=>{
 	//gets info and display to screen
 });
 
-router.get("/singles", (req, res, next)=>{
-
-	function getAnimalID(){
-		var animalRandom;
-		var rand = Math.random() * 10;
-		if(rand<=5){
-			animalRandom = "cat";
-		}else{
-			animalRandom = "dog";
-		}
-		return new Promise((resolve,reject)=>{
-			var randomAnimal = `http://api.petfinder.com/pet.getRandom?key=${config.petFinderApi}&animal=${animalRandom}&ouput=id&format=json`;
-			request(randomAnimal, (error, response)=>{
-				if(error){
-					reject(error);
-				}else{
-					var parsedData = JSON.parse(response.body);
-					resolve(parsedData);
-					// resolve(response.body[0].petfinder.petIds.id.$t);
-				}
-			})
-		})
-	}
-
-	function getRandomPet(animalID){
+router.get("/singles/:id", (req, res, next)=>{
+	var id = req.params.id;
+	function getPet(id){
 		return new Promise((resolve, reject)=>{
-			var randomAnimal = `http://api.petfinder.com/pet.get?key=${config.petFinderApi}&id=${animalID}&format=json`;
+			var randomAnimal = `http://api.petfinder.com/pet.get?key=${config.petFinderApi}&id=${id}&format=json`;
 			request(randomAnimal, (error, response)=>{
 				if(error){
 					reject(error);
@@ -371,16 +353,17 @@ router.get("/singles", (req, res, next)=>{
 			})
 		})
 	}
-	getAnimalID().then((data)=>{
-		var animalID = data.petfinder.petIds.id.$t;
-		console.log(animalID);
-		return getRandomPet(animalID);
-	}).then((animal)=>{
+	getPet(id).then((animal)=>{
 		var animalPhoto = animal.petfinder.pet.media.photos.photo;
 		var animalAge = animal.petfinder.pet.age.$t;
 		var animalBreed = animal.petfinder.pet.breeds.breed.$t;
 		var animalName = animal.petfinder.pet.name.$t;
 		var animalDescription = animal.petfinder.pet.description.$t;
+		var sex = animal.petfinder.pet.sex.$t;
+		var phone = animal.petfinder.pet.contact.phone.$t;
+		if(animalBreed == undefined){
+			animalBreed == "unknown";
+		}
 		if(animalPhoto == undefined){
 			animalPhoto = "No photos at this point";
 		}
@@ -392,12 +375,14 @@ router.get("/singles", (req, res, next)=>{
 			age: animalAge,
 			breed: animalBreed,
 			name: animalName,
+			sex: sex,
+			phone:phone,
 			description: animalDescription
 		});
 		// res.json(animal);
 	}).catch((error)=>{
 		console.log(error);
-	})
+	});
 })
 //===================need to work on this===================
 // SEARCH from INDEX will go back to listings and replace the search results with what we got from api and database
@@ -412,6 +397,7 @@ router.post("/search", (req,res,next)=>{
 	var location = req.body.location;
 	var age = req.body.ageSelect;
 	var gender = req.body.genderSelect;
+
 	function requestAPI(){
 		return new Promise((resolve, reject)=>{
 			var requestString = `http://api.petfinder.com/pet.find?key=${config.petFinderApi}&animal=${type}&breed=${breedSelect}&location=${location}&age=${age}&format=json`;
@@ -426,7 +412,7 @@ router.post("/search", (req,res,next)=>{
 	}
 
 	requestAPI().then((data)=>{
-		console.log(data);
+		// console.log(data);
 		res.send(data.body);
 	})
 });

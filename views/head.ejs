@@ -41,9 +41,10 @@
     		// 	$('#new-message').val('');
     		// }
     		socket.on('messageToClient', (msg)=>{
+    			var style = `style="border: 1px solid #26a69a";`
     			if(msg.message != ""){
-	    			$('#messages').prepend(`<p>${msg.message}</p>`);
-	    			$('#user-name').prepend(`<p>${msg.name}</p>`);
+	    			$('#messages').prepend(`<p ${style}>${msg.message}</p>`);
+	    			$('#user-name').prepend(`<p ${style}>${msg.name}</p>`);
 	    		}
     			// $('#messages').append($('<li>').text(msg));
     			// $('#messages').append($('<li>').text(msg));

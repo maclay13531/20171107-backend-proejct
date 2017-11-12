@@ -510,40 +510,73 @@ router.get('/changePassword', (req, res, next) => {
 // POST changePassword route 
 router.post('/changePasswordSubmit', (req, res, next) =>{
 	//extracting info from changePassword
-	console.log(req.body);
 	var currentPass = req.body.currentPassword;
 	var newPass = req.body.newPassword;
-	console.log(newPass);
 	var confirmNewPass = req.body.confirmNewPassword;
 	var email = req.session.email;
 	// Checking if current pass is matched with the one ine the db
-	console.log(currentPass);
-	// function checkDB(){
-	// 	return new Promise((resolve, reject)=>{
-	// 		var checkQuery = "select * from users where email = ?;";
-	// 		// console.log(email);
-	// 		connection.query(checkQuery, [email], (error, results)=>{
-	// 			if(error){
-	// 				reject(error);
-	// 			}else{
-	// 				resolve(results);
-	// 			}
-	// 		})
-	// 	})
-	// }
+	function checkDB(){
+		return new Promise((resolve, reject)=>{
+			var checkQuery = "select * from users where email = ?;";
+			// console.log(email);
+			connection.query(checkQuery, [email], (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					var isMatchInDB = bcrypt.compareSync(currentPass, results[0].password);
+					if(isMatchInDB){
+						resolve(isMatchInDB);
+					}else{
+						res.redirect("/changePassword?msg=wrongCurrentPass");
+					}
+				}
+			})
+		})
+	}
 
-	// function checkIfPassMatch(){
+	function checkIfPassMatch(){
+		return new Promise((resolve, reject)=>{
+			if(newPass != confirmNewPass){
+				res.redirect("/changePassword?msg=passwordNotMatch");
+			}else{
+				resolve("Passwords Match");
+			}
+		})
+	}
 
-	// }
-
-	// checkDB()
-	// .then((results)=>{
-	// 	var isMatchInDB = bcrypt.compareSync(currentPass, results[0].password);
-	// 	return res.send(isMatchInDB);
-	// })
-	//checking if newpass match with confirmnew pass
-
-	//if both pass, then update value in the db
+	function updatePassword(){
+		return new Promise((resolve, reject)=>{
+			var hash = bcrypt.hashSync(newPass);
+			var updateQuery = `update users 
+			set password = ? 
+			where email = ?;`;
+			connection.query(updateQuery, [hash, email], (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve("success");
+				}
+			});
+		})
+	}
+	checkDB()
+	.then((results)=>{
+		// checking if newpass match with confirmnew pass
+		return checkIfPassMatch();
+	})
+	.catch((error)=>{
+		console.log(error);
+	})
+	.then((e)=>{
+		// if both pass, then update value in the db
+		return updatePassword();
+	})
+	.catch((error)=>{
+		console.log(error);
+	})
+	.then((e)=>{
+		res.redirect("/listings");
+	});
 });
 // GET emailSettings Route 
 router.get('/emailSettings',(req,res,next)=>{

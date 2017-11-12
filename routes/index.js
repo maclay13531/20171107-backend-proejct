@@ -514,6 +514,11 @@ router.post('/changePasswordSubmit', (req, res, next) => {
 // GET emailSettings Route 
 router.get('/emailSettings',(req,res,next)=>{
 	res.render('emailSettings')
+});
+
+// GET myListings Route 
+router.get('/myListings',(req,res, next)=>{
+	res.render('myListings')
 })
 
 // Logout Route

@@ -84,5 +84,7 @@ nav {
 	overflow: auto;
 }
 
-
+.select-wrapper span.caret {
+	margin: 17px 0px;
+}
 

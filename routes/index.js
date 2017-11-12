@@ -87,9 +87,9 @@ router.post('/registerProcess', function(req,res, next){
 	//insert into database
 	function insertInto(){
 		return new Promise((resolve, reject)=>{
-			var insertQuery="insert into users (first_name, last_name, email, password, zipcode) values (?,?,?,?,?);";
+			var insertQuery="insert into users (first_name, last_name, email, password, zipcode, phone) values (?,?,?,?,?,?);";
 			var hash = bcrypt.hashSync(passwordOne);
-			connection.query(insertQuery, [firstName, lastName, email, hash, zipCode], (error, results, field)=>{
+			connection.query(insertQuery, [firstName, lastName, email, hash, zipCode, phone], (error, results, field)=>{
 				if(error){
 					reject(error);
 				}else{
@@ -354,6 +354,7 @@ router.get("/listings", (req, res, next)=>{
 });
 
 //SINGLE PAGE route
+//=======find a way to loop through images with only x
 router.get("/singles/:id", (req, res, next)=>{
 	var id = req.params.id;
 	function getPet(id){
@@ -370,6 +371,7 @@ router.get("/singles/:id", (req, res, next)=>{
 		})
 	}
 	getPet(id).then((animal)=>{
+		// CAN LOOP THROUGH to find where id = 
 		var animalPhoto = animal.petfinder.pet.media.photos.photo;
 		var bigPic = animal.petfinder.pet.media.photos.photo[3].$t;
 		var animalAge = animal.petfinder.pet.age.$t;
@@ -406,6 +408,7 @@ router.get("/singles/:id", (req, res, next)=>{
 // SEARCH from INDEX will go back to listings and replace the search results with what we got from api and database
 router.post("/search", (req,res,next)=>{
 	var type = req.body.typeSelect;
+	
 	var breedSelect;
 	if(type == "dog"){
 		breedSelect = req.body.dog_breed_select;
@@ -429,7 +432,8 @@ router.post("/search", (req,res,next)=>{
 		})
 	}
 
-	requestAPI().then((data)=>{
+	requestAPI()
+	.then((data)=>{
 		// console.log(data);
 		res.send(data.body);
 	})

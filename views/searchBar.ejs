@@ -1,7 +1,7 @@
 <form action="/search" method="post">
     <div class="row">
         <div class="input-field col s2">
-            <select id='breeds-select' name="typeSelect">
+            <select id='breeds-select' name="typeSelect" required>
                 <option value="" disabled selected>Type</option>
                 <option value="dog" class="dog" id="dog" name="dog">Dog</option>
                 <option value="cat" class="cat" id="cat" name="cat">Cat</option>
@@ -17,10 +17,10 @@
         </div>
         <div class="input-field col s2">
             <label for="location">Location:</label>
-            <input type="text" class="validate" name="location">
+            <input type="text" class="validate" name="location" required>
         </div>
         <div class="input-field col s2">
-            <select multiple name="ageSelect">
+            <select name="ageSelect" required>
                 <option value="" disabled selected>Age</option>
                 <option value="baby">Baby</option>
                 <option value="young">Young</option>
@@ -29,7 +29,7 @@
             </select>
         </div>
         <div class="input-field col s2">
-            <select name="genderSelect">
+            <select name="genderSelect" required>
                 <option value="" disabled selected>Gender</option>
                 <option value="f" class="dog">Female</option>
                 <option value="m" class="cat">Male</option>
@@ -38,7 +38,32 @@
         </div>
         <div class="input-field col s2">
             <!-- margin needs to be top 7px -->
-            <button class="btn btn-block waves-effect waves-light">Search!</button>
+           <button class="btn btn-block waves-effect waves-light">Search!</button>
         </div>
     </div>
 </form>
+<script>
+	$(document).ready(()=>{
+		$('select').material_select();
+		$("select[required]").css({
+			display: "inline",
+			height: 0,
+			padding: 0,
+			width: 0
+		});
+		// Hide dog/cat breeds to only show when a type is selected
+		$('.dog-breeds, .cat-breeds').hide();
+		// show dog/cat breeds depending on selection
+		$('#breeds-select').change(function () {
+			var inputValue = $(this).val();
+			// console.log(inputValue)
+			if (inputValue == "dog") {
+				$('.dog-breeds').show();
+				$('.cat-breeds').hide();
+			} else if (inputValue == "cat") {
+				$('.cat-breeds').show();
+				$('.dog-breeds').hide();
+			}
+		});
+	})
+</script>

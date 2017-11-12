@@ -40,7 +40,8 @@ router.all("/*", (req,res,next)=>{
 		console.log("YOU ARE LOGGEDIN");
 		//mention this middleware
 		res.locals.firstNameTest = req.session.fname;
-		var sessionName = res.locals.firstNameTest;
+		res.locals.lastNameTest = req.session.lname;
+		res.locals.emailTest = req.session.email;
 		// console.log(req.session.uid)
 		next();
 	}
@@ -212,7 +213,7 @@ router.get('/upload', function(req, res, next){
 	// console.log(req.file)
 	res.render('upload', {})
 });
-
+// Post Route for Upload Page
 router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 	var type = req.body.breed_type_select;
 	var dogBreed = req.body.dog_breed_select;
@@ -222,7 +223,7 @@ router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 	var gender = req.body.gender;
 	var tmpPath = req.file.path;
 	var targetPath = `public/images/${req.file.originalname}`;
-	console.log(req.file);
+	
 
 	var insertUploadInfo = function () {
 		return new Promise(function (resolve, reject) {
@@ -247,9 +248,9 @@ router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 					if (error) {
 						throw error;
 					}
-					var insertQuery = `INSERT INTO upload (img_url)
-                          VALUES (?);`;
-					connection.query(insertQuery, [req.file.path], (dbError, results) => {
+					var updateQuery = `UPDATE upload SET img_url = ? WHERE user_id = ?;`;
+					connection.query(updateQuery, [req.file.path, req.session.uid], (dbError, results) => {
+						console.log(req.file.path);
 						if (error) {
 							reject(error);
 						} else {
@@ -266,13 +267,12 @@ router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 	}).then(function(e){
 		res.redirect('/uploadSuccess')
 	})
-	insertUploadInfo().catch((error) => {
-		res.json(error);
-	});
-	insertImage().catch((error) => {
-		res.json(error);
-	});
-
+	// insertUploadInfo().catch((error) => {
+	// 	res.json(error);
+	// });
+	// insertImage().catch((error) => {
+	// 	res.json(error);
+	// });
 });
 
 router.get('/uploadSuccess',(req,res,next)=>{

@@ -323,7 +323,7 @@ router.get("/listings", (req, res, next)=>{
 	.then((data)=>{
 		//this is the animalID that's getting resolved
 		var animalID = data.petfinder.petIds.id.$t;
-		console.log(animalID);
+		// console.log(animalID);
 		return getRandomPet(animalID);
 	})
 	.then((animal)=>{
@@ -333,7 +333,7 @@ router.get("/listings", (req, res, next)=>{
 		var animalName = animal.petfinder.pet.name.$t;
 		var animalDescription = animal.petfinder.pet.description.$t;
 		var petId = animal.petfinder.pet.id.$t;
-		console.log(petId);
+		// console.log(petId);
 		if(animalPhoto == undefined){
 			animalPhoto = "No photos at this point";
 		}
@@ -508,8 +508,42 @@ router.get('/changePassword', (req, res, next) => {
 });
 
 // POST changePassword route 
-router.post('/changePasswordSubmit', (req, res, next) => {
+router.post('/changePasswordSubmit', (req, res, next) =>{
+	//extracting info from changePassword
+	console.log(req.body);
+	var currentPass = req.body.currentPassword;
+	var newPass = req.body.newPassword;
+	console.log(newPass);
+	var confirmNewPass = req.body.confirmNewPassword;
+	var email = req.session.email;
+	// Checking if current pass is matched with the one ine the db
+	console.log(currentPass);
+	// function checkDB(){
+	// 	return new Promise((resolve, reject)=>{
+	// 		var checkQuery = "select * from users where email = ?;";
+	// 		// console.log(email);
+	// 		connection.query(checkQuery, [email], (error, results)=>{
+	// 			if(error){
+	// 				reject(error);
+	// 			}else{
+	// 				resolve(results);
+	// 			}
+	// 		})
+	// 	})
+	// }
 
+	// function checkIfPassMatch(){
+
+	// }
+
+	// checkDB()
+	// .then((results)=>{
+	// 	var isMatchInDB = bcrypt.compareSync(currentPass, results[0].password);
+	// 	return res.send(isMatchInDB);
+	// })
+	//checking if newpass match with confirmnew pass
+
+	//if both pass, then update value in the db
 });
 // GET emailSettings Route 
 router.get('/emailSettings',(req,res,next)=>{

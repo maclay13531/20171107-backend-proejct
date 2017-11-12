@@ -51,6 +51,12 @@ nav {
 .register-form{
     padding: 5%
 }
+.account-update-form{
+    margin-top: 5%; 
+}
+.side-nav-bar{
+    margin-top: 5%
+}
 
 .footer-copyright {
     overflow: hidden;

@@ -40,7 +40,8 @@ router.all("/*", (req,res,next)=>{
 		console.log("YOU ARE LOGGEDIN");
 		//mention this middleware
 		res.locals.firstNameTest = req.session.fname;
-		var sessionName = res.locals.firstNameTest;
+		res.locals.lastNameTest = req.session.lname;
+		res.locals.emailTest = req.session.email;
 		// console.log(req.session.uid)
 		next();
 	}

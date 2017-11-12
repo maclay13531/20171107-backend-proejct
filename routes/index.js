@@ -223,14 +223,15 @@ router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 	var name = req.body.pet_name;
 	var age = req.body.age;
 	var gender = req.body.gender;
+	var description = req.body.description;
 	var tmpPath = req.file.path;
 	var targetPath = `public/images/${req.file.originalname}`;
 	
 
 	var insertUploadInfo = function () {
 		return new Promise(function (resolve, reject) {
-			var insertPetInfoQuery = `INSERT INTO upload (user_id, type, cat_breed, dog_breed, name_upload, age, gender) VALUES (?,?,?, ?, ?, ?, ?)`;
-			connection.query(insertPetInfoQuery, [req.session.uid, type, dogBreed, catBreed, name, age, gender], (error, results) => {
+			var insertPetInfoQuery = `INSERT INTO upload (user_id, type, cat_breed, dog_breed, name_upload, age, gender, description) VALUES (?,?,?, ?, ?, ?, ?,?)`;
+			connection.query(insertPetInfoQuery, [req.session.uid, type, dogBreed, catBreed, name, age, gender,description], (error, results) => {
 				if (error) {
 					reject(error);
 				} else {
@@ -440,6 +441,8 @@ router.post("/search", (req,res,next)=>{
 		res.send(data.body);
 	})
 });
+
+// test route for dev
 router.get("/test", (req, res, next) => {
 	res.render('test')
 });
@@ -508,7 +511,7 @@ router.get('/changePassword', (req, res, next) => {
 router.post('/changePasswordSubmit', (req, res, next) => {
 
 });
-
+// GET emailSettings Route 
 router.get('/emailSettings',(req,res,next)=>{
 	res.render('emailSettings')
 })

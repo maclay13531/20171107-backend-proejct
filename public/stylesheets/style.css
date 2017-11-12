@@ -51,13 +51,21 @@ nav {
 .register-form{
     padding: 5%
 }
-.account-update-form{
+.account-update-box{
     margin-top: 5%; 
+}
+.profile-img{
+    max-height: 30px;
+    max-width: 30px;
 }
 .side-nav-bar{
     margin-top: 5%
 }
-
+.sidenav-profile-name{
+    text-align: end;
+    margin-top: 32%;
+    font-size: 32px
+}
 .footer-copyright {
     overflow: hidden;
     min-height: 50px;

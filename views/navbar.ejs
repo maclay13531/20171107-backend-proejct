@@ -1,12 +1,26 @@
+<script>
+	$(document).ready(function){
+		$(".dropdown-button").dropdown();
+	}
+</script>
+
+<!-- Dropdown Structure -->
+<ul id="dropdown1" class="dropdown-content">
+  <li><a href="/profile">Account</a></li>
+  <li><a href="/changePassword">Security</a></li>
+  <li><a href="/emailSettings">Email Settings</a></li>
+  <li><a href="myListings">My Listings</a></li>
+  <li><a href="/logOut">Log Out</a></li>
+</ul> 
+ 
  <nav>
     <div class="nav-wrapper">
       	<a href="/" class="brand-logo">PetBasket</a>
 		<ul id="nav-mobile" class="right hide-on-med-and-down">
 		 <% if (locals.firstNameTest !== undefined){ %>
         	<li><a href="/upload">Upload</a></li>
-			<li><a href="/profile">Profile</a></li>
-			<li><a href="/logout">Log Out</a></li>
-			<li><%= locals.firstNameTest %></li>
+			<li><a href="/">Messages</a></li>
+			 <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Profile<i class="material-icons right">arrow_drop_down</i></a></li>
 		<% }else{ %> 
 			<li><a href="/register">Sign Up</a></li>
 			<li><a href="/login">Login</a></li>

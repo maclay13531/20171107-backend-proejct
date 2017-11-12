@@ -15,6 +15,7 @@ var uploadDir = multer({
 })
 //make sure that imageToUpload matches on the upload.ejs file as well
 var nameOfFileField = uploadDir.single('imageToUpload');
+var nameOfFileField1 = uploadDir.single('imageToUpload1');
 
 // config.db will be given to Bihn/Jason/Jenn by Jong Park.
 var connection = mysql.createConnection(config.db);
@@ -42,6 +43,7 @@ router.all("/*", (req,res,next)=>{
 		res.locals.firstNameTest = req.session.fname;
 		res.locals.lastNameTest = req.session.lname;
 		res.locals.emailTest = req.session.email;
+		res.locals.profileUpdated = false;
 		// console.log(req.session.uid)
 		next();
 	}
@@ -438,10 +440,76 @@ router.get("/test", (req, res, next) => {
 	res.render('test')
 });
 
+// GET Profile route
 router.get('/profile',(req,res, next)=>{
 	res.render('profile')
 })
+//Post Profile Route
+router.post('/profileChange', nameOfFileField1, (req,res,next)=>{
+	var fName = req.body.fName;
+	var lName = req.body.lName; 
+	var email = req.body.email;
+	var tmpPath = req.file.path;
+	var targetPath = `public/images/profile_images/${req.file.originalname}`;
 
+	var updateUserInfo = function () {
+		return new Promise(function (resolve, reject) {
+			var updateUserInfoQuery = `UPDATE users SET first_name = ?, last_name = ?, email = ? WHERE id = ?;`;
+			connection.query(updateUserInfoQuery, [fName, lName, email, req.session.uid], (error, results) => {
+				if (error) {
+					reject(error);
+				} else {
+					resolve("info updated");
+				}
+			})
+		})
+	}
+
+	var updateUserImage = function () {
+		return new Promise(function (resolve, reject) {
+			fs.readFile(tmpPath, (error, fileContents) => {
+				if (error) {
+					throw error;
+				}
+				fs.writeFile(targetPath, fileContents, (error) => {
+					if (error) {
+						throw error;
+					}
+					var updateQuery = `UPDATE users SET profile_imgUrl = ? WHERE id = ?;`;
+					connection.query(updateQuery, [req.file.path, req.session.uid], (dbError, results) => {
+						if (error) {
+							reject(error);
+						} else {
+							resolve("image added");
+						}
+					})
+				})
+			})
+		})
+	}
+
+	updateUserInfo().then(function (result) {
+		return updateUserImage(result);
+	}).then(function (e) {
+		res.redirect('/profile');
+	})
+});
+
+// GET changePassword route
+router.get('/changePassword', (req, res, next) => {
+	res.render('changePassword')
+});
+
+// POST changePassword route 
+router.post('/changePasswordSubmit', (req, res, next) => {
+
+});
+
+router.get('/emailSettings',(req,res,next)=>{
+	res.render('emailSettings')
+})
+
+// Logout Route
 router.get('/logout', (req, res) => {
 	req.session.destroy();
 	res.redirect('/login');

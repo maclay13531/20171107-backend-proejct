@@ -12,7 +12,7 @@
 		<div class="row"></div>
 			<h3 class="center-align">Register</h3>
 			<form class="offset-s2 col s8 card darken-1 register-form" action="/registerProcess" method="post">
-				<div class="row">
+				<div class="row"> <!-- row for name -->
 					<div class="input-field col s6">
 						<input id="first_name" name="first_name" type="text" class="validate" required>
 						<label for="first_name">First Name</label>
@@ -22,7 +22,7 @@
 						<label for="last_name">Last Name</label>
 					</div>
 				</div>
-				<div class="row">
+				<div class="row"> <!-- row for email and icon -->
 					<div class="col s12">
 						<i class="material-icons">email</i>
 					</div>
@@ -32,40 +32,43 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="row">
-						<div class="input-field col s12">
-							<input id="password" type="password" class="validate" name="passwordOne" required>
-							<label for="password">Password</label>
-						</div>
+					<div class="input-field col s12">
+						<input id="password" type="password" class="validate" name="passwordOne" required>
+						<label for="password">Password</label>
 					</div>
-					<div class="row">
-						<div class="input-field col s12">
-							<input id="password2" type="password" class="validate" name="passwordTwo">
-							<label for="password2">Password Again</label>
-						</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="password2" type="password" class="validate" name="passwordTwo">
+						<label for="password2">Password Again</label>
 					</div>
+				</div>
+
+				<div class="row">
 					<div class="input-field col s12">
 						<input type="text" id="zip-code" name="zip-code"  class="validate" required>
 						<label for="zip-code">Zip Code</label>
 					</div>
+				</div>
+				<div class="row">
 					<div class="input-field col s12">
 						<input type="text" id="phone" name="phone"  class="validate" required>
 						<label for="phone">Phone</label>
 					</div>
-					<div class="row">
-						<div class="input-field col s6">
-							<div class="center-align">
-								<button class="btn btn-block waves-effect waves-light" type="submit" name="action">Submit
-									<i class="material-icons right">send</i>
-								</button>
-							</div>
-						</div>
-						<div class="input-field col s6 center-align login-with-google">
-							<a href="/registerWithAuth0" class="btn btn-block waves-effect waves-light red">Register With Google</a>
+				</div>
+				<div class="row">
+					<div class="input-field col s6">
+						<div class="center-align">
+							<button class="btn btn-block waves-effect waves-light" type="submit" name="action">Submit
+								<i class="material-icons right">send</i>
+							</button>
 						</div>
 					</div>
-				</form>
-			</div>
+					<div class="input-field col s6 center-align login-with-google">
+						<a href="/registerWithAuth0" class="btn btn-block waves-effect waves-light red">Register With Google</a>
+					</div>
+				</div>
+			</form>
 		</div>
     </main>
     <% include footer %> 

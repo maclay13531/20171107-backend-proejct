@@ -7,27 +7,6 @@
     </head>
     <body>
    		<% include navbar %>
-		   <script type="text/javascript">
-		$(document).ready(() => {
-				// initiate selection dropdown
-				$('select').material_select();
-
-				// Hide dog/cat breeds to only show when a type is selected
-				$('.dog-breeds, .cat-breeds').hide();
-				// show dog/cat breeds depending on selection
-				$('#breeds-select').change(function () {
-					var inputValue = $(this).val();
-					// console.log(inputValue)
-					if (inputValue == "dog") {
-						$('.dog-breeds').show();
-						$('.cat-breeds').hide();
-					} else if (inputValue == "cat") {
-						$('.cat-breeds').show();
-						$('.dog-breeds').hide();
-					}
-				});
-			});
-	</script>
      <main>
 		<div class="container">
 			<% include searchBar %> 
@@ -53,9 +32,9 @@
 								</div>
 								<div class="right-align">
 									<% if (locals.firstNameTest !== undefined){ %>
-									<a href="/singles/<%=id%>" class="btn-floating btn-large red"><i class="material-icons">add</i></a>
+									<a href="/singles/<%=id%>" class="btn-floating btn-large red pulse"><i class="material-icons">add</i></a>
 									<% }else{ %>
-									<a href="#" class="btn-floating btn-large red" onclick="Materialize.toast('Must Login To View Detail', 4000)"><i class="material-icons">add</i></a>
+									<a href="#" class="btn-floating btn-large red pulse" onclick="Materialize.toast('Must Login To View Detail', 4000)"><i class="material-icons">add</i></a>
 									<% } %>
 								</div>
 							</div>

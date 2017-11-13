@@ -410,13 +410,18 @@ router.get("/singles/:id", (req, res, next)=>{
 //===================need to work on this===================
 // SEARCH from INDEX will go back to listings and replace the search results with what we got from api and database
 router.post("/search", (req,res,next)=>{
+	// request from API
 	var type = req.body.typeSelect;
-	
 	var breedSelect;
+	var createTable;
+	var dropTableQuery = "DROP TABLE TemporaryTable;";
+	var selectQuery = "SELECT * FROM TemporaryTable where user_id = ?;";
 	if(type == "dog"){
 		breedSelect = req.body.dog_breed_select;
+		createTable = `create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN cat_breed;`;
 	}else if(type == "cat"){
 		breedSelect = req.body.cat_breed_select;
+		createTable = `create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN dog_breed;`;
 	}
 	var location = req.body.location;
 	var age = req.body.ageSelect;
@@ -434,11 +439,59 @@ router.post("/search", (req,res,next)=>{
 			})
 		})
 	}
+	// request from db
+	function createTempTable(){
+		return new Promise((resolve, reject)=>{
+			connection.query(createTable, (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve("created table!");
+				}
+			});
+		})
+	}
+	function selectFromTempTable(){
+		return new Promise((resolve, reject)=>{
+			connection.query(selectQuery, [req.session.uid], (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve(results);
+				}
+			})
+		})
+	}
+	function dropTableFromDb(){
+		return new Promise((resolve, reject)=>{
+			connection.query(dropTableQuery, [req.session.uid], (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve("Table Dropped");
+				}
+			})
+		})
+	}
 
 	requestAPI()
 	.then((data)=>{
 		// console.log(data);
-		res.send(data.body);
+		return createTempTable();
+	})
+	.then((createTable)=>{
+		return selectFromTempTable();
+	})
+	.then((fromTempTable)=>{
+		// get the usefull information;
+		console.log(fromTempTable);
+		return dropTableFromDb();
+	})
+	.then((e)=>{
+		res.redirect("/listings");
+	})
+	.catch((error)=>{
+		console.log(error);
 	})
 });
 
@@ -564,18 +617,15 @@ router.post('/changePasswordSubmit', (req, res, next) =>{
 		// checking if newpass match with confirmnew pass
 		return checkIfPassMatch();
 	})
-	.catch((error)=>{
-		console.log(error);
-	})
 	.then((e)=>{
 		// if both pass, then update value in the db
 		return updatePassword();
 	})
-	.catch((error)=>{
-		console.log(error);
-	})
 	.then((e)=>{
 		res.redirect("/listings");
+	})
+	.catch((error)=>{
+		console.log(error);
 	});
 });
 // GET emailSettings Route 

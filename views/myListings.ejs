@@ -11,24 +11,26 @@
                 <div class="row">
                     <% include sideNav %>
                      <div class="col s8 account-update-box">
+                        <% uploadResults.map((uploads)=>{ %>
                         <div class="card">
                             <div class="card-image waves-effect waves-block waves-light">
-                                <img class="activator" src="images/office.jpg">
+                                <img class="activator" src="images/listings/<%= uploads.img_url %>">
                             </div>
                             <div class="card-content">
-                                <span class="card-title activator grey-text text-darken-4">Name
+                                <span class="card-title activator grey-text text-darken-4"><%= uploads.name_upload %>
                                     <i class="material-icons right">more_vert</i>
                                 </span>
-                                <p>Breed</p>
+                                <p><%= uploads.catBreed %></p>
                                 <p><a href="#">Edit Posts</a></p>
                             </div>
                             <div class="card-reveal">
-                                <span class="card-title grey-text text-darken-4">Name
+                                <span class="card-title grey-text text-darken-4"><%= uploads.name_upload %>
                                     <i class="material-icons right">close</i>
                                 </span>
-                                <p>Here is some more information about this product that is only revealed once clicked on.</p>
+                                <p><%= uploads.description %></p>
                             </div>
                         </div>
+                    <% }) %> 
                     </div>   
                 </div>
 			</div>

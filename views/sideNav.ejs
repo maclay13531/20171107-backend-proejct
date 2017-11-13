@@ -1,10 +1,10 @@
 <div class="col s4 side-nav-bar">
     <div class="col s12">
         <div class="col s6">
-            <% if (locals.profileimgTest !== null){ %>
-                <img src="images/profile_images/<%= locals.profileimgTest %>" class="circle responsive-img">
-            <% }else{ %>
+            <% if (locals.profileimgTest == null){ %>
                 <img src="images/woman_dogs.jpeg" class="circle responsive-img">
+            <% }else{ %>
+                <img src="images/profile_images/<%= locals.profileimgTest %>" class="circle responsive-img">
             <% } %>   
         </div>
         <div class="col s6 sidenav-profile-name"><%= locals.firstNameTest %></div>

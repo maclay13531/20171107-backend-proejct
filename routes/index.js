@@ -229,7 +229,7 @@ router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 	var gender = req.body.gender;
 	var description = req.body.description;
 	var tmpPath = req.file.path;
-	var targetPath = `public/images/profile_images/${req.file.originalname}`;
+	var targetPath = `public/images/listings/${req.file.originalname}`;
 	
 
 	var insertUploadInfo = function () {
@@ -256,7 +256,7 @@ router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 						throw error;
 					}
 					var updateQuery = `UPDATE upload SET img_url = ? WHERE user_id = ?;`;
-					connection.query(updateQuery, [req.file.path, req.session.uid], (dbError, results) => {
+					connection.query(updateQuery, [req.file.originalname, req.session.uid], (dbError, results) => {
 						console.log(req.file.path);
 						if (error) {
 							reject(error);
@@ -640,7 +640,27 @@ router.get('/emailSettings',(req,res,next)=>{
 
 // GET myListings Route 
 router.get('/myListings',(req,res, next)=>{
-	res.render('myListings')
+	
+	var getuploadInfo = function() {
+		return new Promise(function (resolve, reject) {
+			var uploadInfoQuery = `SELECT * FROM upload where user_id = ?`
+			connection.query(uploadInfoQuery, [req.session.uid], (error, results) => {
+				if (error) {
+					reject(error);
+				} else {
+					resolve(results);
+				}
+			});
+		})	
+	}
+	
+	getuploadInfo().then(function (results) {
+		// console.log(results)
+		res.render('myListings', {
+			uploadResults: results
+		})
+	})
+	
 })
 
 // Logout Route

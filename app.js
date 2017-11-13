@@ -12,6 +12,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var photos = require('./routes/photos');
 // const flash = require('connect-flash');
+var sharedsession = require('express-socket.io-session');
 
 
 // This will configure Passport to use Auth0
@@ -114,6 +115,8 @@ app.use(function(err, req, res, next) {
 app.io.on('connect', function(socket){  
     console.log('A USER CONNECTED TO THE SERVER VIA A SOCKET');
     socket.on('messageToServer', function(msg){
+    	// var name = socket.request.session.fname;
+    	// console.log(socket.request.session.fname);
         console.log(msg);
         app.io.emit('messageToClient', msg)
     });

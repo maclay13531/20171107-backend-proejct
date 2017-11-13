@@ -27,7 +27,11 @@
     		$(".button-collapse").sideNav();
     		$('#modal1').modal();
     		var socket = io();
-    		var userName = 'GUEST';
+    		var userName;
+            <% if(locals.firstNameTest != undefined){ %>         userName = '<%= locals.firstNameTest %>';
+            <% }else{ %>
+                userName ="GUEST"
+            <% } %>
     		// use if statment to see if req.session.name exist then change userName to match req.session.name
     		$('#submit-message').submit((event)=>{
     			event.preventDefault();
@@ -46,7 +50,7 @@
     		// 	$('#new-message').val('');
     		// }
     		socket.on('messageToClient', (msg)=>{
-    			var styleUser = `style='border: 1px solid #26a69a;color: white;padding: 5px;font-family: "Comic Sans MS", sans-serif'`
+    			var styleUser = `style='border: 1px solid #26a69a; font-size: 10px; width: 100%;color: white;padding: 5px;font-family: "Comic Sans MS", sans-serif'`
     			var styleMessage = `style='border: 1px solid #26a69a;color: #26a69a;padding: 5px;font-family: "Comic Sans MS", sans-serif'`
     			// if(msg.message != ""){
 	    		// 	$('#messages').prepend(`<p ${style}>${msg.message}</p>`);

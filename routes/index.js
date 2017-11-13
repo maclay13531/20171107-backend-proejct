@@ -693,6 +693,10 @@ router.get('/myListings',(req,res, next)=>{
 	
 })
 
+router.get('/favorites',(req,res,next)=>{
+	res.render('favorites')
+})
+
 // Logout Route
 router.get('/logout', (req, res) => {
 	req.session.destroy();

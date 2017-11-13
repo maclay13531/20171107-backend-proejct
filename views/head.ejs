@@ -17,10 +17,9 @@
 	<script src="/socket.io/socket.io.js"></script>  
     <script>
     	$(document).ready(function(){
-    		// modal option
-    		$('#modal1').modal();
     		// button button-collapse option
     		$(".button-collapse").sideNav();
+    		$('#modal1').modal();
     		var socket = io();
     		var userName = 'GUEST';
     		// use if statment to see if req.session.name exist then change userName to match req.session.name
@@ -41,10 +40,17 @@
     		// 	$('#new-message').val('');
     		// }
     		socket.on('messageToClient', (msg)=>{
-    			var style = `style="border: 1px solid #26a69a";`
-    			if(msg.message != ""){
-	    			$('#messages').prepend(`<p ${style}>${msg.message}</p>`);
-	    			$('#user-name').prepend(`<p ${style}>${msg.name}</p>`);
+    			var styleUser = `style='border: 1px solid #26a69a;color: white;padding: 5px;font-family: "Comic Sans MS", sans-serif'`
+    			var styleMessage = `style='border: 1px solid #26a69a;color: #26a69a;padding: 5px;font-family: "Comic Sans MS", sans-serif'`
+    			// if(msg.message != ""){
+	    		// 	$('#messages').prepend(`<p ${style}>${msg.message}</p>`);
+	    		// 	$('#user-name').prepend(`<p ${style}>${msg.name}</p>`);
+	    		// }
+	    		// if(msg.message != ""){
+	    		// 	$('#chat-panel').prepend(`<div id="user-name" class="col s4"><p ${style}>${msg.name}</p></div><div id="messages" class="col s8"><p ${style}>${msg.message}</p></div>`);
+	    		// }
+	    		if(msg.message != ""){
+	    			$('#chat-panel').prepend(`<div id="user-name" class="col s4"><a href="#modal1" class="waves-effect waves-light btn modal-trigger" ${styleUser} href="#">${msg.name}</a></div><div id="messages" class="col s8"><p ${styleMessage}>${msg.message}</p></div>`);
 	    		}
     			// $('#messages').append($('<li>').text(msg));
     			// $('#messages').append($('<li>').text(msg));
@@ -54,9 +60,13 @@
     		// 	$('#user-name').prepend(`<p>${msg.name}</p>`);
     		// });
     		$('#clear').click(function(){
-	    		$("#messages").empty();
-	    		$("#user-name").empty();
+	    		// $("#messages").empty();
+	    		// $("#user-name").empty();
+	    		$("#chat-panel").empty();
 	    	});
+	    	$('#user-name').click(function(){
+	    
+	    	})
     	});
 
     </script>

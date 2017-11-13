@@ -9,6 +9,7 @@ var config = require('../config/config');
 var bcrypt = require('bcrypt-nodejs');
 var multer = require('multer');
 var request = require("request");
+var url = require("url");
 //images will be saved in the public folder
 var uploadDir = multer({
 	dest: 'public/images'
@@ -424,6 +425,12 @@ router.post("/search", (req,res,next)=>{
 	var age = req.body.ageSelect;
 	var gender = req.body.genderSelect;
 	var dropTableQuery = "DROP TABLE TemporaryTable;";
+	// if(gender == "Male"){
+	// 	gender = "m";
+	// }else{
+	// 	gender = "f";
+	// }
+
 	if(type == "dog"){
 		breedSelect = req.body.dog_breed_select;
 		createTable = `DROP TABLE IF EXISTS TemporaryTable; create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN dog_breed;`;
@@ -433,6 +440,10 @@ router.post("/search", (req,res,next)=>{
 		createTable = `DROP TABLE IF EXISTS TemporaryTable; create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN cat_breed;`;
 		selectQuery ="SELECT * FROM TemporaryTable where user_id = ? and dog_breed = ? and age = ? and gender = ?;";
 	}
+	// console.log(gender);
+	// console.log(age);
+	// console.log(breedSelect);
+	// console.log(type);
 	function requestAPI(){
 		return new Promise((resolve, reject)=>{
 			var requestString = `http://api.petfinder.com/pet.find?key=${config.petFinderApi}&animal=${type}&breed=${breedSelect}&location=${location}&age=${age}&format=json`;
@@ -474,7 +485,7 @@ router.post("/search", (req,res,next)=>{
 				if(error){
 					reject(error);
 				}else{
-					resolve("Table Dropped");
+					resolve(allData);
 				}
 			})
 		})
@@ -491,18 +502,29 @@ router.post("/search", (req,res,next)=>{
 	})
 	.then((allData)=>{
 		// get the usefull information;
+		// console.log(allData);
 		// data from our db
-		console.log(allData);
 		return dropTableFromDb(allData);
 	})
 	.then((allData)=>{
-		// console.log(allData);
-		res.redirect("/listings");
+		// separate into two groups, api and db
+		var dataFromApi = allData.apiData;
+		var dataFromDb = allData.results;
+		var parsedDataFromApi = JSON.parse(dataFromApi);
+
+		
+		// return redirect("/searchListings?")
 	})
 	.catch((error)=>{
 		console.log(error);
-	})
+	});
 });
+
+
+
+router.get("/searchListings", (req, res, next)=>{
+	res.render("searchFromListings");
+})
 
 // test route for dev
 router.get("/test", (req, res, next) => {
@@ -638,6 +660,7 @@ router.post('/changePasswordSubmit', (req, res, next) =>{
 		console.log(error);
 	});
 });
+
 // GET emailSettings Route 
 router.get('/emailSettings',(req,res,next)=>{
 	res.render('emailSettings')

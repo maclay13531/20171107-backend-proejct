@@ -1,0 +1,54 @@
+<div id="slide-out" class="side-nav">
+    <div class="row">
+        <h5 style="color: #26a69a" class="center-align">WELCOME!</h5>
+        <div class="col s12 center-align" style="color: #26a69a">
+            <form id="submit-message" onsubmit="return false">
+                <input id="new-message" type="text" autocomplete="off" placeholder="TYPE" />
+                <button type="submit">SEND</button>
+            </form>
+        </div>
+    </div>
+    <div class="row center-align" id="chat-panel">
+        <div id="user-name" class="col s4">
+            <!-- user name from datatable will be displayed here -->
+        </div>
+        <div id="messages" class="col s8">
+            <!-- messages will be displayed here -->
+        </div>
+    </div>
+    <div class="row">
+        <div style="color: #26a69a;border-top: 1px solid #26a69a" class="center-align">
+            <button style="margin-top:20px" id="clear">CLEAR</button>
+        </div>
+    </div>
+</div>
+<a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+<!-- modal for socket chat panel -->
+<!-- Modal Structure -->
+<div id="modal1" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <div class="row">
+            <div class="col s6">
+                <div>
+                    <p>FIRST NAME</p>
+                </div>
+                <div>
+                    <p>LAST NAME</p>
+                </div>
+                <div>
+                    <p>EMAIL</p>
+                </div>
+                <div>
+                    <p>PHONE NO.</p>
+                </div>
+            </div>
+            <div class="col s6">
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">LINK1</a>
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">LINK2</a>
+    </div>
+</div>

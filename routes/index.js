@@ -411,26 +411,28 @@ router.get("/singles/:id", (req, res, next)=>{
 		console.log(error);
 	});
 })
-//===================need to work on this===================
 // SEARCH from INDEX will go back to listings and replace the search results with what we got from api and database
+// TODO: databse messed up, might need to change from cat to dog in db
+// TODO: check with drop table if exist query to see if it works
 router.post("/search", (req,res,next)=>{
 	// request from API
 	var type = req.body.typeSelect;
 	var breedSelect;
 	var createTable;
-	var dropTableQuery = "DROP TABLE TemporaryTable;";
-	var selectQuery = "SELECT * FROM TemporaryTable where user_id = ?;";
-	if(type == "dog"){
-		breedSelect = req.body.dog_breed_select;
-		createTable = `create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN cat_breed;`;
-	}else if(type == "cat"){
-		breedSelect = req.body.cat_breed_select;
-		createTable = `create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN dog_breed;`;
-	}
+	var selectQuery;
 	var location = req.body.location;
 	var age = req.body.ageSelect;
 	var gender = req.body.genderSelect;
-
+	var dropTableQuery = "DROP TABLE TemporaryTable;";
+	if(type == "dog"){
+		breedSelect = req.body.dog_breed_select;
+		createTable = `DROP TABLE IF EXISTS TemporaryTable; create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN dog_breed;`;
+		selectQuery = "SELECT * FROM TemporaryTable where user_id = ? and cat_breed = ? and age = ? and gender = ?;";
+	}else if(type == "cat"){
+		breedSelect = req.body.cat_breed_select;
+		createTable = `DROP TABLE IF EXISTS TemporaryTable; create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN cat_breed;`;
+		selectQuery ="SELECT * FROM TemporaryTable where user_id = ? and dog_breed = ? and age = ? and gender = ?;";
+	}
 	function requestAPI(){
 		return new Promise((resolve, reject)=>{
 			var requestString = `http://api.petfinder.com/pet.find?key=${config.petFinderApi}&animal=${type}&breed=${breedSelect}&location=${location}&age=${age}&format=json`;
@@ -444,31 +446,31 @@ router.post("/search", (req,res,next)=>{
 		})
 	}
 	// request from db
-	function createTempTable(){
+	function createTempTable(apiData){
 		return new Promise((resolve, reject)=>{
 			connection.query(createTable, (error, results)=>{
 				if(error){
 					reject(error);
 				}else{
-					resolve("created table!");
+					resolve(apiData);
 				}
 			});
 		})
 	}
-	function selectFromTempTable(){
+	function selectFromTempTable(apiData){
 		return new Promise((resolve, reject)=>{
-			connection.query(selectQuery, [req.session.uid], (error, results)=>{
+			connection.query(selectQuery, [req.session.uid, breedSelect, age, gender], (error, results)=>{
 				if(error){
 					reject(error);
 				}else{
-					resolve(results);
+					resolve({results, apiData});
 				}
 			})
 		})
 	}
-	function dropTableFromDb(){
+	function dropTableFromDb(allData){
 		return new Promise((resolve, reject)=>{
-			connection.query(dropTableQuery, [req.session.uid], (error, results)=>{
+			connection.query(dropTableQuery, (error, results)=>{
 				if(error){
 					reject(error);
 				}else{
@@ -477,21 +479,24 @@ router.post("/search", (req,res,next)=>{
 			})
 		})
 	}
-
 	requestAPI()
 	.then((data)=>{
-		// console.log(data);
-		return createTempTable();
+		// data from api
+		var dataApi = data.body;
+		return createTempTable(dataApi);
 	})
-	.then((createTable)=>{
-		return selectFromTempTable();
+	.then((apiData)=>{
+		// console.log(apiData);
+		return selectFromTempTable(apiData);
 	})
-	.then((fromTempTable)=>{
+	.then((allData)=>{
 		// get the usefull information;
-		console.log(fromTempTable);
-		return dropTableFromDb();
+		// data from our db
+		console.log(allData);
+		return dropTableFromDb(allData);
 	})
-	.then((e)=>{
+	.then((allData)=>{
+		// console.log(allData);
 		res.redirect("/listings");
 	})
 	.catch((error)=>{

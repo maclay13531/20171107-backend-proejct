@@ -511,9 +511,11 @@ router.post("/search", (req,res,next)=>{
 		var dataFromApi = allData.apiData;
 		var dataFromDb = allData.results;
 		var parsedDataFromApi = JSON.parse(dataFromApi);
-
-		
-		// return redirect("/searchListings?")
+		var parsedPetsFromApi = parsedDataFromApi.petfinder.pets;
+		res.render("searchFromListings", {
+			dataApi: parsedPetsFromApi,
+			dataDb: dataFromDb
+		});
 	})
 	.catch((error)=>{
 		console.log(error);
@@ -522,9 +524,9 @@ router.post("/search", (req,res,next)=>{
 
 
 
-router.get("/searchListings", (req, res, next)=>{
-	res.render("searchFromListings");
-})
+// router.get("/searchListings", (req, res, next)=>{
+// 	res.render("searchFromListings");
+// })
 
 // test route for dev
 router.get("/test", (req, res, next) => {

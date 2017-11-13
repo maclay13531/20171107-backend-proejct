@@ -41,6 +41,7 @@ var app = express();
 // auth0
 
 
+app.io = require('socket.io')();
 
 var sessionOptions = {
 	secret: config.sessionSalt,
@@ -108,6 +109,18 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+app.io.on('connect', function(socket){  
+    console.log('A USER CONNECTED TO THE SERVER VIA A SOCKET');
+    socket.on('messageToServer', function(msg){
+        console.log(msg);
+        app.io.emit('messageToClient', msg)
+    });
+    // socket.on('nameToServer', function(name){
+    //     console.log(name);
+    //     app.io.emit('nameToClient', name)
+    // });
 });
 
 module.exports = app;

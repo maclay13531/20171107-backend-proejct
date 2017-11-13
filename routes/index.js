@@ -43,7 +43,10 @@ router.all("/*", (req,res,next)=>{
 		res.locals.firstNameTest = req.session.fname;
 		res.locals.lastNameTest = req.session.lname;
 		res.locals.emailTest = req.session.email;
-		res.locals.profileUpdated = false;
+		res.locals.profileimgTest = req.session.profileimg;
+
+		console.log(res.locals.profileimgTest)
+		// res.locals.profileUpdated = false;
 		// console.log(req.session.uid)
 		next();
 	}
@@ -150,6 +153,7 @@ router.post('/loginProcess', function (req, res, next) {
 				req.session.email = results[0].email;
 				req.session.uid = results[0].id;
 				req.session.location = results[0].zipcode;
+				req.session.profileimg = results[0].profile_imgUrl
 				resolve(passwordMatch);
 			}else{
 				resolve(passwordMatch);
@@ -225,7 +229,7 @@ router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 	var gender = req.body.gender;
 	var description = req.body.description;
 	var tmpPath = req.file.path;
-	var targetPath = `public/images/${req.file.originalname}`;
+	var targetPath = `public/images/profile_images/${req.file.originalname}`;
 	
 
 	var insertUploadInfo = function () {
@@ -511,6 +515,7 @@ router.post('/profileChange', nameOfFileField1, (req,res,next)=>{
 	var email = req.body.email;
 	var tmpPath = req.file.path;
 	var targetPath = `public/images/profile_images/${req.file.originalname}`;
+	console.log(req.file)
 
 	var updateUserInfo = function () {
 		return new Promise(function (resolve, reject) {
@@ -536,7 +541,7 @@ router.post('/profileChange', nameOfFileField1, (req,res,next)=>{
 						throw error;
 					}
 					var updateQuery = `UPDATE users SET profile_imgUrl = ? WHERE id = ?;`;
-					connection.query(updateQuery, [req.file.path, req.session.uid], (dbError, results) => {
+					connection.query(updateQuery, [req.file.originalname, req.session.uid], (dbError, results) => {
 						if (error) {
 							reject(error);
 						} else {

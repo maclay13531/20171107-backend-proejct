@@ -495,7 +495,11 @@ router.post("/search", (req,res,next)=>{
 		})
 	}
 
-
+	function getFromPetsDb(){
+		return new Promise((resolve, reject)=>{
+			
+		})
+	}
 
 
 

@@ -339,7 +339,6 @@ router.get("/listings", (req, res, next)=>{
 //SINGLE PAGE route
 router.get("/singles/:id", (req, res, next)=>{
 	var anmId = req.params.id;
-	console.log(anmId);
 	// look at the infomration for this specific dog
 	function specificInfo(){
 		return new Promise((resolve, reject)=>{
@@ -400,7 +399,6 @@ router.get("/singles/:id", (req, res, next)=>{
 		var description;
 		var photo;
 		var parsedPhotoUrl = JSON.parse(data.specific[0].pictures);
-		console.log(parsedPhotoUrl);
 		var contactInfo;
 		if(parsedPhotoUrl.length == 0){
 			photo = "No Photos";

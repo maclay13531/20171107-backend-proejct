@@ -806,14 +806,14 @@ router.get('/myListings',(req,res, next)=>{
 	
 });
 //edit listings
-router.get('/myListings/:postid', (req, res) => {
+router.get('/editListings/:postid', (req, res) => {
 	// res.json(req.params);
-	var postID = req.params.postid;
-
+	var postId = req.params.postid;
+	console.log(postId)
 	var getPostInfo = function () {
 		return new Promise(function (resolve, reject) {
 			var getPostInfo = `SELECT * FROM upload where id = ?;`;
-			connection.query(getPostInfo, [postID], (error, results) => {
+			connection.query(getPostInfo, [postId], (error, results) => {
 				if (error) {
 					reject(error);
 				} else {
@@ -824,13 +824,25 @@ router.get('/myListings/:postid', (req, res) => {
 	}
 	getPostInfo().then(function (results) {
 		console.log(results)
-		res.render('/', {
-			postResults: results
-		})
+		res.render('editListings', {
+			type: results[0].type,
+			cat_breed: results[0].cat_breed, 
+			dog_breed: results[0].dog_breed, 
+			name: results[0].name_upload, 
+			age: results[0].age, 
+			gender: results[0].gender, 
+			img_url: results[0].img_url, 
+			upload_date: results[0].upload_date
+		});
+		console.log(type)
 	})
-
+	
 
 });
+
+router.get('/editListings',(req,res,next)=>{
+	res.render('editListings')
+})
 
 router.get('/favorites/:id',(req,res,next)=>{
 	res.render('favorites')

@@ -256,8 +256,8 @@ router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 					if (error) {
 						throw error;
 					}
-					var updateQuery = `UPDATE upload SET img_url = ? WHERE user_id = ?;`;
-					connection.query(updateQuery, [req.file.originalname, req.session.uid], (dbError, results) => {
+					var updateQuery = `UPDATE upload SET img_url = ? WHERE id = Last_INSERT_ID()`;
+					connection.query(updateQuery, [req.file.originalname], (dbError, results) => {
 						console.log(req.file.path);
 						if (error) {
 							reject(error);
@@ -271,6 +271,7 @@ router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 	}
 
 	insertUploadInfo().then(function (result) {
+		console.log(result);
 		return insertImage(result);
 	}).then(function(e){
 		res.redirect('/uploadSuccess')
@@ -282,7 +283,7 @@ router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 	// 	res.json(error);
 	// });
 });
-
+// GET uploadSuccess Route
 router.get('/uploadSuccess',(req,res,next)=>{
 	res.render('uploadSuccess')
 })
@@ -691,7 +692,34 @@ router.get('/myListings',(req,res, next)=>{
 		})
 	})
 	
-})
+	
+});
+
+router.get('/myListings/:postid', (req, res) => {
+	// res.json(req.params);
+	var postID = req.params.postid;
+
+	var getPostInfo = function () {
+		return new Promise(function (resolve, reject) {
+			var getPostInfo = `SELECT * FROM upload where id = ?;`;
+			connection.query(getPostInfo, [postID], (error, results) => {
+				if (error) {
+					reject(error);
+				} else {
+					resolve(results);
+				}
+			});
+		})
+	}
+	getPostInfo().then(function (results) {
+		console.log(results)
+		res.render('/', {
+			postResults: results
+		})
+	})
+
+
+});
 
 router.get('/favorites',(req,res,next)=>{
 	res.render('favorites')

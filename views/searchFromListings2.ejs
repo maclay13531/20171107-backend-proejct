@@ -40,6 +40,36 @@
 				</div>
 			<div class="divider"></div>
 			<%}%>
+			<% for(let i = 0; i<uploadDb.length; i++){ %>
+				<div class="row">
+					<div class="col s12">
+						<h4 class="header listings-pet-name"><%=uploadDb[i].name_upload%></h4>
+						<div class="card horizontal card-page hoverable">
+							<div class="card-image">
+								<img src="<%=photo[i]%>" width="100%" height="300px">
+							</div>
+							<div class="card-stacked">
+								<div class="card-content card-description">
+									<p><%=uploadDb[i].description%></p>
+								</div>
+								<div class="card-action">
+									<div class="col s6">
+										Age: <%=uploadDb[i].age%>
+									</div>
+									<div class="right-align">
+										<% if (locals.firstNameTest !== undefined){ %>
+										<a href="/singles/<%=uploadDb[i].id%>?userId=<%=uploadDb[i].user_id%>" class="btn-floating btn-large red pulse"><i class="material-icons">add</i></a>
+										<% }else{ %>
+										<a href="#" class="btn-floating btn-large red pulse" onclick="Materialize.toast('Must Login To View Detail', 4000)"><i class="material-icons">add</i></a>
+										<% } %>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="divider"></div>
+			<%}%>
 		</div>
 	</main>
     <% include footer %>

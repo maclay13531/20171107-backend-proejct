@@ -288,7 +288,6 @@ router.get('/uploadSuccess',(req,res,next)=>{
 	res.render('uploadSuccess')
 })
 // listings route
-//TODO: need a way to check to make sure everything is not empty
 router.get("/listings", (req, res, next)=>{
 	// need to get a random animal from db where location is around you
 	var currentLocation = req.session.location;
@@ -342,6 +341,7 @@ router.get("/listings", (req, res, next)=>{
 //SINGLE PAGE route
 router.get("/singles/:id", (req, res, next)=>{
 	var anmId = req.params.id;
+	console.log(anmId);
 	// look at the infomration for this specific dog
 	function specificInfo(){
 		return new Promise((resolve, reject)=>{
@@ -430,7 +430,7 @@ router.get("/singles/:id", (req, res, next)=>{
 })
 // SEARCH from listings
 // TODO: databse messed up, might need to change from cat to dog in db
-// TODO: check with drop table if exist query to see if it works
+// TODO: get images from upload table
 router.post("/search", (req,res,next)=>{
 	var type = req.body.typeSelect;
 	var breedSelect;
@@ -607,6 +607,7 @@ router.post("/search", (req,res,next)=>{
 	})
 	.then((allData)=>{
 		var parsedPhotoUrl =[]
+		var dataFromUploadTable;
 		for(let i = 0; i < allData.results.length; i++){
 			var parsedPhoto = JSON.parse(allData.results[i].pictures)
 			console.log(parsedPhoto);
@@ -614,11 +615,18 @@ router.post("/search", (req,res,next)=>{
 			parsedPhotoUrl.push(originalPicture);
 		}
 		console.log(parsedPhotoUrl);
-		return res.render("searchFromListings", {
-			petsDb: allData.results,
-			uploadDb: allData.dataFromUpload,
-			photo:parsedPhotoUrl
-		});
+		if(allData.dataFromUpload.length == 0){
+			return res.render("searchFromListings", {
+				petsDb: allData.results,
+				photo:parsedPhotoUrl
+			});
+		}else{
+			return res.render("searchFromListings2", {
+				petsDb: allData.results,
+				uploadDb: allData.dataFromUpload,
+				photo:parsedPhotoUrl
+			});
+		}
 		// res.json(allData);
 	});
 });

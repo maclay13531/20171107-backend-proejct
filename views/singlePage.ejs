@@ -11,39 +11,37 @@
 		<div class="container">
 			<div class="row top-content">
 				<div class="col s12">
-					<div class="center-align">
-						<h3><%=name%></h3>
-					</div>
+						<h3>Meet <%=name%>:</h3>	
 				</div>
 			</div>
 			<div class="row top-content">
-				<div class="col s12">
-					<div class="center-align">
+				<div class="col s4">
 						<img src="<%=photo%>" width="300px" height="300px" class="hoverable">
-					</div>
+				</div>
+				<div class="col s6 description flex-text">
+					<h5>About</h5>
+					<%=description%>
 				</div>
 			</div>
-			<div class="row text-image-break">
-				<div class="row info center-align">
+				<div class="row info card center-align">
 					<div class="col s2">
-						Breed
+						<h5>Breed</h5>
 					</div>
 					<div class="col s2">
-						Age
+						<h5>Age</h5>
 					</div>
 					<div class="col s2">
-						Gender
+						<h5>Gender</h5>
 					</div>
 					<div class="col s2">
-						Owner's Name
+						<h5>Owner</h5>
 					</div>
 					<div class="col s2">
-						Contact Info
+						<h5>Contact</h5>
 					</div>
 				</div>
-			</div>
-			<div class="divider"></div>
-			<div class="row">
+			<!-- <div class="divider"></div> -->
+			<div class="row card">
 				<div class="info center-align">
 					<div class="col s2">
 						<%=breed%>
@@ -60,11 +58,6 @@
 					<div class="col s2">
 						<%=contactInfo%>
 					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="description">
-					<%=description%>
 				</div>
 			</div>
 		</div>

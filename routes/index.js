@@ -437,28 +437,133 @@ router.post("/search", (req,res,next)=>{
 	var location = req.body.location;
 	var age = req.body.ageSelect;
 	var gender = req.body.genderSelect;
+	var getFromPetsDb;
+	var selectFromTempTable;
 	var dropTableQuery = "DROP TABLE TemporaryTable;";
 	if(type == "dog"){
 		breedSelect = req.body.dog_breed_select;
 
-		createTable = `DROP TABLE IF EXISTS TemporaryTable; create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN dog_breed;`;
+		createTable = `create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN dog_breed;`;
 
-		selectQuery = "SELECT * FROM TemporaryTable where user_id = ? and cat_breed = ? and age = ? and gender = ?;";
+		if(breedSelect == undefined){
+			selectQueryForPetsDB = "select name, descriptionPlain, age, animalID, pictures, animalLocation, age, sex from pets where species = ? and animalLocation = ? and age =? and sex =?;";
+			selectQuery = "SELECT * FROM TemporaryTable where user_id = ? and age = ? and gender = ?;";
+			getFromPetsDb = function(dataFromUpload){
+				return new Promise((resolve, reject)=>{
+					connection.query(selectQueryForPetsDB, [type, location, age, gender], (error, results)=>{
+						if(error){
+							reject(error);
+						}else{
+							resolve({results, dataFromUpload});
+						}
+					})
+				})
+			}
+			selectFromTempTable=function(){
+				return new Promise((resolve, reject)=>{
+					connection.query(selectQuery, [req.session.uid, age, gender], (error, results)=>{
+						if(error){
+							reject(error);
+						}else{
+							console.log(results);
+							resolve(results);
+						}
+					})
+				})
+			}
+		}else{
+			selectQueryForPetsDB = "select name, descriptionPlain, age, animalID, pictures, animalLocation, breed, age, sex from pets where species = ? and animalLocation = ? and breed = ? and age =? and sex =?;";
 
-		selectQueryForPetsDB = "select "
+			selectQuery = "SELECT * FROM TemporaryTable where user_id = ? and cat_breed = ? and age = ? and gender = ?;";
+			getFromPetsDb = function(dataFromUpload){
+				return new Promise((resolve, reject)=>{
+					connection.query(selectQueryForPetsDB, [type, location, breedSelect, age, gender], (error, results)=>{
+						if(error){
+							reject(error);
+						}else{
+							resolve({results, dataFromUpload});
+						}
+					})
+				})
+			}
+
+			selectFromTempTable = function(){
+				return new Promise((resolve, reject)=>{
+					connection.query(selectQuery, [req.session.uid, breedSelect, age, gender], (error, results)=>{
+						if(error){
+							reject(error);
+						}else{
+							resolve(results);
+						}
+					})
+				})
+			}
+		}
 	}else if(type == "cat"){
 		breedSelect = req.body.cat_breed_select;
 
-		createTable = `DROP TABLE IF EXISTS TemporaryTable; create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN cat_breed;`;
+		createTable = `create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN cat_breed;`;
 
-		selectQuery ="SELECT * FROM TemporaryTable where user_id = ? and dog_breed = ? and age = ? and gender = ?;";
+
+		if(breedSelect == undefined){
+			selectQueryForPetsDB = "select name, descriptionPlain, age, animalID, pictures, animalLocation, age, sex from pets where species = ? and animalLocation = ? and age =? and sex =?;";
+
+			selectQuery = "SELECT * FROM TemporaryTable where user_id = ? and age = ? and gender = ?;";
+			getFromPetsDb = function(dataFromUpload){
+				return new Promise((resolve, reject)=>{
+					connection.query(selectQueryForPetsDB, [type, location, age, gender], (error, results)=>{
+						if(error){
+							reject(error);
+						}else{
+							resolve({results, dataFromUpload});
+						}
+					})
+				})
+			}
+			selectFromTempTable=function(){
+				return new Promise((resolve, reject)=>{
+					connection.query(selectQuery, [req.session.uid, age, gender], (error, results)=>{
+						if(error){
+							reject(error);
+						}else{
+							resolve(results);
+						}
+					})
+				})
+			}
+
+		}else{
+			selectQueryForPetsDB = "select name, descriptionPlain, age, animalID, pictures, animalLocation, breed, age, sex from pets where species = ? and animalLocation = ? and breed = ? and age =? and sex =?;";
+
+
+			selectQuery ="SELECT * FROM TemporaryTable where user_id = ? and dog_breed = ? and age = ? and gender = ?;";
+
+			getFromPetsDb = function(dataFromUpload){
+				return new Promise((resolve, reject)=>{
+					connection.query(selectQueryForPetsDB, [type, location, breedSelect, age, gender], (error, results)=>{
+						if(error){
+							reject(error);
+						}else{
+							resolve({results, dataFromUpload});
+						}
+					})
+				})
+			}
+
+			selectFromTempTable=function(){
+				return new Promise((resolve, reject)=>{
+					connection.query(selectQuery, [req.session.uid, breedSelect, age, gender], (error, results)=>{
+						if(error){
+							reject(error);
+						}else{
+							resolve(results);
+						}
+					})
+				})
+			}
+		}
 	}
 
-	function getFromPetsList(){
-		return new Promise((resolve, reject)=>{
-			var selectQueryFor = ""
-		})
-	}
 
 	// GETS FROM UPLOAD
 	function createTempTable(){
@@ -467,46 +572,37 @@ router.post("/search", (req,res,next)=>{
 				if(error){
 					reject(error);
 				}else{
-					resolve("table created");
+					resolve(console.log("table created"));
 				}
 			});
 		})
 	}
-	function selectFromTempTable(){
-		return new Promise((resolve, reject)=>{
-			connection.query(selectQuery, [req.session.uid, breedSelect, age, gender], (error, results)=>{
-				if(error){
-					reject(error);
-				}else{
-					resolve({results});
-				}
-			})
-		})
-	}
-	function dropTableFromDb(){
+	function dropTableFromDb(result){
 		return new Promise((resolve, reject)=>{
 			connection.query(dropTableQuery, (error, results)=>{
 				if(error){
 					reject(error);
 				}else{
-					resolve();
+					resolve(result);
 				}
 			})
 		})
 	}
 
-	function getFromPetsDb(){
-		return new Promise((resolve, reject)=>{
-			
-		})
-	}
-
-
-
 	
-
-
-	res.render("searchFromListings");
+	createTempTable()
+	.then((e)=>{
+		return selectFromTempTable();
+	})
+	.then((results)=>{
+		return dropTableFromDb(results);
+	})
+	.then((results)=>{
+		return getFromPetsDb(results);
+	})
+	.then((allData)=>{
+		res.json(allData);
+	})
 });
 
 

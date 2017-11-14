@@ -48,6 +48,10 @@ nav {
     height: 56px;
     line-height: 56px;
  }
+.sidenav-profilebox{
+    border: 1px solid #DDDDDD;
+    background: #2FA599
+}
 .register-form{
     padding: 5%
 }
@@ -74,7 +78,11 @@ nav {
 .sidenav-profile-name{
     text-align: end;
     margin-top: 32%;
-    font-size: 32px
+    font-size: 32px;
+    color: white
+}
+.sidenav-img{
+    margin-top: 7%
 }
 .footer-copyright {
     overflow: hidden;

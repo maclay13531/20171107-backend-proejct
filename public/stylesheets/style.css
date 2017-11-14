@@ -64,6 +64,13 @@ nav {
 .side-nav-bar{
     margin-top: 5%
 }
+.profileimg_navbar{
+    max-height: 30px;
+    max-width: 30px;
+    min-width: 30px;
+    min-width: 30px;
+    margin-top: 16px
+}
 .sidenav-profile-name{
     text-align: end;
     margin-top: 32%;

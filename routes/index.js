@@ -295,7 +295,7 @@ router.get("/listings", (req, res, next)=>{
 	function getRandomAnimal(){
 		return new Promise((resolve, reject)=>{
 			//get everything we have form db
-			var seletQuery = "select species, name,age,animalID, descriptionPlain, pictures from pets where status = 'available' and animalLocation = ?;";
+			var seletQuery = "select species, name,age,animalID,animalLocation, breed, descriptionPlain, pictures from pets where status = 'available' and animalLocation = ?;";
 			connection.query(seletQuery, [currentLocation], (error, results)=>{
 				if(error){
 					reject(error);
@@ -329,6 +329,8 @@ router.get("/listings", (req, res, next)=>{
 			name: randomAnimalResults.name,
 			age: randomAnimalResults.age,
 			description: description,
+			location: randomAnimalResults.animalLocation,
+			breed: randomAnimalResults.breed,
 			id: randomAnimalResults.animalID,
 			photo:photo
 		});

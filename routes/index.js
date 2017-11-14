@@ -319,7 +319,7 @@ router.get("/listings", (req, res, next)=>{
 			photo = parsedPhotoUrl[0].originalUrl;
 		}
 		console.log(photo);
-		if(randomAnimalResults.descriptionPlain == undefined){
+		if(randomAnimalResults.descriptionPlain == null){
 			description = "No description at this point.";
 		}else{
 			description = randomAnimalResults.descriptionPlain;
@@ -332,29 +332,105 @@ router.get("/listings", (req, res, next)=>{
 			photo:photo
 		});
 	})
-
+	.catch((error)=>{
+		console.log(error);
+	})
 });
 //SINGLE PAGE route
-//=======find a way to loop through images with only x
 router.get("/singles/:id", (req, res, next)=>{
-	
-
-
-
-
-
-
-
-
-
-
-
+	var anmId = req.params.id;
+	console.log(anmId);
+	// look at the infomration for this specific dog
+	function specificInfo(){
+		return new Promise((resolve, reject)=>{
+			var selectQuery = "SELECT * from pets where animalID = ?;";
+			connection.query(selectQuery, [anmId], (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve(results);
+				}
+			})
+		})
+	}
+	function searchForContactInfo(specific){
+		return new Promise((resolve, reject)=>{
+			var searchForInfo ="select distinct orgs.email, orgs.name from orgs inner join pets on orgs.orgID = (select orgID from pets where animalID = ?);";
+			connection.query(searchForInfo, [anmId], (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve({results, specific});
+				}
+			})
+		})
+	}
+	specificInfo()
+	.then((specific)=>{
+		var description;
+		var photo;
+		var parsedPhotoUrl = JSON.parse(specific[0].pictures);
+		var contactInfo;
+		if(parsedPhotoUrl.length == 0){
+			photo = "No Photos";
+		}else{
+			photo = parsedPhotoUrl[0].originalUrl;
+		}
+		if(specific[0].descriptionPlain == null){
+			description = "No description at this point.";
+		}else{
+			description = specific[0].descriptionPlain;
+		}
+		if(contactInfo == undefined){
+			return searchForContactInfo(specific);
+		}else{
+			res.render("singlePage", {
+				name: specific[0].name,
+				age: specific[0].age,
+				description: description,
+				photo: photo,
+				breed: specific[0].breed,
+				sex: specific[0].sex,
+				contactInfo: specific[0].contactEmail,
+				contactName: specific[0].contactName
+			});	
+		}
+	})
+	.then((data)=>{
+		var description;
+		var photo;
+		var parsedPhotoUrl = JSON.parse(data.specific[0].pictures);
+		console.log(parsedPhotoUrl);
+		var contactInfo;
+		if(parsedPhotoUrl.length == 0){
+			photo = "No Photos";
+		}else{
+			photo = parsedPhotoUrl[0].originalUrl;
+		}
+		if(data.specific[0].descriptionPlain == null){
+			description = "No description at this point.";
+		}else{
+			description = data.specific[0].descriptionPlain;
+		}
+		res.render("singlePage", {
+			name: data.specific[0].name,
+			age: data.specific[0].age,
+			description:description,
+			photo: photo,
+			breed: data.specific[0].breed,
+			sex: data.specific[0].sex,
+			contactInfo: data.results[0].email,
+			contactName: data.results[0].name
+		});	
+	})
+	.catch((error)=>{
+		console.log(error);
+	})
 })
-// SEARCH from INDEX will go back to listings and replace the search results with what we got from api and database
+// SEARCH from listings
 // TODO: databse messed up, might need to change from cat to dog in db
 // TODO: check with drop table if exist query to see if it works
 router.post("/search", (req,res,next)=>{
-	
 
 
 
@@ -363,6 +439,7 @@ router.post("/search", (req,res,next)=>{
 
 
 
+	res.render("searchFromListings");
 });
 
 

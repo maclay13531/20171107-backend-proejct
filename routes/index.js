@@ -447,19 +447,10 @@ router.post("/search", (req,res,next)=>{
 		createTable = `create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN dog_breed;`;
 
 		if(breedSelect == undefined){
-			selectQueryForPetsDB = "select name, descriptionPlain, age, animalID, pictures, animalLocation, age, sex from pets where species = ? and animalLocation = ? and age =? and sex =?;";
 			selectQuery = "SELECT * FROM TemporaryTable where user_id = ? and age = ? and gender = ?;";
-			getFromPetsDb = function(dataFromUpload){
-				return new Promise((resolve, reject)=>{
-					connection.query(selectQueryForPetsDB, [type, location, age, gender], (error, results)=>{
-						if(error){
-							reject(error);
-						}else{
-							resolve({results, dataFromUpload});
-						}
-					})
-				})
-			}
+
+			selectQueryForPetsDB = "select name, descriptionPlain, age, animalID, pictures, animalLocation, age, sex from pets where species = ? and animalLocation = ? and age =? and sex =?;";
+
 			selectFromTempTable=function(){
 				return new Promise((resolve, reject)=>{
 					connection.query(selectQuery, [req.session.uid, age, gender], (error, results)=>{
@@ -472,13 +463,9 @@ router.post("/search", (req,res,next)=>{
 					})
 				})
 			}
-		}else{
-			selectQueryForPetsDB = "select name, descriptionPlain, age, animalID, pictures, animalLocation, breed, age, sex from pets where species = ? and animalLocation = ? and breed = ? and age =? and sex =?;";
-
-			selectQuery = "SELECT * FROM TemporaryTable where user_id = ? and cat_breed = ? and age = ? and gender = ?;";
 			getFromPetsDb = function(dataFromUpload){
 				return new Promise((resolve, reject)=>{
-					connection.query(selectQueryForPetsDB, [type, location, breedSelect, age, gender], (error, results)=>{
+					connection.query(selectQueryForPetsDB, [type, location, age, gender], (error, results)=>{
 						if(error){
 							reject(error);
 						}else{
@@ -487,6 +474,10 @@ router.post("/search", (req,res,next)=>{
 					})
 				})
 			}
+		}else{
+			selectQuery = "SELECT * FROM TemporaryTable where user_id = ? and cat_breed = ? and age = ? and gender = ?;";
+
+			selectQueryForPetsDB = "select name, descriptionPlain, age, animalID, pictures, animalLocation, breed, age, sex from pets where species = ? and animalLocation = ? and breed = ? and age =? and sex =?;";
 
 			selectFromTempTable = function(){
 				return new Promise((resolve, reject)=>{
@@ -499,45 +490,6 @@ router.post("/search", (req,res,next)=>{
 					})
 				})
 			}
-		}
-	}else if(type == "cat"){
-		breedSelect = req.body.cat_breed_select;
-
-		createTable = `create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN cat_breed;`;
-
-
-		if(breedSelect == undefined){
-			selectQueryForPetsDB = "select name, descriptionPlain, age, animalID, pictures, animalLocation, age, sex from pets where species = ? and animalLocation = ? and age =? and sex =?;";
-
-			selectQuery = "SELECT * FROM TemporaryTable where user_id = ? and age = ? and gender = ?;";
-			getFromPetsDb = function(dataFromUpload){
-				return new Promise((resolve, reject)=>{
-					connection.query(selectQueryForPetsDB, [type, location, age, gender], (error, results)=>{
-						if(error){
-							reject(error);
-						}else{
-							resolve({results, dataFromUpload});
-						}
-					})
-				})
-			}
-			selectFromTempTable=function(){
-				return new Promise((resolve, reject)=>{
-					connection.query(selectQuery, [req.session.uid, age, gender], (error, results)=>{
-						if(error){
-							reject(error);
-						}else{
-							resolve(results);
-						}
-					})
-				})
-			}
-
-		}else{
-			selectQueryForPetsDB = "select name, descriptionPlain, age, animalID, pictures, animalLocation, breed, age, sex from pets where species = ? and animalLocation = ? and breed = ? and age =? and sex =?;";
-
-
-			selectQuery ="SELECT * FROM TemporaryTable where user_id = ? and dog_breed = ? and age = ? and gender = ?;";
 
 			getFromPetsDb = function(dataFromUpload){
 				return new Promise((resolve, reject)=>{
@@ -551,6 +503,45 @@ router.post("/search", (req,res,next)=>{
 				})
 			}
 
+		}
+	}else if(type == "cat"){
+		breedSelect = req.body.cat_breed_select;
+
+		createTable = `create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN cat_breed;`;
+
+
+		if(breedSelect == undefined){
+			selectQuery = "SELECT * FROM TemporaryTable where user_id = ? and age = ? and gender = ?;";
+
+			selectQueryForPetsDB = "select name, descriptionPlain, age, animalID, pictures, animalLocation, age, sex from pets where species = ? and animalLocation = ? and age =? and sex =?;";
+			selectFromTempTable=function(){
+				return new Promise((resolve, reject)=>{
+					connection.query(selectQuery, [req.session.uid, age, gender], (error, results)=>{
+						if(error){
+							reject(error);
+						}else{
+							resolve(results);
+						}
+					})
+				})
+			}
+			getFromPetsDb = function(dataFromUpload){
+				return new Promise((resolve, reject)=>{
+					connection.query(selectQueryForPetsDB, [type, location, age, gender], (error, results)=>{
+						if(error){
+							reject(error);
+						}else{
+							resolve({results, dataFromUpload});
+						}
+					})
+				})
+			}
+
+		}else{
+			selectQuery ="SELECT * FROM TemporaryTable where user_id = ? and dog_breed = ? and age = ? and gender = ?;";
+
+			selectQueryForPetsDB = "select name, descriptionPlain, age, animalID, pictures, animalLocation, breed, age, sex from pets where species = ? and animalLocation = ? and breed = ? and age =? and sex =?;";
+
 			selectFromTempTable=function(){
 				return new Promise((resolve, reject)=>{
 					connection.query(selectQuery, [req.session.uid, breedSelect, age, gender], (error, results)=>{
@@ -558,6 +549,17 @@ router.post("/search", (req,res,next)=>{
 							reject(error);
 						}else{
 							resolve(results);
+						}
+					})
+				})
+			}
+			getFromPetsDb = function(dataFromUpload){
+				return new Promise((resolve, reject)=>{
+					connection.query(selectQueryForPetsDB, [type, location, breedSelect, age, gender], (error, results)=>{
+						if(error){
+							reject(error);
+						}else{
+							resolve({results, dataFromUpload});
 						}
 					})
 				})
@@ -598,12 +600,25 @@ router.post("/search", (req,res,next)=>{
 	.then((results)=>{
 		return dropTableFromDb(results);
 	})
-	.then((results)=>{
-		return getFromPetsDb(results);
+	.then((result)=>{
+		return getFromPetsDb(result);
 	})
 	.then((allData)=>{
-		res.json(allData);
-	})
+		var parsedPhotoUrl =[]
+		for(let i = 0; i < allData.results.length; i++){
+			var parsedPhoto = JSON.parse(allData.results[i].pictures)
+			console.log(parsedPhoto);
+			var originalPicture = parsedPhoto[0].originalUrl;
+			parsedPhotoUrl.push(originalPicture);
+		}
+		console.log(parsedPhotoUrl);
+		return res.render("searchFromListings", {
+			petsDb: allData.results,
+			uploadDb: allData.dataFromUpload,
+			photo:parsedPhotoUrl
+		});
+		// res.json(allData);
+	});
 });
 
 
@@ -777,7 +792,7 @@ router.get('/myListings',(req,res, next)=>{
 	
 	
 });
-
+//edit listings
 router.get('/myListings/:postid', (req, res) => {
 	// res.json(req.params);
 	var postID = req.params.postid;

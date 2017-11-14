@@ -318,7 +318,7 @@ router.get("/listings", (req, res, next)=>{
 		}else{
 			photo = parsedPhotoUrl[0].originalUrl;
 		}
-		console.log(photo);
+		// console.log(photo);
 		if(randomAnimalResults.descriptionPlain == null){
 			description = "No description at this point.";
 		}else{

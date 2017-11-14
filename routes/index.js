@@ -829,7 +829,7 @@ router.get('/myListings/:postid', (req, res) => {
 
 });
 
-router.get('/favorites',(req,res,next)=>{
+router.get('/favorites/:id',(req,res,next)=>{
 	res.render('favorites')
 })
 

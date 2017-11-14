@@ -33,7 +33,7 @@
             <% include sidenav %>
 			<h3 class="center-align">Edit <%=name%>'s Post </h3>
 			<h7>Last updated: <%= upload_date %></h7>
-			<form class="col s8 card darken-1" action="/uploadProcess" method="post" enctype="multipart/form-data">
+			<form class="col s8 card darken-1" action="/editListings/<%=id%>" method="post" enctype="multipart/form-data">
 				<div class="row">
 					<div class="input-field col s12">
 						<select name="breed_type_select" id='breeds-select'>
@@ -91,14 +91,14 @@
 						Image Upload
 					</div>
 					<div class="input-field col s6">
-						<input type="file" name= "imageToUpload">
+						<input type="file" name= "imageToUpload3">
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
 						<div class="center-align">
-							<button class="btn waves-effect waves-light" type="submit" name="action">Submit
-								<i class="material-icons right">send</i>
+							<button class="btn waves-effect waves-light" type="submit" name="action">Save
+								<i class="material-icons right">save</i>
 							</button>
 						</div>
 					</div>

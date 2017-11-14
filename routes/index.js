@@ -17,6 +17,7 @@ var uploadDir = multer({
 //make sure that imageToUpload matches on the upload.ejs file as well
 var nameOfFileField = uploadDir.single('imageToUpload');
 var nameOfFileField1 = uploadDir.single('imageToUpload1');
+var nameOfFileField3 = uploadDir.single('imageToUpload3');
 
 // config.db will be given to Bihn/Jason/Jenn by Jong Park.
 var connection = mysql.createConnection(config.db);
@@ -825,6 +826,7 @@ router.get('/editListings/:postid', (req, res) => {
 	getPostInfo().then(function (results) {
 		console.log(results)
 		res.render('editListings', {
+			id:results[0].id,
 			type: results[0].type,
 			cat_breed: results[0].cat_breed, 
 			dog_breed: results[0].dog_breed, 
@@ -837,11 +839,77 @@ router.get('/editListings/:postid', (req, res) => {
 		console.log(type)
 	})
 	
-
 });
 
 router.get('/editListings',(req,res,next)=>{
 	res.render('editListings')
+});
+router.post('/editListings/:postid', nameOfFileField3, (req, res, next) => {
+	var postId = req.params.postid;
+	var type = req.body.breed_type_select;
+	var dogBreed = req.body.dog_breed_select;
+	var catBreed = req.body.cat_breed_select;
+	var name = req.body.pet_name;
+	var age = req.body.age;
+	var gender = req.body.gender;
+	var description = req.body.description;
+	var tmpPath = req.file.path;
+	var targetPath = `public/images/listings/${req.file.originalname}`;
+
+
+	var updateUploadInfo = function () {
+		return new Promise(function (resolve, reject) {
+			var insertPetInfoQuery = `UPDATE upload SET type = ?, cat_breed = ?, dog_breed = ?,  name_upload = ?, age = ?, gender = ?, description = ? WHERE id = ?;`;
+			connection.query(insertPetInfoQuery, [type, catBreed, dogBreed, name, age, gender, description, postId], (error, results) => {
+				if (error) {
+					reject(error);
+				} else {
+					resolve("info updated");
+				}
+			})
+		})
+	}
+
+	var updateUploadImage = function () {
+		return new Promise(function (resolve, reject) {
+			fs.readFile(tmpPath, (error, fileContents) => {
+				if (error) {
+					throw error;
+				}
+				fs.writeFile(targetPath, fileContents, (error) => {
+					if (error) {
+						throw error;
+					}
+					var updateQuery = `UPDATE upload SET img_url = ? WHERE id = ?`;
+					connection.query(updateQuery, [req.file.originalname, postId], (dbError, results) => {
+						console.log(req.file.path);
+						if (error) {
+							reject(error);
+						} else {
+							resolve("image updated");
+						}
+					})
+				})
+			})
+		})
+	}
+
+	updateUploadInfo().then(function (result) {
+		// console.log(result);
+		return updateUploadImage(result);
+	}).then(function (e) {
+		res.redirect('/postUpdated')
+	})
+	// insertUploadInfo().catch((error) => {
+	// 	res.json(error);
+	// });
+	// insertImage().catch((error) => {
+	// 	res.json(error);
+	// });
+});
+
+router.get('/postUpdated', (req, res, next) => {
+	res.render('postUpdated')
 })
 
 router.get('/favorites/:id',(req,res,next)=>{

@@ -21,7 +21,16 @@
 		 	<li><a href="/listings">Explore</a></li>
 			<li><a href="/favorites">Favorites<i class="material-icons right">favorite</i></a></li>
         	<li><a href="/upload">Add Listing<i class="material-icons right">add_to_photos</i></a></li>
-			 <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Profile<i class="material-icons right">arrow_drop_down</i></a></li>
+			 <li><a class="dropdown-button" href="#!" data-activates="dropdown1">
+				 <% if (locals.profileimgTest == null){ %>
+                <img src="images/profile_images/blank_profile.jpg" class="circle responsive-img profileimg_navbar">
+            	<% }else{ %>
+                <img src="images/profile_images/<%= locals.profileimgTest %>" class="circle responsive-img profileimg_navbar">
+            	<% } %>
+			 <!-- <img src="images/woman_dogs.jpeg" class="circle responsive-img profileimg_navbar"> -->
+			 	<span><%= locals.firstNameTest %></span>
+			 	<i class="material-icons right center-align">arrow_drop_down</i></a>
+			 </li>
 		<% }else{ %> 
 			<li><a href="/register">Sign Up</a></li>
 			<li><a href="/login">Login</a></li>

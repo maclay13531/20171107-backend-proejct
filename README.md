@@ -23,10 +23,13 @@ PetBasket is a web application designed to help match users with their ideal pet
   	* **Key code portions**: README.md, 
 
 ## Programming Languages used
-* HTML
-* CSS
+* EJS View Engine
+* Materialize CSS
 * JavaScript
 * jQuery
+* Node.js/Express.js
+* Auth0
+* MySQL
 
 ## APIs used
 * [Petfinder API](https://www.petfinder.com/developers/api-docs)

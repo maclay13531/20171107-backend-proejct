@@ -8,40 +8,43 @@
     <body>
     <% include navbar %>
      <main>
-		<div class="conatainer">
+		<div class="container">
 			<div class="row top-content">
-				<div class="col s6">
-					<div class="center-align">
-						<img src="<%=bigPic%>" width="300px" height="300px">
-					</div>
-				</div>
-				<div class="col s6">
-					<div class="center-align">
-						<div class="col s12">
-							<img src="<%=photo[3].$t%>" width ="50px" height="50px">
-						</div>
-					</div>
+				<div class="col s12">
+					<h3>Meet
+						<%=name%></h3>
 				</div>
 			</div>
-			<div class="row text-image-break">
-				<div class="info center-align">
-					<div class="col s2">
-						Breed
-					</div>
-					<div class="col s2">
-						Age
-					</div>
-					<div class="col s2">
-						Gender
-					</div>
-					<div class="col s2">
-						Owner's Name
-					</div>
-					<div class="col s2">
-						Contact Info
-					</div>
+			<div class="row card">
+			<div class="row top-content">
+				<div class="col s4 center-align">
+					<img src="<%=photo%>" width="300px" height="300px" class="hoverable">
+				</div>
+				<div class="col s6 description flex-text">
+					<h5>About</h5>
+					<%=description%>
 				</div>
 			</div>
+			</div>
+			<div class="row card">
+				<div class="row card teal info center-align">
+					<div class="col s2">
+						<h6>Breed</h6>
+					</div>
+					<div class="col s2">
+						<h6>Age</h6>
+					</div>
+					<div class="col s2">
+						<h6>Gender</h6>
+					</div>
+					<div class="col s2">
+						<h6>Owner</h6>
+					</div>
+					<div class="col s2">
+						<h6>Contact</h6>
+					</div>
+				</div>
+			<!-- <div class="divider"></div> -->
 			<div class="row">
 				<div class="info center-align">
 					<div class="col s2">
@@ -54,17 +57,13 @@
 						<%=sex%>
 					</div>
 					<div class="col s2">
-						Owner's Name
+						<%=contactName%>
 					</div>
 					<div class="col s2">
-						<%=phone%>
+						<%=contactInfo%>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="description">
-					<%=description%>
-				</div>
 			</div>
 		</div>
 	</main>

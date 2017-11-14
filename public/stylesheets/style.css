@@ -27,6 +27,16 @@ h3 {
 	color: #26a69a;
 }
 
+h5 {
+
+	font-family: 'Bree Serif', serif;
+	color: #26a69a;
+}
+h6{
+    color: white;
+    font-size: 24px;
+}
+
 .footer-logo {
 	font-family: 'Bree Serif', serif;
 	font-size: 18px;
@@ -48,11 +58,18 @@ nav {
     height: 56px;
     line-height: 56px;
  }
+.sidenav-profilebox{
+    border: 1px solid #DDDDDD;
+    background: #2FA599
+}
 .register-form{
     padding: 5%
 }
 .account-update-box{
     margin-top: 5%; 
+}
+.emailsettings-box{
+    margin-top: 20%
 }
 .profile-img{
     max-height: 30px;
@@ -61,10 +78,21 @@ nav {
 .side-nav-bar{
     margin-top: 5%
 }
+.profileimg_navbar{
+    max-height: 30px;
+    max-width: 30px;
+    min-width: 30px;
+    min-width: 30px;
+    margin-top: 16px
+}
 .sidenav-profile-name{
     text-align: end;
     margin-top: 32%;
-    font-size: 32px
+    font-size: 32px;
+    color: white
+}
+.sidenav-img{
+    margin-top: 7%
 }
 .footer-copyright {
     overflow: hidden;
@@ -83,7 +111,11 @@ nav {
     color: #fff !important;
     background-color:  #26a69a !important;
 }
-
+.footer-chat{
+    position: absolute;
+    margin-top: -2%;
+    left: 90%
+}
 
 .card-page{
 	height: 300px;

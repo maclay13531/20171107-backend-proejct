@@ -46,7 +46,7 @@ router.all("/*", (req,res,next)=>{
 		res.locals.emailTest = req.session.email;
 		res.locals.profileimgTest = req.session.profileimg;
 
-		console.log(res.locals.profileimgTest)
+		// console.log(res.locals.profileimgTest)
 		// res.locals.profileUpdated = false;
 		// console.log(req.session.uid)
 		next();
@@ -286,240 +286,83 @@ router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 router.get('/uploadSuccess',(req,res,next)=>{
 	res.render('uploadSuccess')
 })
-// listings route, wants to print out featured animals which is pet.getRandom
+// listings route
+//TODO: need a way to check to make sure everything is not empty
 router.get("/listings", (req, res, next)=>{
-	//gets random animal dogs for now
-	function getAnimalID(){
-		var animalRandom;
-		var rand = Math.random() * 10;
-		if(rand<=5){
-			animalRandom = "cat";
-		}else{
-			animalRandom = "dog";
-		}
-		return new Promise((resolve,reject)=>{
-			var randomAnimal = `http://api.petfinder.com/pet.getRandom?key=${config.petFinderApi}&animal=${animalRandom}&ouput=id&format=json`;
-			request(randomAnimal, (error, response)=>{
-				if(error){
-					reject(error);
-				}else{
-					var parsedData = JSON.parse(response.body);
-					resolve(parsedData);
-					// resolve(response.body[0].petfinder.petIds.id.$t);
-				}
-			})
-		})
-	}
-
-	function getRandomPet(animalID){
+	// need to get a random animal from db where location is around you
+	var currentLocation = req.session.location;
+	function getRandomAnimal(){
 		return new Promise((resolve, reject)=>{
-			var randomAnimal = `http://api.petfinder.com/pet.get?key=${config.petFinderApi}&id=${animalID}&format=json`;
-			request(randomAnimal, (error, response)=>{
+			//get everything we have form db
+			var seletQuery = "select species, name,age,animalID, descriptionPlain, pictures from pets where status = 'available' and animalLocation = ?;";
+			connection.query(seletQuery, [currentLocation], (error, results)=>{
 				if(error){
 					reject(error);
 				}else{
-					var parsedData = JSON.parse(response.body);
-					resolve(parsedData);
+					var randomAnimalInArray = Math.floor(Math.random() * results.length);
+					// console.log(randomAnimalInArray);
+					// console.log(results);
+					resolve(results[randomAnimalInArray]);
 				}
 			})
-		})
+		});
 	}
-	getAnimalID()
-	.then((data)=>{
-		//this is the animalID that's getting resolved
-		var animalID = data.petfinder.petIds.id.$t;
-		// console.log(animalID);
-		return getRandomPet(animalID);
-	})
-	.then((animal)=>{
-		var animalPhoto = animal.petfinder.pet.media.photos.photo[3].$t;
-		var animalAge = animal.petfinder.pet.age.$t;
-		var animalBreed = animal.petfinder.pet.breeds.breed.$t;
-		var animalName = animal.petfinder.pet.name.$t;
-		var animalDescription = animal.petfinder.pet.description.$t;
-		var petId = animal.petfinder.pet.id.$t;
-		// console.log(petId);
-		if(animalPhoto == undefined){
-			animalPhoto = "No photos at this point";
+	getRandomAnimal()
+	.then((randomAnimalResults)=>{
+		// res.json(randomAnimalResults);
+		var description;
+		var parsedPhotoUrl = JSON.parse(randomAnimalResults.pictures);
+		var photo;
+		if(parsedPhotoUrl.length == 0){
+			photo = "No Photos";
+		}else{
+			photo = parsedPhotoUrl[0].originalUrl;
 		}
-		if(animalDescription == undefined){
-			animalDescription = "No description at this point";
+		console.log(photo);
+		if(randomAnimalResults.descriptionPlain == undefined){
+			description = "No description at this point.";
+		}else{
+			description = randomAnimalResults.descriptionPlain;
 		}
 		res.render("listings", {
-			photo: animalPhoto,
-			age: animalAge,
-			breed: animalBreed,
-			name: animalName,
-			description: animalDescription,
-			id: petId
+			name: randomAnimalResults.name,
+			age: randomAnimalResults.age,
+			description: description,
+			id: randomAnimalResults.animalID,
+			photo:photo
 		});
-		// res.json(animal);
 	})
-	.catch((error)=>{
-		console.log(error);
-	})
-	//gets info and display to screen
-});
 
+});
 //SINGLE PAGE route
 //=======find a way to loop through images with only x
 router.get("/singles/:id", (req, res, next)=>{
-	var id = req.params.id;
-	function getPet(id){
-		return new Promise((resolve, reject)=>{
-			var randomAnimal = `http://api.petfinder.com/pet.get?key=${config.petFinderApi}&id=${id}&format=json`;
-			request(randomAnimal, (error, response)=>{
-				if(error){
-					reject(error);
-				}else{
-					var parsedData = JSON.parse(response.body);
-					resolve(parsedData);
-				}
-			})
-		})
-	}
-	getPet(id).then((animal)=>{
-		// CAN LOOP THROUGH to find where id = 
-		var animalPhoto = animal.petfinder.pet.media.photos.photo;
-		var bigPic = animal.petfinder.pet.media.photos.photo[3].$t;
-		var animalAge = animal.petfinder.pet.age.$t;
-		var animalBreed = animal.petfinder.pet.breeds.breed.$t;
-		var animalName = animal.petfinder.pet.name.$t;
-		var animalDescription = animal.petfinder.pet.description.$t;
-		var sex = animal.petfinder.pet.sex.$t;
-		var phone = animal.petfinder.pet.contact.phone.$t;
-		if(animalBreed == undefined){
-			animalBreed == "unknown";
-		}
-		if(animalPhoto == undefined){
-			animalPhoto = "No photos at this point";
-		}
-		if(animalDescription == undefined){
-			animalDescription = "No description at this point";
-		}
-		res.render("singlePage", {
-			photo: animalPhoto,
-			age: animalAge,
-			breed: animalBreed,
-			name: animalName,
-			sex: sex,
-			phone:phone,
-			description: animalDescription,
-			bigPic :bigPic
-		});
-		// res.json(animal);
-	}).catch((error)=>{
-		console.log(error);
-	});
+	
+
+
+
+
+
+
+
+
+
+
+
 })
 // SEARCH from INDEX will go back to listings and replace the search results with what we got from api and database
 // TODO: databse messed up, might need to change from cat to dog in db
 // TODO: check with drop table if exist query to see if it works
 router.post("/search", (req,res,next)=>{
-	// request from API
-	var type = req.body.typeSelect;
-	var breedSelect;
-	var createTable;
-	var selectQuery;
-	var location = req.body.location;
-	var age = req.body.ageSelect;
-	var gender = req.body.genderSelect;
-	var dropTableQuery = "DROP TABLE TemporaryTable;";
-	// if(gender == "Male"){
-	// 	gender = "m";
-	// }else{
-	// 	gender = "f";
-	// }
+	
 
-	if(type == "dog"){
-		breedSelect = req.body.dog_breed_select;
-		createTable = `DROP TABLE IF EXISTS TemporaryTable; create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN dog_breed;`;
-		selectQuery = "SELECT * FROM TemporaryTable where user_id = ? and cat_breed = ? and age = ? and gender = ?;";
-	}else if(type == "cat"){
-		breedSelect = req.body.cat_breed_select;
-		createTable = `DROP TABLE IF EXISTS TemporaryTable; create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN cat_breed;`;
-		selectQuery ="SELECT * FROM TemporaryTable where user_id = ? and dog_breed = ? and age = ? and gender = ?;";
-	}
-	// console.log(gender);
-	// console.log(age);
-	// console.log(breedSelect);
-	// console.log(type);
-	function requestAPI(){
-		return new Promise((resolve, reject)=>{
-			var requestString = `http://api.petfinder.com/pet.find?key=${config.petFinderApi}&animal=${type}&breed=${breedSelect}&location=${location}&age=${age}&format=json`;
-			request(requestString, (error, response)=>{
-				if(error){
-					reject(error);
-				}else{
-					resolve(response);
-				}
-			})
-		})
-	}
-	// request from db
-	function createTempTable(apiData){
-		return new Promise((resolve, reject)=>{
-			connection.query(createTable, (error, results)=>{
-				if(error){
-					reject(error);
-				}else{
-					resolve(apiData);
-				}
-			});
-		})
-	}
-	function selectFromTempTable(apiData){
-		return new Promise((resolve, reject)=>{
-			connection.query(selectQuery, [req.session.uid, breedSelect, age, gender], (error, results)=>{
-				if(error){
-					reject(error);
-				}else{
-					resolve({results, apiData});
-				}
-			})
-		})
-	}
-	function dropTableFromDb(allData){
-		return new Promise((resolve, reject)=>{
-			connection.query(dropTableQuery, (error, results)=>{
-				if(error){
-					reject(error);
-				}else{
-					resolve(allData);
-				}
-			})
-		})
-	}
-	requestAPI()
-	.then((data)=>{
-		// data from api
-		var dataApi = data.body;
-		return createTempTable(dataApi);
-	})
-	.then((apiData)=>{
-		// console.log(apiData);
-		return selectFromTempTable(apiData);
-	})
-	.then((allData)=>{
-		// get the usefull information;
-		// console.log(allData);
-		// data from our db
-		return dropTableFromDb(allData);
-	})
-	.then((allData)=>{
-		// separate into two groups, api and db
-		var dataFromApi = allData.apiData;
-		var dataFromDb = allData.results;
-		var parsedDataFromApi = JSON.parse(dataFromApi);
-		var parsedPetsFromApi = parsedDataFromApi.petfinder.pets;
-		res.render("searchFromListings", {
-			dataApi: parsedPetsFromApi,
-			dataDb: dataFromDb
-		});
-	})
-	.catch((error)=>{
-		console.log(error);
-	});
+
+
+
+
+
+
+
 });
 
 

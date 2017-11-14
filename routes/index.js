@@ -45,6 +45,8 @@ router.all("/*", (req,res,next)=>{
 		res.locals.lastNameTest = req.session.lname;
 		res.locals.emailTest = req.session.email;
 		res.locals.profileimgTest = req.session.profileimg;
+		res.locals.uidTest = req.session.uid;
+		res.locals.phoneTest = req.session.phone
 
 		console.log(res.locals.profileimgTest)
 		// res.locals.profileUpdated = false;
@@ -154,7 +156,8 @@ router.post('/loginProcess', function (req, res, next) {
 				req.session.email = results[0].email;
 				req.session.uid = results[0].id;
 				req.session.location = results[0].zipcode;
-				req.session.profileimg = results[0].profile_imgUrl
+				req.session.profileimg = results[0].profile_imgUrl;
+				req.session.phone = results[0].phone;
 				resolve(passwordMatch);
 			}else{
 				resolve(passwordMatch);

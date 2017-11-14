@@ -27,10 +27,35 @@
     		$(".button-collapse").sideNav();
     		$('#modal1').modal();
     		var socket = io();
-    		var userName;
-            <% if(locals.firstNameTest != undefined){ %>         userName = '<%= locals.firstNameTest %>';
+    		var firstName;
+            var lastName;
+            var userId;
+            var myEmail;
+            var myPhone;
+            <% if(locals.firstNameTest != undefined){ %>         
+                firstName = '<%= locals.firstNameTest %>';
             <% }else{ %>
-                userName ="GUEST"
+                firstName ="GUEST"
+            <% } %>
+            <% if(locals.lastNameTest != undefined){ %>         
+                lastName = '<%= locals.lastNameTest %>';
+            <% }else{ %>
+                lastName =""
+            <% } %>
+            <% if(locals.uidTest != undefined){ %>         
+                userId = '<%= locals.uidTest %>';
+            <% }else{ %>
+                userId =""
+            <% } %>
+            <% if(locals.emailTest != undefined){ %>         
+                myEmail = '<%= locals.emailTest %>';
+            <% }else{ %>
+                myEmail =""
+            <% } %>
+            <% if(locals.phoneTest != undefined){ %>         
+                myPhone = '<%= locals.phoneTest %>';
+            <% }else{ %>
+                myPhone =""
             <% } %>
     		// use if statment to see if req.session.name exist then change userName to match req.session.name
     		$('#submit-message').submit((event)=>{
@@ -39,7 +64,9 @@
     			$("#new-message").val('');
     			socket.emit('messageToServer', {
     				message: newMessage,
-    				name: userName
+    				firstName: firstName,
+                    lastName: lastName,
+                    userId: userId
     			});
     			// socket.emit('nameToServer', {
     			// 	name: userName
@@ -50,7 +77,7 @@
     		// 	$('#new-message').val('');
     		// }
     		socket.on('messageToClient', (msg)=>{
-    			var styleUser = `style='border: 1px solid #26a69a; font-size: 10px; width: 100%;color: white;padding: 5px;font-family: "Comic Sans MS", sans-serif'`
+    			var styleUser = `style='border: 1px solid #26a69a; font-size: 7px; width: 100%;color: white;padding: 5px;font-family: "Comic Sans MS", sans-serif'`
     			var styleMessage = `style='border: 1px solid #26a69a;color: #26a69a;padding: 5px;font-family: "Comic Sans MS", sans-serif'`
     			// if(msg.message != ""){
 	    		// 	$('#messages').prepend(`<p ${style}>${msg.message}</p>`);
@@ -60,8 +87,10 @@
 	    		// 	$('#chat-panel').prepend(`<div id="user-name" class="col s4"><p ${style}>${msg.name}</p></div><div id="messages" class="col s8"><p ${style}>${msg.message}</p></div>`);
 	    		// }
 	    		if(msg.message != ""){
-	    			$('#chat-panel').prepend(`<div id="user-name" class="col s4"><a href="#modal1" class="waves-effect waves-light btn modal-trigger" ${styleUser} href="#">${msg.name}</a></div><div id="messages" class="col s8"><p ${styleMessage}>${msg.message}</p></div>`);
+	    			$('#chat-panel').prepend(`<div class="user-name col s3"><a href="#modal1" class="waves-effect waves-light btn modal-trigger" ${styleUser}>${msg.firstName} ${msg.lastName}</a></div><div id="messages" class="col s7"><p ${styleMessage}>${msg.message}</p></div><input id="info-selector" type="hidden" value="${msg.userId}"></div>`);
 	    		}
+                // <div id="user-id" selecting="${msg.userId}" class="col s2">
+                // <p ${styleMessage}>${msg.userId}</p>
     			// $('#messages').append($('<li>').text(msg));
     			// $('#messages').append($('<li>').text(msg));
     		// });
@@ -74,9 +103,46 @@
 	    		// $("#user-name").empty();
 	    		$("#chat-panel").empty();
 	    	});
-	    	$('#user-name').click(function(){
-	    
-	    	})
+            $('.user-name').click(function(){
+                var infoSelect = $('#info-selector').val();
+                socket.emit("modalMessageToServer", {
+                    infoSelect: infoSelect
+                });
+            });
+            socket.on('modalMessageToClient', (msg)=>{
+                console.log(msg);
+                var style = `style='font-size: 20px; width: 100%;color: #26a69a;padding: 5px;font-family: "Comic Sans MS", sans-serif'`
+                // changing myinfo
+                $('#solo-my-info-fname').prepend(`<div ${style}>${firstName}</div>`);
+                $('#solo-my-info-lname').prepend(`<div ${style}>${lastName}</div>`);
+                $('#solo-my-info-email').prepend(`<div ${style}>${myEmail}</div>`);
+                $('#solo-my-info-phone').prepend(`<div ${style}>${myPhone}</div>`);
+                // changing userinfo
+                $('#solo-user-info-fname').prepend(`<div ${style}>${msg.fname}</div>`);
+                $('#solo-user-info-lname').prepend(`<div ${style}>${msg.lname}</div>`);
+                $('#solo-user-info-email').prepend(`<div ${style}>${msg.email}</div>`);
+                $('#solo-user-info-phone').prepend(`<div ${style}>${msg.phone}</div>`);
+            })        
+            $('#modal-submit-message').submit((event)=>{
+                event.preventDefault();
+                var newMessage = $('#modal-new-message').val();
+                $("#modal-new-message").val('');
+                socket.emit('soloMessageToServer', {
+                    message: newMessage,
+                    firstName: firstName,
+                    lastName: lastName,
+                });
+            });
+            socket.on('soloMessageToClient', (msg)=>{
+                var styleUser = `style='font-family: "Comic Sans MS", sans-serif'`
+                var styleMessage = `style='font-family: "Comic Sans MS", sans-serif'`
+                if(msg.message != ""){
+                    $('#solo-chat-panel').prepend(`<div class="col s4" ${styleUser}>${msg.firstName} ${msg.lastName}</div><div class="col s8" ${styleMessage}>${msg.message}</div>`);
+                }
+            });
+            $('#solo-clear').click(function(){
+                $("#solo-chat-panel").empty();
+            });
     	});
 
     </script>

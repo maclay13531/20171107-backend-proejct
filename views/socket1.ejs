@@ -25,16 +25,85 @@
 <a href="#" data-activates="slide-out" style="color: white" class="button-collapse brand-logo">Messages<i class="material-icons">message</i></a>
 <!-- modal for socket chat panel -->
 <!-- Modal Structure -->
-<div id="modal1" class="modal modal-fixed-footer">
+<div id="modal1" class="modal modal-fixed-footer" style='color: #26a69a;font-family: "Comic Sans MS", sans-serif'>
     <div class="modal-content">
         <div class="row">
-            <div class="col s12">
+            <div class="col s5">
+                <div class="row">
+                    <div class="col s12" style='color: #26a69a;font-size: 20px;font-family: "Comic Sans MS", sans-serif'>
+                        MY INFO
+                    </div>
+                    <div class="col s12" style='color: #26a69a;font-size: 10px;font-family: "Comic Sans MS", sans-serif'>
+                        [FIRST NAME]
+                    </div>
+                    <div id="solo-my-info-fname" class="col s12">
 
+                    </div>
+                    <div class="col s12" style='color: #26a69a;font-size: 10px;font-family: "Comic Sans MS", sans-serif'>
+                        [LAST NAME]
+                    </div>
+                    <div id="solo-my-info-lname" class="col s12">
+
+                    </div>
+                    <div class="col s12" style='color: #26a69a;font-size: 10px;font-family: "Comic Sans MS", sans-serif'>
+                        [EMAIL]
+                    </div>
+                    <div id="solo-my-info-email" class="col s12">
+
+                    </div>
+                    <div class="col s12" style='color: #26a69a;font-size: 10px;font-family: "Comic Sans MS", sans-serif'>
+                        [PHONE No.]
+                    </div>
+                    <div id="solo-my-info-phone" class="col s12">
+
+                    </div>
+                </div>
+                   <div class="row">
+                    <div class="col s12" style='color: #26a69a;font-size: 20px;font-family: "Comic Sans MS", sans-serif'>
+                        USER INFO
+                    </div>
+                    <div class="col s12" style='color: #26a69a;font-size: 10px;font-family: "Comic Sans MS", sans-serif'>
+                        [FIRST NAME]
+                    </div>
+                    <div id="solo-user-info-fname" class="col s12">
+
+                    </div>
+                    <div class="col s12" style='color: #26a69a;font-size: 10px;font-family: "Comic Sans MS", sans-serif'>
+                        [LAST NAME]
+                    </div>
+                    <div id="solo-user-info-lname" class="col s12">
+
+                    </div>
+                    <div class="col s12" style='color: #26a69a;font-size: 10px;font-family: "Comic Sans MS", sans-serif'>
+                        [EMAIL]
+                    </div>
+                    <div id="solo-user-info-email" class="col s12">
+
+                    </div>
+                    <div class="col s12" style='color: #26a69a;font-size: 10px;font-family: "Comic Sans MS", sans-serif'>
+                        [PHONE No.]
+                    </div>
+                    <div id="solo-user-info-phone" class="col s12">
+
+                    </div>
+                </div>
+            </div>      
+            <div class="col s7">
+                <div class="row">
+                    <form id="modal-submit-message" onsubmit="return false">
+                        <input id="modal-new-message" type="text" autocomplete="off" placeholder="TYPE" />
+                        <button type="submit">SEND</button>
+                    </form>
+                </div>
+                <div id="solo-chat-panel" class="row">
+
+                </div>
+                <div class="row">
+                    <div style="color: #26a69a;border-top: 1px solid #26a69a" class="center-align">
+                    <button style="margin-top:20px" id="solo-clear">CLEAR</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="modal-footer">
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">LINK1</a>
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">LINK2</a>
     </div>
 </div>

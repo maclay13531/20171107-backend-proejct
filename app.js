@@ -14,6 +14,14 @@ var photos = require('./routes/photos');
 // const flash = require('connect-flash');
 var sharedsession = require('express-socket.io-session');
 
+var mysql = require('mysql');
+var connection = mysql.createConnection(config.db);
+connection.connect(function(error){
+    if(error){
+        throw error;
+    }
+});
+
 
 // This will configure Passport to use Auth0
 const strategy = new Auth0Strategy({
@@ -119,6 +127,40 @@ app.io.on('connect', function(socket){
     	// console.log(socket.request.session.fname);
         console.log(msg);
         app.io.emit('messageToClient', msg)
+    });
+    socket.on('modalMessageToServer', function(msg){
+        console.log(msg);
+        var idToCheck = msg.infoSelect;
+        var clickedUserInfo = {};  
+        var checkQuery = "select * from users where id = ?;";
+        connection.query(checkQuery,[idToCheck],(error,results)=>{
+            var row = results[0];            
+            console.log(row);
+            if(error){
+                throw error;
+            }else{
+                if(results.length == 0){
+                    clickedUserInfo.fname = "GUEST";
+                    clickedUserInfo.lname = "GUEST";
+                    clickedUserInfo.email = "USER NOT LOGGED IN";
+                    clickedUserInfo.phone = "USER NOT LOGGED IN";
+                }else{
+                    clickedUserInfo.fname = row.first_name;
+                    clickedUserInfo.lname = row.last_name;
+                    clickedUserInfo.email = row.email;
+                    clickedUserInfo.phone = row.phone;
+                }
+            }
+            app.io.emit('modalMessageToClient', clickedUserInfo)
+                // fname: clickedUserInfo.fname,
+                // lname: clickedUserInfo.lname,
+                // email: clickedUserInfo.email,
+                // phone: clickedUserInfo.phone,
+        });
+    });
+    socket.on('soloMessageToServer', function(msg){
+        console.log(msg + "one to one chat");
+        app.io.emit('soloMessageToClient', msg)
     });
     // socket.on('nameToServer', function(name){
     //     console.log(name);

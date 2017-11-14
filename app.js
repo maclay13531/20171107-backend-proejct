@@ -132,7 +132,9 @@ app.io.on('connect', function(socket){
         app.io.emit('messageToClient', msg)
     });
     socket.on('modalMessageToServer', function(msg){
-        console.log(msg);
+		console.log("===========");
+		console.log(msg);
+		console.log("===========");
         var idToCheck = msg.infoSelect;
         var clickedUserInfo = {};  
         var checkQuery = "select * from users where id = ?;";

@@ -101,7 +101,11 @@ nav {
     color: #fff !important;
     background-color:  #26a69a !important;
 }
-
+.footer-chat{
+    position: absolute;
+    margin-top: -2%;
+    left: 90%
+}
 
 .card-page{
 	height: 300px;

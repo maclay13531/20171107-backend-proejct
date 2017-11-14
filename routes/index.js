@@ -429,12 +429,77 @@ router.get("/singles/:id", (req, res, next)=>{
 // TODO: databse messed up, might need to change from cat to dog in db
 // TODO: check with drop table if exist query to see if it works
 router.post("/search", (req,res,next)=>{
+	var type = req.body.typeSelect;
+	var breedSelect;
+	var createTable;
+	var selectQuery;
+	var selectQueryForPetsDB;
+	var location = req.body.location;
+	var age = req.body.ageSelect;
+	var gender = req.body.genderSelect;
+	var dropTableQuery = "DROP TABLE TemporaryTable;";
+	if(type == "dog"){
+		breedSelect = req.body.dog_breed_select;
+
+		createTable = `DROP TABLE IF EXISTS TemporaryTable; create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN dog_breed;`;
+
+		selectQuery = "SELECT * FROM TemporaryTable where user_id = ? and cat_breed = ? and age = ? and gender = ?;";
+
+		selectQueryForPetsDB = "select "
+	}else if(type == "cat"){
+		breedSelect = req.body.cat_breed_select;
+
+		createTable = `DROP TABLE IF EXISTS TemporaryTable; create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN cat_breed;`;
+
+		selectQuery ="SELECT * FROM TemporaryTable where user_id = ? and dog_breed = ? and age = ? and gender = ?;";
+	}
+
+	function getFromPetsList(){
+		return new Promise((resolve, reject)=>{
+			var selectQueryFor = ""
+		})
+	}
+
+	// GETS FROM UPLOAD
+	function createTempTable(){
+		return new Promise((resolve, reject)=>{
+			connection.query(createTable, (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve("table created");
+				}
+			});
+		})
+	}
+	function selectFromTempTable(){
+		return new Promise((resolve, reject)=>{
+			connection.query(selectQuery, [req.session.uid, breedSelect, age, gender], (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve({results});
+				}
+			})
+		})
+	}
+	function dropTableFromDb(){
+		return new Promise((resolve, reject)=>{
+			connection.query(dropTableQuery, (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve();
+				}
+			})
+		})
+	}
 
 
 
 
 
-
+	
 
 
 	res.render("searchFromListings");

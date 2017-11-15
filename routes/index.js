@@ -913,24 +913,8 @@ router.post('/editListings/:postid', nameOfFileField3, (req, res, next) => {
 router.get('/postUpdated', (req, res, next) => {
 	res.render('postUpdated')
 })
-
-router.get('/favorites/:id',(req,res,next)=>{
-	var id = req.params.id;
-	// insert into favroites
-		//loop through pets db, if no find, loop through uploads
-		//and display
-	function insertIntoDB(){
-		return new Promise((resolve, reject)=>{
-			var insertQuery = "insert into favorites (user_id_favorites, pet_id) values(?,?);"
-			connection.query(insertQuery, [req.session.uid, id], (error, results)=>{
-				if(error){
-					reject(error);
-				}else{
-					resolve("Insert Success");
-				}
-			})
-		})
-	}
+router.get("/favorites", (req, res, next)=>{
+	var id = req.query.id;
 	//loop through favorites and get it in the views
 	function getInfoFromPets(){
 		return new Promise((resolve, reject)=>{
@@ -960,13 +944,8 @@ router.get('/favorites/:id',(req,res,next)=>{
 		})
 	}
 
-
-	insertIntoDB()
-	.then((e)=>{
-		return getInfoFromPets();
-	})
-	.then((data)=>{
-		console.log(data);
+	getInfoFromPets().then((data)=>{
+		// console.log(data);
 		var photos = [];
 		for(let i = 0; i<data.length; i++){
 			var parsedPhotoUrl = JSON.parse(data[i].pictures);
@@ -985,8 +964,50 @@ router.get('/favorites/:id',(req,res,next)=>{
 	.then((upload)=>{
 
 	})
-	// add a delete button
 })
+router.get('/favorites/:id',(req,res,next)=>{
+	var id = req.params.id;
+	// insert into favroites
+	function insertIntoDB(){
+		return new Promise((resolve, reject)=>{
+			var insertQuery = "insert into favorites (user_id_favorites, pet_id) values(?,?);"
+			connection.query(insertQuery, [req.session.uid, id], (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve(id);
+				}
+			})
+		})
+	}
+	insertIntoDB()
+	.then((e)=>{
+		console.log(e);
+		res.redirect(`/favorites?id=${e}`);
+	})
+});
+
+
+router.get("/delete/:id", (req, res, next)=>{
+	var id = req.params.id;
+	function deleteQuery(){
+		return new Promise((resolve, reject)=>{
+			var deleteQ = "delete from favorites where user_id_favorites =? and pet_id = ?;";
+			connection.query(deleteQ, [req.session.uid, id], (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve("delete success!")
+				}
+			})
+		})
+	}
+	deleteQuery()
+	.then((e)=>{
+		console.log(e);
+		res.redirect("/favorites");
+	})
+});
 
 // Logout Route
 router.get('/logout', (req, res) => {

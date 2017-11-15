@@ -141,7 +141,9 @@ app.io.on('connect', function(socket){
 
     });
     socket.on('modalMessageToServer', function(msg){
-        console.log(msg);
+		console.log("===========");
+		console.log(msg);
+		console.log("===========");
         var idToCheck = msg.infoSelect;
         var socketInfoSelect = msg.socketInfoSelect;
         var initClientID = msg.initSocketID.socketID;

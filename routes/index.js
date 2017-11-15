@@ -1,3 +1,5 @@
+// import { parse } from 'path';
+
 var express = require('express');
 var router = express.Router();
 const passport = require('passport');
@@ -17,6 +19,7 @@ var uploadDir = multer({
 //make sure that imageToUpload matches on the upload.ejs file as well
 var nameOfFileField = uploadDir.single('imageToUpload');
 var nameOfFileField1 = uploadDir.single('imageToUpload1');
+var nameOfFileField3 = uploadDir.single('imageToUpload3');
 
 // config.db will be given to Bihn/Jason/Jenn by Jong Park.
 var connection = mysql.createConnection(config.db);
@@ -40,17 +43,12 @@ router.all("/*", (req,res,next)=>{
 		next();
 	}else if(req.session.uid != undefined){
 		console.log("YOU ARE LOGGEDIN");
-		//mention this middleware
 		res.locals.firstNameTest = req.session.fname;
 		res.locals.lastNameTest = req.session.lname;
 		res.locals.emailTest = req.session.email;
 		res.locals.profileimgTest = req.session.profileimg;
 		res.locals.uidTest = req.session.uid;
 		res.locals.phoneTest = req.session.phone
-
-		// console.log(res.locals.profileimgTest)
-		// res.locals.profileUpdated = false;
-		// console.log(req.session.uid)
 		next();
 	}
 });
@@ -231,6 +229,7 @@ router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 	var name = req.body.pet_name;
 	var age = req.body.age;
 	var gender = req.body.gender;
+	var location = req.body.location;
 	var description = req.body.description;
 	var tmpPath = req.file.path;
 	var targetPath = `public/images/listings/${req.file.originalname}`;
@@ -238,8 +237,8 @@ router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 
 	var insertUploadInfo = function () {
 		return new Promise(function (resolve, reject) {
-			var insertPetInfoQuery = `INSERT INTO upload (user_id, type, cat_breed, dog_breed, name_upload, age, gender, description) VALUES (?,?,?, ?, ?, ?, ?,?)`;
-			connection.query(insertPetInfoQuery, [req.session.uid, type, dogBreed, catBreed, name, age, gender,description], (error, results) => {
+			var insertPetInfoQuery = `INSERT INTO upload (user_id, type, cat_breed, dog_breed, name_upload, age, gender, description,location) VALUES (?,?,?, ?, ?, ?, ?,?,?)`;
+			connection.query(insertPetInfoQuery, [req.session.uid, type, dogBreed, catBreed, name, age, gender,description,location], (error, results) => {
 				if (error) {
 					reject(error);
 				} else {
@@ -376,6 +375,7 @@ router.get("/singles/:id", (req, res, next)=>{
 		var photo;
 		var parsedPhotoUrl = JSON.parse(specific[0].pictures);
 		var contactInfo;
+		console.log(specific[0].animalID);
 		if(parsedPhotoUrl.length == 0){
 			photo = "No Photos";
 		}else{
@@ -397,6 +397,7 @@ router.get("/singles/:id", (req, res, next)=>{
 				breed: specific[0].breed,
 				sex: specific[0].sex,
 				contactInfo: specific[0].contactEmail,
+				id: anmId,
 				contactName: specific[0].contactName
 			});	
 		}
@@ -423,6 +424,7 @@ router.get("/singles/:id", (req, res, next)=>{
 			photo: photo,
 			breed: data.specific[0].breed,
 			sex: data.specific[0].sex,
+			id:anmId,
 			contactInfo: data.results[0].email,
 			contactName: data.results[0].name
 		});	
@@ -452,13 +454,13 @@ router.post("/search", (req,res,next)=>{
 		createTable = `create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN dog_breed;`;
 
 		if(breedSelect == undefined){
-			selectQuery = "SELECT * FROM TemporaryTable where user_id = ? and age = ? and gender = ?;";
+			selectQuery = "SELECT * FROM TemporaryTable where age = ? and gender = ? and location =?;";
 
 			selectQueryForPetsDB = "select name, descriptionPlain, age, animalID, pictures, animalLocation, age, sex from pets where species = ? and animalLocation = ? and age =? and sex =?;";
 
 			selectFromTempTable=function(){
 				return new Promise((resolve, reject)=>{
-					connection.query(selectQuery, [req.session.uid, age, gender], (error, results)=>{
+					connection.query(selectQuery, [age, gender, location], (error, results)=>{
 						if(error){
 							reject(error);
 						}else{
@@ -480,13 +482,13 @@ router.post("/search", (req,res,next)=>{
 				})
 			}
 		}else{
-			selectQuery = "SELECT * FROM TemporaryTable where user_id = ? and cat_breed = ? and age = ? and gender = ?;";
+			selectQuery = "SELECT * FROM TemporaryTable where and cat_breed = ? and age = ? and gender = ? and location =?;";
 
 			selectQueryForPetsDB = "select name, descriptionPlain, age, animalID, pictures, animalLocation, breed, age, sex from pets where species = ? and animalLocation = ? and breed = ? and age =? and sex =?;";
 
 			selectFromTempTable = function(){
 				return new Promise((resolve, reject)=>{
-					connection.query(selectQuery, [req.session.uid, breedSelect, age, gender], (error, results)=>{
+					connection.query(selectQuery, [breedSelect, age, gender, location], (error, results)=>{
 						if(error){
 							reject(error);
 						}else{
@@ -806,14 +808,14 @@ router.get('/myListings',(req,res, next)=>{
 	
 });
 //edit listings
-router.get('/myListings/:postid', (req, res) => {
+router.get('/editListings/:postid', (req, res) => {
 	// res.json(req.params);
-	var postID = req.params.postid;
-
+	var postId = req.params.postid;
+	console.log(postId)
 	var getPostInfo = function () {
 		return new Promise(function (resolve, reject) {
 			var getPostInfo = `SELECT * FROM upload where id = ?;`;
-			connection.query(getPostInfo, [postID], (error, results) => {
+			connection.query(getPostInfo, [postId], (error, results) => {
 				if (error) {
 					reject(error);
 				} else {
@@ -824,17 +826,191 @@ router.get('/myListings/:postid', (req, res) => {
 	}
 	getPostInfo().then(function (results) {
 		console.log(results)
-		res.render('/', {
-			postResults: results
-		})
+		res.render('editListings', {
+			id:results[0].id,
+			type: results[0].type,
+			cat_breed: results[0].cat_breed, 
+			dog_breed: results[0].dog_breed, 
+			name: results[0].name_upload, 
+			age: results[0].age, 
+			gender: results[0].gender, 
+			img_url: results[0].img_url, 
+			upload_date: results[0].upload_date
+		});
+		console.log(type)
 	})
-
-
+	
 });
 
-router.get('/favorites/:id',(req,res,next)=>{
-	res.render('favorites')
+router.get('/editListings',(req,res,next)=>{
+	res.render('editListings')
+});
+router.post('/editListings/:postid', nameOfFileField3, (req, res, next) => {
+	var postId = req.params.postid;
+	var type = req.body.breed_type_select;
+	var dogBreed = req.body.dog_breed_select;
+	var catBreed = req.body.cat_breed_select;
+	var name = req.body.pet_name;
+	var age = req.body.age;
+	var gender = req.body.gender;
+	var description = req.body.description;
+	var tmpPath = req.file.path;
+	var targetPath = `public/images/listings/${req.file.originalname}`;
+
+
+	var updateUploadInfo = function () {
+		return new Promise(function (resolve, reject) {
+			var insertPetInfoQuery = `UPDATE upload SET type = ?, cat_breed = ?, dog_breed = ?,  name_upload = ?, age = ?, gender = ?, description = ? WHERE id = ?;`;
+			connection.query(insertPetInfoQuery, [type, catBreed, dogBreed, name, age, gender, description, postId], (error, results) => {
+				if (error) {
+					reject(error);
+				} else {
+					resolve("info updated");
+				}
+			})
+		})
+	}
+
+	var updateUploadImage = function () {
+		return new Promise(function (resolve, reject) {
+			fs.readFile(tmpPath, (error, fileContents) => {
+				if (error) {
+					throw error;
+				}
+				fs.writeFile(targetPath, fileContents, (error) => {
+					if (error) {
+						throw error;
+					}
+					var updateQuery = `UPDATE upload SET img_url = ? WHERE id = ?`;
+					connection.query(updateQuery, [req.file.originalname, postId], (dbError, results) => {
+						console.log(req.file.path);
+						if (error) {
+							reject(error);
+						} else {
+							resolve("image updated");
+						}
+					})
+				})
+			})
+		})
+	}
+
+	updateUploadInfo().then(function (result) {
+		// console.log(result);
+		return updateUploadImage(result);
+	}).then(function (e) {
+		res.redirect('/postUpdated')
+	})
+	// insertUploadInfo().catch((error) => {
+	// 	res.json(error);
+	// });
+	// insertImage().catch((error) => {
+	// 	res.json(error);
+	// });
+});
+
+router.get('/postUpdated', (req, res, next) => {
+	res.render('postUpdated')
 })
+
+router.get("/favorites", (req, res, next)=>{
+	var id = req.query.id;
+	//loop through favorites and get it in the views
+	function getInfoFromPets(){
+		return new Promise((resolve, reject)=>{
+			var selectQuery = "select * from favorites inner join pets on favorites.pet_id = pets.animalID where user_id_favorites =?;";
+			connection.query(selectQuery, [req.session.uid], (error, results)=>{
+				// console.log(req.session.uid);
+				// console.log(selectQuery);
+				if(error){
+					reject(error);
+				}else{
+					if(results.length == 0){
+						resolve(res.redirect("/listings"));
+					}else{
+						resolve(results);
+					}
+				}
+			})
+		})
+	}
+	function getInfoFromUpload(){
+		return new Promise((resolve, reject)=>{
+			var selectQuery = "select * from favorites as f where user_id_favorites =? inner join upload on f.pet_id = upload.id;";
+			connection.query(selectQuery, [req.session.uid], (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve(results);
+				}
+			})
+		})
+	}
+
+	getInfoFromPets().then((data)=>{
+		// console.log(data);
+		var photos = [];
+		for(let i = 0; i<data.length; i++){
+			var parsedPhotoUrl = JSON.parse(data[i].pictures);
+			photos.push(parsedPhotoUrl[0].originalUrl);
+		}
+		if(data.length == 0){
+			return getInfoFromUpload();
+		}else{
+			console.log(photos)
+			res.render('favorites',{
+				photo: photos,
+				data: data
+			})
+		}
+	})
+	.then((upload)=>{
+
+	})
+})
+router.get('/favorites/:id',(req,res,next)=>{
+	var id = req.params.id;
+	// insert into favroites
+	function insertIntoDB(){
+		return new Promise((resolve, reject)=>{
+			var insertQuery = "insert into favorites (user_id_favorites, pet_id) values(?,?);"
+			connection.query(insertQuery, [req.session.uid, id], (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve(id);
+				}
+			})
+		})
+	}
+	insertIntoDB()
+	.then((e)=>{
+		console.log(e);
+		res.redirect(`/favorites?id=${e}`);
+	})
+});
+
+
+router.get("/delete/:id", (req, res, next)=>{
+	var id = req.params.id;
+	function deleteQuery(){
+		return new Promise((resolve, reject)=>{
+			var deleteQ = "delete from favorites where user_id_favorites =? and pet_id = ?;";
+			connection.query(deleteQ, [req.session.uid, id], (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve("delete success!")
+				}
+			})
+		})
+	}
+	deleteQuery()
+	.then((e)=>{
+		console.log(e);
+		res.redirect("/favorites");
+	})
+});
 
 // Logout Route
 router.get('/logout', (req, res) => {

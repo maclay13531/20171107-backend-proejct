@@ -156,7 +156,7 @@
                 console.log(mySocketID.socketID);
                 if((msg.socketInfoSelect == mySocketID.socketID) || (msg.initClientID == mySocketID.socketID)){
                     console.log(msg);
-                    var style = `style='font-size: 10px; width: 100%;color: #26a69a;padding: 5px;font-family: "Comic Sans MS", sans-serif'`
+                    var style = `style='font-size: 10px; width: 100%;color: blue;padding: 5px;font-family: "Comic Sans MS", sans-serif'`
                     // changing myinfo
                     $('#solo-my-info-fname').html(`<div ${style}>-- ${firstName} --</div>`);
                     $('#solo-my-info-lname').html(`<div ${style}>-- ${lastName} --</div>`);
@@ -168,21 +168,27 @@
                     $('#solo-user-info-email').html(`<div ${style}>-- ${msg.clickedUserInfo.email} --</div>`);
                     $('#solo-user-info-phone').html(`<div ${style}>-- ${msg.clickedUserInfo.phone} --</div>`);
                     $('.modal-socket-info-selector').val(msg.socketInfoSelect);
+                    $('.init-modal-socket-info-selector').val(msg.initClientID);
                 }
             })        
             $('#modal-submit-message').submit((event)=>{
                 event.preventDefault();
                 var newMessage = $('#modal-new-message').val();
+                var socketInfoSelect = $('.modal-socket-info-selector').val();
+                var initClientID = $('.init-modal-socket-info-selector').val();
                 $("#modal-new-message").val('');
                 socket.emit('soloMessageToServer', {
                     message: newMessage,
                     firstName: firstName,
                     lastName: lastName,
-                    socketInfoSelect: msg.socketInfoSelect,
-                    initClientID: msg.initClientID
+                    socketInfoSelect: socketInfoSelect,
+                    initClientID: initClientID
                 });
             });
             socket.on('soloMessageToClient', (msg)=>{
+                console.log(msg.socketInfoSelect);
+                console.log(msg.initClientID);
+                console.log(mySocketID.socketID);
                 var styleUser = `style='font-family: "Comic Sans MS", sans-serif'`
                 var styleMessage = `style='font-family: "Comic Sans MS", sans-serif'`
                 if((msg.socketInfoSelect == mySocketID.socketID) || (msg.initClientID == mySocketID.socketID)){

@@ -18,9 +18,9 @@ PetBasket is a web application designed to help match users with their ideal pet
   	* **Key code portions**: text text text 
 
 * **[Jennifer Menze](https://github.com/jamenze)**: 
-  	* **Primary team role**: text text text
-  	* **Contributions**:  text text text
-  	* **Key code portions**: README.md, 
+  	* **Primary team role**: "#26a69a Enthusiast"
+  	* **Contributions**:  technical writing, styling, branding
+  	* **Key code portions**: README.md, layout design, CSS/HTML
 
 ## Programming Languages used
 * EJS View Engine

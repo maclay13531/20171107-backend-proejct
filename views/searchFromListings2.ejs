@@ -60,10 +60,10 @@
 									</div>
 									<div class="right-align">
 										<% if (locals.firstNameTest !== undefined){ %>
-										<a href="/favorites/<%=uploadDb[i].id%>" class="btn grey pulse"><i class="material-icons right">favorite</i>Add To Favorites</a>
+										<a href="/favorites/<%=uploadDb[i].id%>" class="btn grey pulse"><i class="material-icons right">favorite</i>Favorite</a>
 										<a href="/singles/<%=uploadDb[i].id%>?userId=<%=uploadDb[i].user_id%>" class="btn-floating btn-large red pulse"><i class="material-icons">add</i></a>
 										<% }else{ %>
-										<a href="/favorites/<%=uploadDb[i].id%>" class="btn grey pulse"><i class="material-icons right">favorite</i>Add To Favorites</a>
+										<a href="/favorites/<%=uploadDb[i].id%>" class="btn grey pulse"><i class="material-icons right">favorite</i>Favorite</a>
 										<a href="#" class="btn-floating btn-large red pulse" onclick="Materialize.toast('Must Login To View Detail', 4000)"><i class="material-icons">add</i></a>
 										<% } %>
 									</div>

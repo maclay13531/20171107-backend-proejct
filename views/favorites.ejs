@@ -35,10 +35,10 @@
 									</div>
 									<div class="right-align">
 										<% if (locals.firstNameTest !== undefined){ %>
-										<a href="/delete/<%=data[i].animalID%>" class="btn grey pulse"><i class="material-icons right">favorite</i>Delete From Favorites</a>
+										<a href="/delete/<%=data[i].animalID%>" class="btn grey pulse"><i class="material-icons right">highlight_off</i>Delete</a>
 										<a href="/singles/<%=data[i].animalID%>" class="btn-floating btn-large red pulse"><i class="material-icons">add</i></a>
 										<% }else{ %>
-										<a href="/delete/<%=data[i].animalID%>" class="btn grey pulse"><i class="material-icons right">favorite</i>Delete From Favorites</a>
+										<a href="/delete/<%=data[i].animalID%>" class="btn grey pulse"><i class="material-icons right">highlight_off</i>Delete</a>
 										<a href="#" class="btn-floating btn-large red pulse" onclick="Materialize.toast('Must Login To View Detail', 4000)"><i class="material-icons">add</i></a>
 										<% } %>
 									</div>

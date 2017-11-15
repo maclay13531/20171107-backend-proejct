@@ -460,7 +460,7 @@ router.post("/search", (req,res,next)=>{
 
 			selectFromTempTable=function(){
 				return new Promise((resolve, reject)=>{
-					connection.query(selectQuery, [age, gender, location], (error, results)=>{
+					connection.query(selectQuery, [age, gender,location], (error, results)=>{
 						if(error){
 							reject(error);
 						}else{

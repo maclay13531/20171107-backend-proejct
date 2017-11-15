@@ -1,3 +1,5 @@
+// import { parse } from 'path';
+
 var express = require('express');
 var router = express.Router();
 const passport = require('passport');
@@ -913,7 +915,77 @@ router.get('/postUpdated', (req, res, next) => {
 })
 
 router.get('/favorites/:id',(req,res,next)=>{
-	res.render('favorites')
+	var id = req.params.id;
+	// insert into favroites
+		//loop through pets db, if no find, loop through uploads
+		//and display
+	function insertIntoDB(){
+		return new Promise((resolve, reject)=>{
+			var insertQuery = "insert into favorites (user_id_favorites, pet_id) values(?,?);"
+			connection.query(insertQuery, [req.session.uid, id], (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve("Insert Success");
+				}
+			})
+		})
+	}
+	//loop through favorites and get it in the views
+	function getInfoFromPets(){
+		return new Promise((resolve, reject)=>{
+			var selectQuery = "select * from favorites inner join pets on favorites.pet_id = pets.animalID where user_id_favorites =?;";
+			connection.query(selectQuery, [req.session.uid], (error, results)=>{
+				// console.log(req.session.uid);
+				// console.log(selectQuery);
+				if(error){
+					reject(error);
+				}else{
+					resolve(results);
+				}
+			})
+		})
+	}
+
+	function getInfoFromUpload(){
+		return new Promise((resolve, reject)=>{
+			var selectQuery = "select * from favorites as f where user_id_favorites =? inner join upload on f.pet_id = upload.id;";
+			connection.query(selectQuery, [req.session.uid], (error, results)=>{
+				if(error){
+					reject(error);
+				}else{
+					resolve(results);
+				}
+			})
+		})
+	}
+
+
+	insertIntoDB()
+	.then((e)=>{
+		return getInfoFromPets();
+	})
+	.then((data)=>{
+		console.log(data);
+		var photos = [];
+		for(let i = 0; i<data.length; i++){
+			var parsedPhotoUrl = JSON.parse(data[i].pictures);
+			photos.push(parsedPhotoUrl[0].originalUrl);
+		}
+		if(data.length == 0){
+			return getInfoFromUpload();
+		}else{
+			console.log(photos)
+			res.render('favorites',{
+				photo: photos,
+				data: data
+			})
+		}
+	})
+	.then((upload)=>{
+
+	})
+	// add a delete button
 })
 
 // Logout Route

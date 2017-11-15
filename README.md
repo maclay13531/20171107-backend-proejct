@@ -1,5 +1,5 @@
 ## Overview
-PetBasket is a web application designed to help match users with their ideal pet! It's free to join, and users may search for pets in their area that are available for adoption based on type (dog or cat), age, and gender. It also features a Classifieds section where users can upload a photo and information of pet(s) they have available for adoption.
+PetBasket is a web application designed to help match users with their ideal pet! It's free to join, and users may search for pets in their area that are available for adoption based on type (dog or cat), age, and gender. It also features a Classifieds/Listings feature where users can upload a photo and information of pet(s) they have available for adoption.
 
 ## The Team
 * **[Jason Li](https://github.com/2monsta)**: 
@@ -18,9 +18,9 @@ PetBasket is a web application designed to help match users with their ideal pet
   	* **Key code portions**: text text text 
 
 * **[Jennifer Menze](https://github.com/jamenze)**: 
-  	* **Primary team role**: text text text
-  	* **Contributions**:  text text text
-  	* **Key code portions**: README.md, 
+  	* **Primary team role**: "#26a69a Enthusiast"
+  	* **Contributions**:  technical writing, styling, branding
+  	* **Key code portions**: README.md, layout design, CSS/HTML
 
 ## Programming Languages used
 * EJS View Engine

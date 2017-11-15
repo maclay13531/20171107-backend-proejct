@@ -454,13 +454,13 @@ router.post("/search", (req,res,next)=>{
 		createTable = `create table TemporaryTable (SELECT * FROM upload); ALTER TABLE TemporaryTable DROP COLUMN dog_breed;`;
 
 		if(breedSelect == undefined){
-			selectQuery = "SELECT * FROM TemporaryTable where user_id = ? and age = ? and gender = ?;";
+			selectQuery = "SELECT * FROM TemporaryTable where age = ? and gender = ? and location =?;";
 
 			selectQueryForPetsDB = "select name, descriptionPlain, age, animalID, pictures, animalLocation, age, sex from pets where species = ? and animalLocation = ? and age =? and sex =?;";
 
 			selectFromTempTable=function(){
 				return new Promise((resolve, reject)=>{
-					connection.query(selectQuery, [req.session.uid, age, gender], (error, results)=>{
+					connection.query(selectQuery, [age, gender, location], (error, results)=>{
 						if(error){
 							reject(error);
 						}else{
@@ -482,13 +482,13 @@ router.post("/search", (req,res,next)=>{
 				})
 			}
 		}else{
-			selectQuery = "SELECT * FROM TemporaryTable where user_id = ? and cat_breed = ? and age = ? and gender = ?;";
+			selectQuery = "SELECT * FROM TemporaryTable where and cat_breed = ? and age = ? and gender = ? and location =?;";
 
 			selectQueryForPetsDB = "select name, descriptionPlain, age, animalID, pictures, animalLocation, breed, age, sex from pets where species = ? and animalLocation = ? and breed = ? and age =? and sex =?;";
 
 			selectFromTempTable = function(){
 				return new Promise((resolve, reject)=>{
-					connection.query(selectQuery, [req.session.uid, breedSelect, age, gender], (error, results)=>{
+					connection.query(selectQuery, [breedSelect, age, gender, location], (error, results)=>{
 						if(error){
 							reject(error);
 						}else{

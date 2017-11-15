@@ -185,7 +185,7 @@ app.io.on('connect', function(socket){
     });
     socket.on('soloMessageToServer', function(msg){
         var socketInfoSelect = msg.socketInfoSelect;
-        var initClientID = msg.initSocketID.socketID;        
+        var initClientID = msg.initSocketID;        
         console.log(msg + "one to one chat");
         app.io.emit('soloMessageToClient', {
             msg: msg,

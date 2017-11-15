@@ -931,7 +931,6 @@ router.get("/favorites", (req, res, next)=>{
 			})
 		})
 	}
-
 	function getInfoFromUpload(){
 		return new Promise((resolve, reject)=>{
 			var selectQuery = "select * from favorites as f where user_id_favorites =? inner join upload on f.pet_id = upload.id;";

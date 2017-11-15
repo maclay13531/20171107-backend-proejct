@@ -5,7 +5,7 @@ PetBasket is a web application designed to help match users with their ideal pet
 * **[Jason Li](https://github.com/2monsta)**: 
 	* **Primary team role**: Backend Routing
   	* **Contributions**:  Registration/Login Authentication,
-  	* **Key code portions**: text text text
+  	* **Key code portions**: User Authentication, Search, Favorites
 
 * **[Binh Chung](https://github.com/binhc)**: 
 	* **Primary team role**: text text text 

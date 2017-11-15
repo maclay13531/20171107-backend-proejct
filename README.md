@@ -67,5 +67,6 @@ router.all("/*", (req,res,next)=>{
 2. Combine both uploads table and pets table in our own database
 3. Auto update our database from RescueGroups
 4. Refactor our code to make use of functions correctly
+5. Need to loop through upload to get pictures
 
 ## [View a live demo of PetBasket!](https://www.google.com)

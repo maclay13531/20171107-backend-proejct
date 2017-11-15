@@ -40,7 +40,7 @@ PetBasket is a web application designed to help match users with their ideal pet
 * User can register, log in, and search for pets that are available for adoption.
 * Users can upload information and photo(s) of pets available for adoption.
 
-## Project Screenshots
+## Demo
 ![Project Screen Shot](public/images/petBasketDemo.gif)
 
 

@@ -229,6 +229,7 @@ router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 	var name = req.body.pet_name;
 	var age = req.body.age;
 	var gender = req.body.gender;
+	var location = req.body.location;
 	var description = req.body.description;
 	var tmpPath = req.file.path;
 	var targetPath = `public/images/listings/${req.file.originalname}`;
@@ -236,8 +237,8 @@ router.post('/uploadProcess', nameOfFileField, (req, res, next) => {
 
 	var insertUploadInfo = function () {
 		return new Promise(function (resolve, reject) {
-			var insertPetInfoQuery = `INSERT INTO upload (user_id, type, cat_breed, dog_breed, name_upload, age, gender, description) VALUES (?,?,?, ?, ?, ?, ?,?)`;
-			connection.query(insertPetInfoQuery, [req.session.uid, type, dogBreed, catBreed, name, age, gender,description], (error, results) => {
+			var insertPetInfoQuery = `INSERT INTO upload (user_id, type, cat_breed, dog_breed, name_upload, age, gender, description,location) VALUES (?,?,?, ?, ?, ?, ?,?,?)`;
+			connection.query(insertPetInfoQuery, [req.session.uid, type, dogBreed, catBreed, name, age, gender,description,location], (error, results) => {
 				if (error) {
 					reject(error);
 				} else {

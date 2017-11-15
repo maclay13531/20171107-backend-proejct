@@ -375,6 +375,7 @@ router.get("/singles/:id", (req, res, next)=>{
 		var photo;
 		var parsedPhotoUrl = JSON.parse(specific[0].pictures);
 		var contactInfo;
+		console.log(specific[0].animalID);
 		if(parsedPhotoUrl.length == 0){
 			photo = "No Photos";
 		}else{
@@ -396,7 +397,7 @@ router.get("/singles/:id", (req, res, next)=>{
 				breed: specific[0].breed,
 				sex: specific[0].sex,
 				contactInfo: specific[0].contactEmail,
-				id: specific[0].animalID,
+				id: anmId,
 				contactName: specific[0].contactName
 			});	
 		}
@@ -423,6 +424,7 @@ router.get("/singles/:id", (req, res, next)=>{
 			photo: photo,
 			breed: data.specific[0].breed,
 			sex: data.specific[0].sex,
+			id:anmId,
 			contactInfo: data.results[0].email,
 			contactName: data.results[0].name
 		});	

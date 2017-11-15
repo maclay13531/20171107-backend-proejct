@@ -12,20 +12,21 @@
 			<div class="row top-content">
 				<div class="col s12">
 					<h3>Meet
-						<%=name%></h3>
+						<%=name%>
+					</h3>
 				</div>
 			</div>
 			<div class="row card">
-			<div class="row top-content">
-				<div class="col s4 center-align">
-					<img src="<%=photo%>" width="300px" height="300px" class="hoverable">
-					<a href=`/favorites/:${id}` class="btn waves-effect waves-light pulse">Favorite</a>
+				<div class="row top-content">
+					<div class="col s4 center-align">
+						<img src="<%=photo%>" width="300px" height="300px" class="hoverable">
+						<a href="/favorites/<%= id %>" class="btn waves-effect waves-light pulse">Favorite</a>
+					</div>
+					<div class="col s6 description flex-text">
+						<h5>About</h5>
+						<%=description%>
+					</div>
 				</div>
-				<div class="col s6 description flex-text">
-					<h5>About</h5>
-					<%=description%>
-				</div>
-			</div>
 			</div>
 			<div class="row card">
 				<div class="row card teal info center-align">

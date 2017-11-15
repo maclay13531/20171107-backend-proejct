@@ -913,6 +913,7 @@ router.post('/editListings/:postid', nameOfFileField3, (req, res, next) => {
 router.get('/postUpdated', (req, res, next) => {
 	res.render('postUpdated')
 })
+
 router.get("/favorites", (req, res, next)=>{
 	var id = req.query.id;
 	//loop through favorites and get it in the views
@@ -925,7 +926,11 @@ router.get("/favorites", (req, res, next)=>{
 				if(error){
 					reject(error);
 				}else{
-					resolve(results);
+					if(results.length == 0){
+						resolve(res.redirect("/listings"));
+					}else{
+						resolve(results);
+					}
 				}
 			})
 		})

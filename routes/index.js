@@ -43,17 +43,12 @@ router.all("/*", (req,res,next)=>{
 		next();
 	}else if(req.session.uid != undefined){
 		console.log("YOU ARE LOGGEDIN");
-		//mention this middleware
 		res.locals.firstNameTest = req.session.fname;
 		res.locals.lastNameTest = req.session.lname;
 		res.locals.emailTest = req.session.email;
 		res.locals.profileimgTest = req.session.profileimg;
 		res.locals.uidTest = req.session.uid;
 		res.locals.phoneTest = req.session.phone
-
-		// console.log(res.locals.profileimgTest)
-		// res.locals.profileUpdated = false;
-		// console.log(req.session.uid)
 		next();
 	}
 });
@@ -400,6 +395,7 @@ router.get("/singles/:id", (req, res, next)=>{
 				breed: specific[0].breed,
 				sex: specific[0].sex,
 				contactInfo: specific[0].contactEmail,
+				id: specific[0].animalID,
 				contactName: specific[0].contactName
 			});	
 		}

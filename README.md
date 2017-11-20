@@ -13,9 +13,9 @@ PetBasket is a web application designed to help match users with their ideal pet
   	* **Key code portions**: Flow Chart, 
 
 * **[Jong Park](https://github.com/maclay13531)**:
-	 * **Primary team role**: text text text
-  	* **Contributions**:  text text text 
-  	* **Key code portions**: text text text 
+	 * **Primary team role**: SOCKET.IO Chat feature / Database setter
+  	* **Contributions**:  socket.io chat / ejs files for sockets / MySQL Check
+  	* **Key code portions**: socket.io / ejs files 
 
 * **[Jennifer Menze](https://github.com/jamenze)**: 
   	* **Primary team role**: "#26a69a Enthusiast"
